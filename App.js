@@ -1,11 +1,11 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import LoadingScreen from "./views/LoadingScreen/view";
+import Dashboard from "./views/Dashboard/view";
 
 export default function App() {
   return (
     <View>
-      <LoadingScreen></LoadingScreen>
+      <Dashboard />
     </View>
   );
 }
