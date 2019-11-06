@@ -4,7 +4,7 @@ import Dashboard from "./views/Dashboard/view";
 
 export default function App() {
   return (
-    <View>
+    <View style={{flex: 1}}>
       <Dashboard />
     </View>
   );
