@@ -8,19 +8,33 @@ const style = {
         flex: 1, 
         flexDirection: 'column',
     },
-    dayImage: {
+    dayPressed: {        
         width: wp (519/375.0*100),
         height: hp (408.5/812.0*100),
         position: 'absolute',
         bottom: hp (0),
         left: wp (-151/375.0*100),
     },
-    nightImage: {
+    dayImage: {
+        width: wp (519/375.0*100),
+        height: hp (408.5/812.0*100),
+        position: 'absolute',
+        bottom: 0,
+        top: 0,
+    },
+    nightPressed: {
         width: wp (531.0/375.0*100),
         height: hp (330.0/812.0*100),
         position: 'absolute',
         top: hp (62/812.0*100),
         right: wp (-165/375.0*100),
+    },
+    nightImage: {
+        width: wp (531.0/375.0*100),
+        height: hp (330.0/812.0*100),
+        position: 'absolute',
+        top: 0,
+        right: 0,
     },
     orText: {
         fontSize: wp(30/375.0*100),
