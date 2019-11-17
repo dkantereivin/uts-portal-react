@@ -33,6 +33,7 @@ export default class App extends Component {
   render () {
     return (
       this.state.fontLoaded? <AppContainer/> :
+      //actually supposed to be the splash screen
       <View style = {{flex: 1, backgroundColor: 'black'}}>
       </View>
     );
@@ -51,7 +52,7 @@ const AppNavigator = createStackNavigator(
     //in charge of transition animation:
     transitionConfig: () => ({
         transitionSpec: {
-          duration: 750,
+          duration: 550,
           easing: Easing.inOut(Easing.ease),
           timing: Animated.timing,
           useNativeDriver: true,
