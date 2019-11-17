@@ -13,7 +13,12 @@ const images = {
 
 class DayNightScreen extends Component {
     style = style;
-    animation = new Animated.Value (0);
+    animation = new Animated.Value (1);
+
+    componentDidMount ()
+    {
+        this.setState (this.animateIn);
+    }
 
     dayPressed = () => {
         //do something to store day
@@ -26,15 +31,22 @@ class DayNightScreen extends Component {
     }
 
     toInitSetting = () => {
-        this.setState (this.animate);
+        this.setState (this.animateOut);
         this.props.navigation.navigate ('InitSetting');
     }
 
-    animate = () => Animated.timing(this.animation, {
-        duration: 550,
+    animateOut = () => Animated.timing(this.animation, {
+        duration: 450,
         toValue: 1,
-        easing: Easing.inOut(Easing.ease),
+        easing: Easing.out(Easing.ease),
     }).start()
+
+    animateIn = () => Animated.timing (this.animation, {
+        duration: 450,
+        toValue: 0,
+        easing: Easing.out (Easing.ease),
+    }).start()
+
 
     render()
     {

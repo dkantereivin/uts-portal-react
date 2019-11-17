@@ -56,7 +56,7 @@ class Circle extends Component {
                     height: this.props.diameter,
                     borderRadius: this.props.diameter/2,
                     backgroundColor: colourAnim,
-                    borderWidth: 3,
+                    borderWidth: 2,
                     borderColor: '#536DFE',
                     justifyContent: 'center',
                     alignItems: 'center',
