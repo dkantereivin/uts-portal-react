@@ -52,8 +52,8 @@ const AppNavigator = createStackNavigator(
     //in charge of transition animation:
     transitionConfig: () => ({
         transitionSpec: {
-          duration: 550,
-          easing: Easing.inOut(Easing.ease),
+          duration: 450,
+          easing: Easing.out(Easing.ease),
           timing: Animated.timing,
           useNativeDriver: true,
         },

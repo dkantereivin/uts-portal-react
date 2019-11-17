@@ -24,8 +24,8 @@ class InitSettingScreen extends Component {
 
     animate = () => Animated.timing (this.animation, {
         toValue: 1,
-        duration: 550,
-        easing: Easing.inOut (Easing.ease),
+        duration: 450,
+        easing: Easing.out (Easing.ease),
     }).start()
 
     render()
@@ -40,7 +40,6 @@ class InitSettingScreen extends Component {
             <View style = {style.weirdPersonContainer}>
                 <Animated.Image style = {[style.weirdPerson, {transform: [{translateY: translate1}]}]} source = {images.weirdPerson} resizeMode = 'stretch'/> 
             </View>
-                       
             <Text style = {style.title}>
                 WHAT ARE YOU INTO?
             </Text>
