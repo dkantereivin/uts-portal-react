@@ -26,8 +26,8 @@ const style = {
         width: wp (531.0/375.0*100),
         height: hp (330.0/812.0*100),
         position: 'absolute',
-        top: hp (62/812.0*100),
-        right: wp (-165/375.0*100),
+        top: hp (7.64),
+        left: wp (2.4),
     },
     nightImage: {
         width: wp (531.0/375.0*100),
