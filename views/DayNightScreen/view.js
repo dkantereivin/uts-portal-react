@@ -55,10 +55,10 @@ class DayNightScreen extends Component {
         return (
         <View style = {style.bigView}>
             <TouchableOpacity onPress = {this.nightPressed} style = {style.nightPressed}>
-                <Animated.Image style = {[style.nightImage, {transform: [{translateX: translate1}]}]} source = {images.nightImage}/>
+                <Animated.Image style = {[style.nightImage, {transform: [{translateX: translate1}]}]} source = {images.nightImage} resizeMode = 'stretch'/>
             </TouchableOpacity>
             <TouchableOpacity onPress = {this.dayPressed} style = {style.dayPressed}>
-                <Animated.Image style = {[style.dayImage, {transform: [{translateX: translate2}]}]} source = {images.dayImage}/>
+                <Animated.Image style = {[style.dayImage, {transform: [{translateX: translate2}]}]} source = {images.dayImage} resizeMode = 'stretch'/>
             </TouchableOpacity>
             <Animated.Text style = {[style.orText, {opacity: translate3}]}>
                 OR

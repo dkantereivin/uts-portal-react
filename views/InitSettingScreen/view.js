@@ -37,7 +37,10 @@ class InitSettingScreen extends Component {
 
         return (
         <View style = {{flex: 1, flexDirection: 'column'}}>
-            <Animated.Image style = {[style.weirdPerson, {transform: [{translateY: translate1}]}]} source = {images.weirdPerson}/>            
+            <View style = {style.weirdPersonContainer}>
+                <Animated.Image style = {[style.weirdPerson, {transform: [{translateY: translate1}]}]} source = {images.weirdPerson} resizeMode = 'stretch'/> 
+            </View>
+                       
             <Text style = {style.title}>
                 WHAT ARE YOU INTO?
             </Text>
@@ -65,7 +68,7 @@ class InitSettingScreen extends Component {
             <View style = {style.rightCircle}>
                 <Circle diameter = {hp (118/812.0*100)} touchable = {false}/>
             </View>
-            <Image style = {style.arrow} source = {images.arrow}/>
+            <Image style = {style.arrow} source = {images.arrow} resizeMode = 'stretch'/>
         </View>         
         );
     }
