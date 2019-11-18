@@ -4,6 +4,9 @@ import Dashboard from "./views/Dashboard/view";
 import LoadingScreen from "./views/LoadingScreen/view";
 import DayNightScreen from "./views/DayNightScreen/view";
 import InitSettingScreen from "./views/InitSettingScreen/view";
+import InitMondayScreen from "./views/InitMondayScreen/view";
+import InitTuesdayScreen from "./views/InitTuesdayScreen/view";
+import WelcomeScreen from "./views/WelcomeScreen/view";
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import * as Font from 'expo-font';
@@ -45,6 +48,9 @@ const AppNavigator = createStackNavigator(
     Loading: LoadingScreen,
     DayNight: DayNightScreen,
     InitSetting: InitSettingScreen,
+    InitMonday: InitMondayScreen,
+    InitTuesday: InitTuesdayScreen,
+    Welcome: WelcomeScreen,
     Dash: Dashboard,
   },
   {
@@ -52,8 +58,8 @@ const AppNavigator = createStackNavigator(
     //in charge of transition animation:
     transitionConfig: () => ({
         transitionSpec: {
-          duration: 450,
-          easing: Easing.out(Easing.ease),
+          duration: 600,
+          easing: Easing.out(Easing.poly(4)),
           timing: Animated.timing,
           useNativeDriver: true,
         },
@@ -66,8 +72,10 @@ const AppNavigator = createStackNavigator(
           const params = route.params || {} //that's i don't know what this does really
           const transition = params.transition || 'default';
           return {
-            default: fade (index, position, width)
-          } [transition];
+            fade: fade (index, position, width),
+            push: push (index, position, width),
+            fadespecial: fadespecial (index, position, width),
+          }[transition];
         },
     }),
     defaultNavigationOptions: {
@@ -78,10 +86,26 @@ const AppNavigator = createStackNavigator(
 
 const AppContainer = createAppContainer (AppNavigator);
 
-let fade = (index, position, width) => {
+let fadespecial = (index, position, width) => {
   const fade = position.interpolate ({
-    inputRange: [index - 1, index],
-    outputRange: [0, 1],
+    inputRange: [index - 1, index, index + 1, index + 2],
+    outputRange: [0, 1, 1, 0],
   })
   return {opacity : fade}
+};
+
+let fade = (index, position, width) => {
+  const fade = position.interpolate ({
+    inputRange: [index - 1, index, index + 1],
+    outputRange: [0, 1, 0],
+  })
+  return {opacity : fade}
+}
+
+let push = (index, position, width) => {
+  const translate = position.interpolate ({
+    inputRange: [index - 1, index, index + 1],
+    outputRange: [width, 0, 0],
+  })
+  return {transform: [{translateX : translate}]}
 };

@@ -87,10 +87,17 @@ const style = {
         width: hp (118/812.0*100),
         height: hp (118.0/812.0*100),
    },
-   arrow: {
+   arrowContainer: {
         position: 'absolute',
         top: hp (513/812.0*100),
         left: wp (329/375.0*100),
+        width: wp (46/375.0*100),
+        height: hp (27.5/812.0*100),
+   },
+   arrow: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
         width: wp (46/375.0*100),
         height: hp (27.5/812.0*100),
    }
