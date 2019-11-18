@@ -30,6 +30,13 @@ class Circle extends Component {
             }).start());
             this.select = !this.select
         }
+        else 
+        {
+            if (this.props.segue)
+            {
+                this.props.delegate.toClasses();
+            }
+        }
     }
 
     render () {

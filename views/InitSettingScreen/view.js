@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import { Animated, Image, Easing, Dimensions, View, Text} from 'react-native';
+import { Animated, Image, Easing, Dimensions, View, TouchableWithoutFeedback, TouchableOpacity, Text} from 'react-native';
 import Circle from '../../components/Circle'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import style from "./style";
+//import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 //this easing that is commented out is bad and it crashes stuff
 //import { Easing } from 'react-native-reanimated';
 
@@ -22,10 +23,16 @@ class InitSettingScreen extends Component {
         this.setState (this.animate);
     }
 
+    toClasses = () => {
+        console.log ("hello");
+        this.props.navigation.navigate ('InitMonday', {transition: 'push'});
+    }
+
     animate = () => Animated.timing (this.animation, {
         toValue: 1,
-        duration: 450,
-        easing: Easing.out (Easing.ease),
+        duration: 600,
+        easing: Easing.out (Easing.poly(4)),
+        useNativeDriver: true,
     }).start()
 
     render()
@@ -65,9 +72,13 @@ class InitSettingScreen extends Component {
                 <Circle diameter = {hp (99/812.0*100)} touchable = {false}/>
             </View>
             <View style = {style.rightCircle}>
-                <Circle diameter = {hp (118/812.0*100)} touchable = {false}/>
+                <Circle diameter = {hp (118/812.0*100)} touchable = {false} segue = {true} delegate = {this}/>
             </View>
-            <Image style = {style.arrow} source = {images.arrow} resizeMode = 'stretch'/>
+            <View style = {style.arrowContainer}>
+                <TouchableWithoutFeedback onPress = {this.toClasses}>
+                    <Image style = {style.arrow} source = {images.arrow} resizeMode = 'stretch'/>
+                </TouchableWithoutFeedback>
+            </View>
         </View>         
         );
     }
