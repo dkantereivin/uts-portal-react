@@ -40,7 +40,7 @@ const style = {
         fontSize: wp(30/375.0*100),
         color: 'black',
         height: hp (37/375.0*100),
-        width: wp (50/375.0*100),
+        width: wp (55/375.0*100),
         left: wp (163/375.0*100),
         fontFamily: 'montserrat-bold',
         top: hp (374/812.0*100),

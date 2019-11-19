@@ -17,11 +17,15 @@ class InitTuesdayScreen extends Component {
     classesNames = new Array ("period one", "period two", "period three", "period four", "period five");
     animation = new Animated.Value (0);
 
-    constructor ()
+    constructor (props)
     {
-        super ()
+        super (props)
         this.next = this.next.bind (this);
         this.createStackTuesday = this.createStackTuesday.bind (this);
+        this.props.navigation.addListener('willFocus', 
+        reset => {
+            this.setState (this.animateIn);
+        })
     }
 
     componentDidMount () {

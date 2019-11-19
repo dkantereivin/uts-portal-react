@@ -24,7 +24,6 @@ class InitSettingScreen extends Component {
     }
 
     toClasses = () => {
-        console.log ("hello");
         this.props.navigation.navigate ('InitMonday', {transition: 'push'});
     }
 
@@ -34,6 +33,7 @@ class InitSettingScreen extends Component {
         easing: Easing.out (Easing.poly(4)),
         useNativeDriver: true,
     }).start()
+
 
     render()
     {

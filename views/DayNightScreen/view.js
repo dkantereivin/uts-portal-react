@@ -20,6 +20,13 @@ class DayNightScreen extends Component {
         this.setState (this.animateIn);
     }
 
+
+    willFocus = this.props.navigation.addListener('willFocus', 
+        reset => {
+            this.setState (this.animateIn);
+        }
+    )
+
     dayPressed = () => {
         //do something to store day
         this.toInitSetting();

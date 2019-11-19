@@ -18,14 +18,20 @@ class InitMondayScreen extends Component {
 
     animation = new Animated.Value (0);
 
-    constructor ()
+    constructor (props)
     {
-        super ()
+        super (props)
         this.next = this.next.bind (this);
         this.createStackMonday = this.createStackMonday.bind (this);
+        this.props.navigation.addListener('willFocus', 
+        reset => {
+            this.setState (this.animateIn);
+        })
     }
 
+
     next () {
+        
         //do something to store monday classes
         this.setState (this.animateOut);
         this.props.navigation.navigate ("InitTuesday", {transition: 'fade'});
@@ -33,6 +39,13 @@ class InitMondayScreen extends Component {
 
     animateOut = () => Animated.timing (this.animation, {
         toValue: 1,
+        duration: 600,
+        easing: Easing.out (Easing.poly (4)),
+        useNativeDriver: true,
+    }).start();
+
+    animateIn = () => Animated.timing (this.animation, {
+        toValue: 0,
         duration: 600,
         easing: Easing.out (Easing.poly (4)),
         useNativeDriver: true,
