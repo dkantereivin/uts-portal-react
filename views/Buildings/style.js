@@ -7,17 +7,17 @@ const style = {
     },
     rearBuildings: {
         position: 'absolute',
-        left: wp(-264/375.0*100),
-        top: hp(-43/812.0*100),
-        width: wp(1942/375.0*100),
-        height: hp(853/812.0*100)
+        left: wp(-70.4),
+        top: hp(-5.30),
+        width: wp(517.87),
+        height: hp(105.05)
     },
     frontBuildings: {
         position: 'absolute',
-        left: wp(-264/375.0*100),
-        top: hp(257/812.0*100),
-        width: wp(1026.5/375.0*100),
-        height: hp(660.5/812.0*100)
+        left: wp(-70.4),
+        top: hp(31.65),
+        width: wp(273.73),
+        height: hp(81.34)
     },
     background: {
         position: 'absolute',
@@ -29,10 +29,10 @@ const style = {
     icon: {
         position: 'absolute',
         opacity: 0,
-        left: wp(117/375.0*100),
-        top: hp(129/812.0*100),
-        width: wp(147.5/375.0*100),
-        height: wp(147/375.0*100)
+        left: wp(31.2),
+        top: hp(15.89),
+        width: wp(39.33),
+        height: wp(39.2)
     }
 };
 

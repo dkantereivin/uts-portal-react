@@ -6,23 +6,23 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 const animate = {
     front: { 
         startXY: {
-            x: wp(-264/375.0*100),
-            y: hp(257/812.0*100)
+            x: wp(-70.4),
+            y: hp(31.65)
         },
         endXY: {//add the different of height or width /2 to adjust for scaling
-            x: wp((-415+((1315-1026.5)/2))/375.0*100),
-            y: hp((274+((847-660.5)/2))/812.0*100)
+            x: wp(-72.2),
+            y: hp(45.23)
         },
         maxScale: 1.2815
     },
     rear: {
         startXY: {
-            x: wp(-264/375.0*100),
-            y: hp(-43/812.0*100)
+            x: wp(-70.4),
+            y: hp(-5.30)
         },
         endXY: {//add the different of height or width /2 to adjust for scaling
-            x: wp((-331+((2198-1942)/2))/375.0*100),
-            y: hp((19+((965-853)/2))/812.0*100)
+            x: wp(-54.13),
+            y: hp(9.24)
         },
         maxScale: 1.13155
     },
@@ -53,7 +53,7 @@ class Buildings extends React.Component
     moveBuildings()
     {
         Animated.parallel([
-        Animated.timing(this.iconop,{toValue: 1, duration: 4000}),
+        Animated.timing(this.iconop,{toValue: animate.icon.opacity, duration: 4000}),
         Animated.timing(this.rearBuildingsXY, {toValue: animate.rear.endXY, duration: 4000}), 
         Animated.timing(this.rearBuildingsScale, {toValue: animate.rear.maxScale, duration: 4000}),
         Animated.timing(this.frontBuildingsXY, {toValue: animate.front.endXY, duration: 4000}),
