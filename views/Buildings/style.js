@@ -25,6 +25,14 @@ const style = {
         top: hp(0),
         width: wp(100),
         height: hp(100)
+    },
+    icon: {
+        position: 'absolute',
+        opacity: 0,
+        left: wp(117/375.0*100),
+        top: hp(129/812.0*100),
+        width: wp(147.5/375.0*100),
+        height: wp(147/375.0*100)
     }
 };
 
