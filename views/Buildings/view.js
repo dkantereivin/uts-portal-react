@@ -29,8 +29,9 @@ const animate = {
 };
 
 const images = {
-    rearBuildings: require('./assets/buildings.png'),
-    frontBuildings: require('./assets/frontBuildings.png'),
+    frontBuildings: require('./assets/buildings.png'),
+    rearBuildings: require('./assets/background.png'),
+    background: require('./assets/backgroundGradient.png'),
     icon: require('./assets/icon.png')
 }
 
@@ -49,12 +50,12 @@ class Buildings extends React.Component
 
     moveBuildings()
     {
-        Animated.parallel([
-            Animated.timing(this.rearBuildingsXY, {toValue: animate.rear.endXY, duration: 4000}),
-            Animated.timing(this.rearBuildingsScale, {toValue: animate.rear.maxScale, duration: 4000}),
-            Animated.timing(this.frontBuildingsXY, {toValue: animate.front.endXY, duration: 4000}),
-            Animated.timing(this.frontBuildingsScale, {toValue: animate.front.maxScale, duration: 4000})
-        ]).start(() => this.animationComplete());
+//        Animated.parallel([
+//            Animated.timing(this.rearBuildingsXY, {toValue: animate.rear.endXY, duration: 4000}),
+//            Animated.timing(this.rearBuildingsScale, {toValue: animate.rear.maxScale, duration: 4000}),
+//            Animated.timing(this.frontBuildingsXY, {toValue: animate.front.endXY, duration: 4000}),
+//            Animated.timing(this.frontBuildingsScale, {toValue: animate.front.maxScale, duration: 4000})
+//        ]).start(() => this.animationComplete());
     }
 
     componentDidMount()
@@ -73,8 +74,9 @@ class Buildings extends React.Component
         };
         return (
             <View style={style.container}>
-                <Animated.Image style={[style.rearBuildings, this.rearBuildingsXY.getLayout(), transform.rear]} source={images.rearBuildings} />
-                <Animated.Image style={[style.frontBuildings, this.frontBuildingsXY.getLayout(), transform.front]} source={images.frontBuildings} />
+                <Animated.Image resizeMode="stretch" style={style.background} source={images.background} />
+                <Animated.Image resizeMode="stretch" style={style.rearBuildings} source={images.rearBuildings} />
+                <Animated.Image resizeMode="stretch" style={style.frontBuildings} source={images.frontBuildings} />
             </View>
         );
     }

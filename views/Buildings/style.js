@@ -7,13 +7,24 @@ const style = {
     },
     rearBuildings: {
         position: 'absolute',
-        width: wp(273.5),
-        height: hp(81.5)
+        left: wp(-264/375.0*100),
+        top: hp(-43/812.0*100),
+        width: wp(1942/375.0*100),
+        height: hp(853/812.0*100)
     },
     frontBuildings: {
         position: 'absolute',
-        width: wp(518),
-        height: hp(105)
+        left: wp(-264/375.0*100),
+        top: hp(257/812.0*100),
+        width: wp(1026.5/375.0*100),
+        height: hp(660.5/812.0*100)
+    },
+    background: {
+        position: 'absolute',
+        left: wp(0),
+        top: hp(0),
+        width: wp(100),
+        height: hp(100)
     }
 };
 
