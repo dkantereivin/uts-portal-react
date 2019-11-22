@@ -4,27 +4,27 @@ import { View, Image, Animated } from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const animate = {
-    rear: { // also top
+    front: { 
         startXY: {
-            x: wp(-70.5),
-            y: hp(31.5)
+            x: wp(-264/375.0*100),
+            y: hp(257/812.0*100)
         },
         endXY: {
-            x: wp(-110.5),
-            y: hp(33.5)
-        },
-        maxScale: 1.284
-    },
-    front: { // also bottom
-        startXY: {
-            x: wp(-70.5),
-            y: hp(-5.5)
-        },
-        endXY: {
-            x: wp(-88),
-            y: hp(2.5)
+            x: wp(-415/375.0*100),
+            y: hp(274/812.0*100)
         },
         maxScale: 1.672
+    },
+    rear: {
+        startXY: {
+            x: wp(-264/375.0*100),
+            y: hp(-43/812.0*100)
+        },
+        endXY: {
+            x: wp(-331/375.0*100),
+            y: hp(19/812.0*100)
+        },
+        maxScale: 1.284
     }
 };
 
@@ -50,12 +50,12 @@ class Buildings extends React.Component
 
     moveBuildings()
     {
-//        Animated.parallel([
-//            Animated.timing(this.rearBuildingsXY, {toValue: animate.rear.endXY, duration: 4000}),
-//            Animated.timing(this.rearBuildingsScale, {toValue: animate.rear.maxScale, duration: 4000}),
-//            Animated.timing(this.frontBuildingsXY, {toValue: animate.front.endXY, duration: 4000}),
-//            Animated.timing(this.frontBuildingsScale, {toValue: animate.front.maxScale, duration: 4000})
-//        ]).start(() => this.animationComplete());
+        //Animated.parallel([
+            Animated.timing(this.rearBuildingsXY, {toValue: animate.rear.endXY, duration: 4000}).start(),
+            Animated.timing(this.rearBuildingsScale, {toValue: animate.rear.maxScale, duration: 4000}).start(),
+            Animated.timing(this.frontBuildingsXY, {toValue: animate.front.endXY, duration: 4000}).start(),
+            Animated.timing(this.frontBuildingsScale, {toValue: animate.front.maxScale, duration: 4000}).start()
+        //]).start(() => this.animationComplete());
     }
 
     componentDidMount()
