@@ -1,8 +1,9 @@
 import style from './style';
+import axios from 'axios';
 import {RoundedButton, TextInputField} from '../GlobalComponents';
 
 import React from 'react';
-import { View, Animated, Text, Image } from 'react-native';
+import { KeyboardAvoidingView, View, Animated, Text, Image, AsyncStorage } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 // import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
@@ -16,7 +17,7 @@ class Welcome extends React.Component
 {
     constructor()
     {
-        super()
+        super();
 
         this.state = {
             infoMode: true // true loads info screen, false loads verify screen
@@ -25,26 +26,34 @@ class Welcome extends React.Component
         this.inputAreaOpacity = new Animated.Value(1);
     }
 
-    fadeInputArea()
+    switchInputArea()
     {
-        Animated.timing(this.inputAreaOpacity, {toValue: 0, duration: 1500, useNativeDriver: true}).start(() => {
+        let fadeOut = Animated.timing(this.inputAreaOpacity, {toValue: 0, duration: 300});
+        let fadeIn = Animated.timing(this.inputAreaOpacity, {toValue: 1, duration: 500})
+        fadeOut.start(() => {
             this.setState({infoMode: !this.state.infoMode});
-            Animated.timing(this.inputAreaOpacity, {toValue: 1, duration: 1500, useNativeDriver: true}).start();
-        })
+            fadeIn.start();
+        });
+    }
+
+    verifyCode()
+    {
+        this.props.navigation.navigate('DayNight');
     }
 
     render()
     {
         return (
-            <View style={style.container}>
+            <KeyboardAvoidingView style={style.container} behavior='position'>
                 <View style={{flex: 0.15}} />
                 <Image style={style.image} source={images.mainContent} />
                 <InputArea info={this.state.infoMode} 
                     viewOpacity={this.inputAreaOpacity} 
-                    onSubmit={() => this.fadeInputArea()}
+                    onSubmit={() => this.switchInputArea()}
+                    onVerify={() => this.verifyCode()}
                 />
 
-            </View>
+            </KeyboardAvoidingView>
         );
     }
     
@@ -60,6 +69,11 @@ class InputArea extends React.Component
             email: '',
             code: null
         }
+        this.busy = false;
+        this.state = {
+            verificationText: `Please enter a valid email ending in ${domain}`,
+            badEmailMessage: null
+        };
     }
 
     verifyEmail()
@@ -68,10 +82,42 @@ class InputArea extends React.Component
         return email.length < 1 || email.indexOf(domain) == email.length - domain.length;
     }
 
-    handleSubmit()
+    async handleSubmit(option)
     {
-        this.props.onSubmit();
-        // run code after
+        const addUserError = (err) => {
+            this.setState({verificationText: 'Having an issue verifying your email. Check for typos and make sure you are connected to the internet.'});
+        }
+        const verifyError = (err) => {
+            this.setState({badEmailMessage: 'Unable to verify you. Check for typos and connection issues, and try restarting the app to resend a code.'});
+        }
+        
+        if (this.busy)
+            return;
+        this.busy = true;
+
+        if (!this.verifyEmail())
+            return this.forceUpdate();
+
+        if (option == 'submit')
+        {
+            let link = 'https://us-central1-uts-portal-293.cloudfunctions.net/email/add_user/';
+            let res = await axios.post(link, this.fields, {timeout: 10000}).catch((e) => addUserError(e));
+            if (res.status == 201)
+                this.props.onSubmit();
+            else
+                addUserError(res.status);
+        }
+        else
+        {
+            let link = 'https://us-central1-uts-portal-293.cloudfunctions.net/email/check_code/';
+            let res = await axios.post(link, this.fields, {timeout: 10000}).catch((e) => verifyError(e));
+            if (res.status == 200 && res.data.success) {
+                AsyncStorage.setItem('@device_token', res.data.token);
+                AsyncStorage.setItem('@user/basics', JSON.stringify(this.fields))
+                this.props.onVerify();
+            } else verifyError(res.status);
+        }
+        this.busy = false;
     }
 
     render()
@@ -85,18 +131,19 @@ class InputArea extends React.Component
                     </Text>
                     <TextInputField text='first name' autocomplete='name' 
                                     onChangeText={(txt) => this.fields.name = txt}
+                                    style={{fontSize: 28}}
                     />
                     <View style={{flex: 0.1}}/>
                     <TextInputField text='email' keyboard='email-address' autocomplete='email' 
-                                    onChangeText={(txt) => this.fields.email = txt} 
-                                    onEndEditing={() => this.forceUpdate()}
+                                    onChangeText={(txt) => this.fields.email = txt.toLowerCase()} 
+                                    onEndEditing={() => this.forceUpdate()} style={{fontSize: 26}}
                     />
                     <Text style={[style.badEmailText, {color: this.verifyEmail() ? 'white' : 'red'}]}>
-                        Please enter a valid email ending in '{domain}'.
+                        {this.state.verificationText}
                     </Text>
                 </View>
                 <View style={style.buttonBox} >
-                    <RoundedButton text='submit' onPress={() => this.handleSubmit()} />
+                    <RoundedButton text='submit' onPress={() => this.handleSubmit('submit')} />
                 </View>
             </Animated.View>
         );
@@ -105,14 +152,20 @@ class InputArea extends React.Component
                 <View style={style.actionBox}>
                     <Text style={[style.fieldsTitle, {fontFamily: 'gilroy-bold'}]}>VERIFICATION.</Text>
                     <Text style={[style.fieldsDescription, {fontFamily: 'gilroy', fontSize: 20}]}>
-                        check your email for a code we sent you.
+                        check your email for{'\n'}a code we sent you.
                     </Text>
                     <TextInputField text='verification code' autocomplete='off' keyboard='numeric'
-                                    onChangeText={(txt) => this.fields.code = txt.replace(/\D/g,'')}
+                                    onChangeText={(txt) => {
+                                        this.fields.code = txt.replace(/\D/g,'');
+                                        this.setState({badEmailMessage: null})
+                                    }}
                     />
+                    <Text style={[style.badEmailText, {color: 'red'}]}>
+                        {this.state.badEmailMessage}
+                    </Text>
                 </View>
                 <View style={style.buttonBox} >
-                    <RoundedButton text='verify.' onPress={() => this.handleSubmit()} />
+                    <RoundedButton text='verify.' onPress={() => this.handleSubmit('verify')} />
                 </View>
             </Animated.View>
         )
