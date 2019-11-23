@@ -27,10 +27,10 @@ class Buildings extends React.Component
     {
         Animated.timing (this.animateValue, {
             toValue: 1,
-            duration: 4000,
+            duration: 40,
             useNativeDriver: true,
         }).start(() => {
-            sleep(1000).then(() => this.props.navigation.navigate('Welcome'));
+            sleep(10).then(() => this.props.navigation.navigate('Settings'));
         });
     }
  

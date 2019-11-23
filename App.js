@@ -13,11 +13,12 @@ import Subscription from './views/Subscription/view';
 import SetMonday from './views/SetMonday/view';
 import SetTuesday from './views/SetTuesday/view';
 import FinalSetup from './views/FinalSetup/view';
+import Settings from './views/Settings/view';
 import Transitions from './assets/Transitions';
 
 
 const handleTransitions = ({scenes}) => {
-    const next = scenes[scenes.length - 1].route.routeName;
+    const next = scenes[scenes.length-1].route.routeName;
 
     switch(next)
     {
@@ -28,6 +29,7 @@ const handleTransitions = ({scenes}) => {
         case 'SetMonday':       return Transitions.fromRight(500);
         case 'SetTuesday':      return Transitions.fromRight(500);
         case 'FinalSetup':      return Transitions.fromRight(500);
+        case 'Settings':        return Transitions.fromRight(500);
         default:                return Transitions.fadeIn(300);
     }
 }
@@ -40,7 +42,8 @@ const gNavigator = createStackNavigator({
     Subscription,
     SetMonday,
     SetTuesday,
-    FinalSetup
+    FinalSetup,
+    Settings
 },
 {
     initialRouteName: 'Buildings',
