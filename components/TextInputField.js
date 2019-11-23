@@ -4,6 +4,7 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 
 const style = StyleSheet.create({
     field: {
+        height: 37,
         width: wp(75),
         fontFamily: 'gilroy',
         fontSize: 30,
@@ -24,7 +25,7 @@ class TextInputField extends React.Component
             <View style={style.view}>
                 <TextInput 
                     style={[style.field, this.props.style]}
-                    maxLength={30}
+                    maxLength={this.props.maxLength || 20} // max 20 characters for field
                     textAlignVertical='bottom'
                     autoCorrect={false}
                     keyboardAppearance='light'
