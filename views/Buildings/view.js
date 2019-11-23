@@ -19,11 +19,14 @@ class Buildings extends React.Component
         this.animateValue = new Animated.Value (0);
     }
  
-    moveBuildings = () => Animated.timing (this.animateValue, {
-        toValue: 1,
-        duration: 4000,
-        useNativeDriver: true,
-    }).start()
+    moveBuildings() {
+            Animated.timing (this.animateValue, {
+            toValue: 1,
+            delay: 1000,
+            duration: 4000,
+            useNativeDriver: true,
+        }).start()
+    }
  
     componentDidMount()
     { 
