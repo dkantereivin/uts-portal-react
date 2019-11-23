@@ -1,14 +1,17 @@
 import style from './style';
 import React from 'react';
-import { View, Image, Animated, Easing } from 'react-native';
+import { View, Animated } from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
- 
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 const images = {
     frontBuildings: require('./assets/buildings.png'),
     rearBuildings: require('./assets/background.png'),
     logo: require('./assets/icon.png'),
-    background: require('./assets/backgroundGradient.png'),
-    //icon: require('./assets/icon.png')
+    background: require('./assets/backgroundGradient.png')
 }
  
 class Buildings extends React.Component
@@ -19,23 +22,20 @@ class Buildings extends React.Component
         this.animateValue = new Animated.Value (0);
     }
  
-    moveBuildings() {
-            Animated.timing (this.animateValue, {
+    moveBuildings()
+    {
+        Animated.timing (this.animateValue, {
             toValue: 1,
-            delay: 1000,
             duration: 4000,
             useNativeDriver: true,
-        }).start()
+        }).start(() => {
+            sleep(1000).then(() => this.props.navigation.navigate('Welcome'));
+        });
     }
  
     componentDidMount()
     { 
         this.moveBuildings() 
-    }
- 
-    animationComplete()
-    {
-        this.props.navigation.navigate('Welcome');
     }
  
     render()
