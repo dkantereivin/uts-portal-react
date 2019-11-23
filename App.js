@@ -7,6 +7,7 @@ import InitSettingScreen from "./views/InitSettingScreen/view";
 import InitMondayScreen from "./views/InitMondayScreen/view";
 import InitTuesdayScreen from "./views/InitTuesdayScreen/view";
 import WelcomeScreen from "./views/WelcomeScreen/view";
+import Buildings from "./views/Buildings/view";
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import * as Font from 'expo-font';
@@ -35,7 +36,7 @@ export default class App extends Component {
 
   render () {
     return (
-      this.state.fontLoaded? <AppContainer/> :
+      this.state.fontLoaded? <Buildings/>/*<AppContainer/>*/ :
       //actually supposed to be the splash screen
       <View style = {{flex: 1, backgroundColor: 'black'}}>
       </View>

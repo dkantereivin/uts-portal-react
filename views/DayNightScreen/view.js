@@ -39,7 +39,7 @@ class DayNightScreen extends Component {
 
     toInitSetting = () => {
         this.setState (this.animateOut);
-        this.props.navigation.navigate ('InitSetting', {transition: 'fadespecial'});
+        this.props.navigation.navigate ('InitSetting', {transition: 'fade'});
     }
 
     animateOut = () => Animated.timing(this.animation, {
