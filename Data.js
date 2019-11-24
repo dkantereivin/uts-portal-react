@@ -55,6 +55,9 @@ class Data
             if (value == null)
             {
                 let notifSettings = {};
+                notifSettings ["special"] = true,
+                notifSettings ["latestart"] = true,
+                notifSettings ["assembly"] = true,
                 notifSettings ["articles"] = true;
                 notifSettings ["general"] = true;
                 notifSettings ["house"] = true;
@@ -284,6 +287,9 @@ masterJSON:
         },
         notifSettings: Object { //those shown are default values
             "articles" : true,
+            "latestart": true,
+            "special": true,
+            "assembly": true,
             "general" : true,
             "house" : true,
             "surveys" : true,
