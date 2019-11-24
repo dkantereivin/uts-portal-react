@@ -15,7 +15,19 @@ import SetTuesday from './views/SetTuesday/view';
 import FinalSetup from './views/FinalSetup/view';
 import Settings from './views/Settings/view';
 import Transitions from './assets/Transitions';
+import * as firebase from 'firebase';
+import Data from './Data';
 
+const firebaseConfig = {
+    apiKey: "AIzaSyCkMVXbgG-8l_vPXo5EoHDw3lB2HXKm4Y4",
+    authDomain: "uts-portal-293.firebaseapp.com",
+    databaseURL: "https://uts-portal-293.firebaseio.com",
+    projectId: "uts-portal-293",
+    storageBucket: "uts-portal-293.appspot.com",
+    messagingSenderId: "367766824243",
+};
+
+firebase.initializeApp(firebaseConfig);
 
 const handleTransitions = ({scenes}) => {
     const next = scenes[scenes.length-1].route.routeName;
@@ -46,7 +58,8 @@ const gNavigator = createStackNavigator({
     Settings
 },
 {
-    initialRouteName: 'Buildings',
+    initialRouteName: 'SetMonday',
+    //initialRouteName: 'Buildings',
     headerMode: 'none',
     transitionConfig: (nav) => handleTransitions(nav)
     // transitionConfig: () => ({
@@ -75,11 +88,13 @@ class App extends React.Component
 
     componentDidMount()
     {
+        Data.setDefaults();
+        Data.updateAll();
         Font.loadAsync({
             'gilroy': require('./assets/fonts/gilroy.ttf'),
             'gilroy-bold': require('./assets/fonts/gilroy-bold.ttf'),
             'montserrat': require('./assets/fonts/montserrat.ttf'),
-            'montserrat-bold': require('./assets/fonts/montserrat-bold.ttf')
+            'montserrat-bold': require('./assets/fonts/Montserrat-Bold.ttf')
         });
     }
 

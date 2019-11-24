@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import { Animated, Image, Easing, Dimensions, View, Text, TouchableOpacity, TextInput} from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import style from "./style";
+import Data from "../../Data";
 //this easing that is commented out is bad and it crashes stuff
 //import { Easing } from 'react-native-reanimated';
 
@@ -29,13 +30,9 @@ class SetTuesday extends Component {
     }
 
     next () {
+        Data.initTimetable (false, this.classesTuesday);
         this.setState (this.animateOut)
-        this.props.navigation.navigate ('Welcome')
-        /*
-        for (var x = 0; x < 5; x++)
-        {
-            console.log (this.classesTuesday [x]);
-        }*/
+        this.props.navigation.navigate ('FinalSetup')
     }
     animateOut = () => Animated.timing (this.animation, {
         toValue: 2,
