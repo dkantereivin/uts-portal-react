@@ -59,6 +59,7 @@ class Data
                 notifSettings ["latestart"] = true,
                 notifSettings ["assembly"] = true,
                 notifSettings ["articles"] = true;
+                notifSettings ["flipday"] = true,
                 notifSettings ["general"] = true;
                 notifSettings ["house"] = true;
                 notifSettings ["surveys"] = true;
@@ -280,8 +281,15 @@ class Data
 
 export default Data;
 /*
-masterJSON:
+masterJSON: //this might not be entirely correct, but the idea should be right
+    @device_token: token,
     @user: {
+        "basics": Object {
+            "name" : str,
+            "email" : str,
+            "code" : number,
+        },
+        
         "expiration": Object {
             "expirationDate" : "DateString"
         },
@@ -289,6 +297,7 @@ masterJSON:
             "articles" : true,
             "latestart": true,
             "special": true,
+            "flipday": true,
             "assembly": true,
             "general" : true,
             "house" : true,

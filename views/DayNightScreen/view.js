@@ -5,6 +5,7 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 const {width} = Dimensions.get('window');
 
 import style from "./style";
+import Data from '../../Data';
 
 const images = {
     dayImage: require ('./assets/dayImage.png'),
@@ -28,12 +29,12 @@ class DayNightScreen extends Component {
     )
 
     dayPressed = () => {
-        //do something to store day
+        Data.setNotification ("notifTime", 1)
         this.toInitSetting();
     }
 
     nightPressed = () => {
-        // do something to store night
+        Data.setNotification ("notifTime", 2);
         this.toInitSetting();
     }
 
