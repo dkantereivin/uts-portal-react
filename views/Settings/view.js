@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { View, ScrollView, StyleSheet, Image, Text, Slider, AsyncStorage, TouchableOpacity, Switch } from 'react-native';
+import { View, ScrollView, StyleSheet, Image, Text, Slider, AsyncStorage, TouchableOpacity, Switch, Object } from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import style from './style';
 
@@ -10,6 +10,47 @@ const images = {
     night: require('./assets/Night_Notification.png'),
     thumb: require('./assets/Ellipse 2.png')
 };
+class notification extends Component{
+   static async setNotification (key, newvalue) //string, value
+    {
+        try 
+        {
+            let curr = await AsyncStorage.getItem ('@user/notifSettings');
+            let oldJSON = JSON.parse (curr);
+            oldJSON [key] = newvalue;
+            AsyncStorage.setItem ('@user/notifSettings', JSON.stringify(oldJSON));
+        }
+        catch (error)
+        {
+            console.log (error);
+        }
+    }
+
+    static async setNotification (json) //json object
+    {
+        
+        try {AsyncStorage.setItem ('@user/notifSettings', JSON.stringify (json));} catch (error) {console.log (error)}
+    }
+
+    static async getNotification ()
+    {
+        try {return JSON.parse(await AsyncStorage.getItem ('@user/notifSettings'));} catch (error) {console.log (error)}
+        return null;
+    }
+
+    static async getNotification (key) //string
+    {
+        try {
+            let curr = await AsyncStorage.getItem ('@user/notifSettings');
+            let json = JSON.parse (curr);
+            return json [key];
+        }
+        catch (error)
+        {
+            console.log (error);
+        }
+    }
+}
 class Settings extends Component {
     constructor()
     {
@@ -17,23 +58,19 @@ class Settings extends Component {
         this.exit = this.exit.bind (this);
     }
     state = {
-        days: 1,  
-        morningnight: 'night',
-        general: false,
-        house: false,
-        articles: false,
-        surveys: false,
-        late_start: false,
-        assembly: false,
-        special_schedule: false,
-        flip_days: false,
+        notifs: {}
     };
     componentDidMount(){
-        
+        this.setState({notifs:notification.getNotification()})
+        console.log(this.state.notifs['daysBefore'])
+    }
+    changenotif(key, newvalue){
+        let newnotifs=this.state.notifs;
+        newnotifs[key]=newvalue;
+        this.setState({notifs: newnotifs});
+        notification.setNotification(key,newvalue);
     }
     exit(){
-        const notifs = this.state.morningnight === 'night' ? {time: '7:00 pm'} : {time: '8:00 am'}
-        AsyncStorage.setItem("@user/notifications", JSON.stringify(notifs));
         this.props.navigation.navigate ('Home')
     }
     render() {
