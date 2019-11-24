@@ -1,111 +1,100 @@
-import React, {Component} from 'react';
-import { Animated, StyleSheet, Text, View, Easing} from 'react-native';
-import Dashboard from "./views/Dashboard/view";
-import LoadingScreen from "./views/LoadingScreen/view";
-import DayNightScreen from "./views/DayNightScreen/view";
-import InitSettingScreen from "./views/InitSettingScreen/view";
-import InitMondayScreen from "./views/InitMondayScreen/view";
-import InitTuesdayScreen from "./views/InitTuesdayScreen/view";
-import WelcomeScreen from "./views/WelcomeScreen/view";
-import {createAppContainer} from 'react-navigation';
-import {createStackNavigator} from 'react-navigation-stack';
+import React from 'react';
 import * as Font from 'expo-font';
-//import Animated from 'react-native-reanimated';
+import { SafeAreaView, Text, View, AsyncStorage } from 'react-native';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
+import * as ReactTransitions from 'react-navigation-transitions'; // https://github.com/plmok61/react-navigation-transitions/blob/master/src/index.js
 
-export default class App extends Component {
-  constructor ()
-  {
-    super ()
-    this.state = {
-      fontLoaded: false,
+import Buildings from './views/Buildings/view';
+import Welcome from './views/Welcome/view';
+import Login from './views/Login/view';
+import DayNight from './views/DayNight/view';
+import Subscription from './views/Subscription/view';
+import SetMonday from './views/SetMonday/view';
+import SetTuesday from './views/SetTuesday/view';
+import FinalSetup from './views/FinalSetup/view';
+import Settings from './views/Settings/view';
+import Transitions from './assets/Transitions';
+
+
+const handleTransitions = ({scenes}) => {
+    const next = scenes[scenes.length-1].route.routeName;
+
+    switch(next)
+    {
+        case 'Welcome':         return Transitions.fadeIn(1000);
+        case 'Login':           return Transitions.fadeOut(1000);
+        case 'DayNight':        return Transitions.fromRight(300);
+        case 'Subscriptions':   return Transitions.fromRight(500);
+        case 'SetMonday':       return Transitions.fromRight(500);
+        case 'SetTuesday':      return Transitions.fromRight(500);
+        case 'FinalSetup':      return Transitions.fromRight(500);
+        case 'Settings':        return Transitions.fromRight(500);
+        default:                return Transitions.fadeIn(300);
     }
-  }
-  //load the fonts
-  async componentDidMount () {
-    await Font.loadAsync({
-      'montserrat': require ('./assets/fonts/Montserrat.ttf'),
-      'montserrat-bold': require ('./assets/fonts/Montserrat-Bold.ttf'),
-      'simsun': require ('./assets/fonts/SimSun.ttf'),
-      'gilroy-extrabold': require ('./assets/fonts/Gilroy-ExtraBold.ttf'),
-      'gilroy-light': require ('./assets/fonts/Gilroy-Light.ttf'),
-    });
-    //sets the state to true after the font is loaded
-    this.setState({fontLoaded: true});
-  }
-
-  render () {
-    return (
-      this.state.fontLoaded? <AppContainer/> :
-      //actually supposed to be the splash screen
-      <View style = {{flex: 1, backgroundColor: 'black'}}>
-      </View>
-    );
-  }
 }
 
-const AppNavigator = createStackNavigator(
-  {
-    Loading: LoadingScreen,
-    DayNight: DayNightScreen,
-    InitSetting: InitSettingScreen,
-    InitMonday: InitMondayScreen,
-    InitTuesday: InitTuesdayScreen,
-    Welcome: WelcomeScreen,
-    Dash: Dashboard,
-  },
-  {
-    initialRouteName: 'DayNight', //temporary
-    //in charge of transition animation:
-    transitionConfig: () => ({
-        transitionSpec: {
-          duration: 600,
-          easing: Easing.out(Easing.poly(4)),
-          timing: Animated.timing,
-          useNativeDriver: true,
-        },
-        screenInterpolator: (sceneProps) => {
-          //console.log (sceneProps);
-          const {layout, position, scene} = sceneProps;
-          const width = layout.initWidth;
-          const height = layout.initHeight;
-          const {index, route} = scene;
-          const params = route.params || {} //that's i don't know what this does really
-          const transition = params.transition || 'default';
-          return {
-            fade: fade (index, position, width),
-            push: push (index, position, width),
-            fadespecial: fadespecial (index, position, width),
-          }[transition];
-        },
-    }),
-    defaultNavigationOptions: {
-      header: null, //hides the header/navigation bar
+const gNavigator = createStackNavigator({
+    Buildings,
+    Welcome,
+    Login,
+    DayNight,
+    Subscription,
+    SetMonday,
+    SetTuesday,
+    FinalSetup,
+    Settings
+},
+{
+    initialRouteName: 'Buildings',
+    headerMode: 'none',
+    transitionConfig: (nav) => handleTransitions(nav)
+    // transitionConfig: () => ({
+    //     transitionSpec: Transitions.transitionSpec(),
+    //     screenInterpolator: (sceneProps) => Transitions.screenInterpolator(sceneProps)
+    // })
+});
+
+const GlobalContainer = createAppContainer(gNavigator);
+
+class App extends React.Component
+{
+    constructor()
+    {
+        super();
+        this.state = {
+            firstTime: null
+        }
     }
-  }
-);
 
-const AppContainer = createAppContainer (AppNavigator);
+    componentWillMount()
+    {
+        AsyncStorage.getItem('@device/token')
+            .then((val) => this.setState({firstTime: val == null || val == undefined}));
+    }
 
-let fadespecial = (index, position, width) => {
-  const fade = position.interpolate ({
-    inputRange: [index - 1, index, index + 1, index + 2],
-    outputRange: [0, 1, 1, 0],
-  })
-  return {opacity : fade}
-};
+    componentDidMount()
+    {
+        Font.loadAsync({
+            'gilroy': require('./assets/fonts/gilroy.ttf'),
+            'gilroy-bold': require('./assets/fonts/gilroy-bold.ttf'),
+            'montserrat': require('./assets/fonts/montserrat.ttf'),
+            'montserrat-bold': require('./assets/fonts/montserrat-bold.ttf')
+        });
+    }
 
-let fade = (index, position, width) => {
-  const fade = position.interpolate ({
-    inputRange: [index - 1, index, index + 1],
-    outputRange: [0, 1, 0],
-  })
-  return {opacity : fade}
+    render()
+    {
+        if (this.state.firstTime == null)
+            return (<Text>{null}</Text>);
+        return (
+            <SafeAreaView style={{flex: 1}} forceInset={{ top: 'always', bottom: 'always' }}>
+                <GlobalContainer />
+            </SafeAreaView>
+        );
+    }
 }
 
-let push = (index, position, width) => {
-  const translate = position.interpolate ({
-    inputRange: [index - 1, index, index + 1],
-    outputRange: [width, 0, 0],
-  })
-  return {transform: [{translateX : translate}]}
-};
+
+
+export default App;
