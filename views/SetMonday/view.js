@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import { KeyboardAvoidingView, Animated, Image, Easing, Dimensions, View, Text, TouchableOpacity, TextInput} from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import style from "./style";
+import Data from "../../Data";
 //this easing that is commented out is bad and it crashes stuff
 //import { Easing } from 'react-native-reanimated';
 
@@ -26,7 +27,7 @@ class SetMonday extends Component {
     }
 
     next () {
-        //do something to store monday classes
+        Data.initTimetable (true, this.classesMonday);
         this.setState (this.animateOut);
         this.props.navigation.navigate ("SetTuesday");
     }

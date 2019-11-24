@@ -3,6 +3,7 @@ import React from 'react';
 import { View, Animated } from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
+
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
