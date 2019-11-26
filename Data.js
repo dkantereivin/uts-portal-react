@@ -14,12 +14,10 @@ class Data
     }
     
     static merge(m1, m2){
+        if (m1 == undefined) m1 = {};
         for(key in m2){
             if(this.is_value(m2[key])) m1[key] = m2[key];
-            else{
-                if(m1[key] == undefined) m1[key] = {};
-                merge(m1[key],m2[key]);
-            }
+            else merge(m1[key],m2[key]);
         }
     }
 

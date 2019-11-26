@@ -1,6 +1,6 @@
 import React from 'react';
 import * as Font from 'expo-font';
-import { SafeAreaView, Text, View, AsyncStorage } from 'react-native';
+import { SafeAreaView, Text, View, Switch, AsyncStorage } from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import * as ReactTransitions from 'react-navigation-transitions'; // https://github.com/plmok61/react-navigation-transitions/blob/master/src/index.js
@@ -105,13 +105,13 @@ class App extends React.Component
         if (this.state.firstTime == null || !this.state.fontLoaded)
             return (<Text>{null}</Text>);
         return (
+            <Settings/>
+            /*
             <SafeAreaView style={{flex: 1}} forceInset={{ top: 'always', bottom: 'always' }}>
                 <GlobalContainer />
-            </SafeAreaView>
+            </SafeAreaView>*/
         );
     }
 }
-
-
 
 export default App;
