@@ -39,6 +39,7 @@ const style = {
     fieldsDescription: { // description/title for fields
         fontSize: 30,
         justifyContent: 'center',
+        alignItems: 'center',
         paddingLeft: wp(7),
         paddingRight: wp(7),
         paddingTop: 0,
