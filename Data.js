@@ -60,6 +60,10 @@ class Data
                 notifSettings ["house"] = true;
                 notifSettings ["surveys"] = true;
                 notifSettings ["daysBefore"] = 2;
+                notifSettings ["latestart"] = true;
+                notifSettings ["assembly"] = true;
+                notifSettings ["special"] = true;
+                notifSettings ["flipdays"] = true;
                 notifSettings ["notifTime"] = 2; //1: afternoon, 2: evening;
                 await AsyncStorage.setItem ('@user/notifSettings', JSON.stringify (notifSettings));
             }
@@ -257,7 +261,17 @@ class Data
 
     static async getNotification ()
     {
-        try {return JSON.parse(await AsyncStorage.getItem ('@user/notifSettings'));} catch (error) {console.log (error)}
+        try {
+            let value = AsyncStorage.getItem ("@user/notifSettings");
+            if (value == null) {
+                await this.setDefaults();
+            }
+            return JSON.parse(await AsyncStorage.getItem ('@user/notifSettings'));
+        } 
+        catch (error) 
+        {
+            console.log (error)
+        }
         return null;
     }
 
