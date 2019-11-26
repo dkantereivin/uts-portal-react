@@ -12,6 +12,7 @@ import DayNight from './views/DayNight/view';
 import Subscription from './views/Subscription/view';
 import SetMonday from './views/SetMonday/view';
 import SetTuesday from './views/SetTuesday/view';
+import ScheduleScreen from './views/ScheduleScreen/view';
 import FinalSetup from './views/FinalSetup/view';
 import Transitions from './assets/Transitions';
 import * as firebase from 'firebase';
@@ -73,7 +74,8 @@ class App extends React.Component
     {
         super();
         this.state = {
-            firstTime: null
+            firstTime: null,
+            fontLoaded: false
         }
     }
 
@@ -91,18 +93,20 @@ class App extends React.Component
             'gilroy': require('./assets/fonts/gilroy.ttf'),
             'gilroy-bold': require('./assets/fonts/gilroy-bold.ttf'),
             'montserrat': require('./assets/fonts/montserrat.ttf'),
-            'montserrat-bold': require('./assets/fonts/Montserrat-Bold.ttf')
-        });
+            'montserrat-bold': require('./assets/fonts/Montserrat-Bold.ttf'),
+        }).then (() => this.setState ({fontLoaded: true}));
     }
 
     render()
     {
-        if (this.state.firstTime == null)
+        if (this.state.firstTime == null || !this.state.fontLoaded)
             return (<Text>{null}</Text>);
         return (
+            <ScheduleScreen/>
+            /*
             <SafeAreaView style={{flex: 1}} forceInset={{ top: 'always', bottom: 'always' }}>
                 <GlobalContainer />
-            </SafeAreaView>
+            </SafeAreaView>*/
         );
     }
 }
