@@ -7,26 +7,42 @@ require ('firebase/database');
 
 class Data 
 {
-    static merge (obj1, obj2)
-    {
-        let result = {};
-        let key;
-        for (key in obj1)
-        {
-            if (obj1.hasOwnProperty(key))
-            {
-                result [key] = obj1 [key]
-            }
-        }
-        for (key in obj2)
-        {
-            if (obj2.hasOwnProperty(key))
-            {
-                result [key] = obj2 [key]
-            }
-        }
-        return result;
+    static is_value(obj){
+        if(obj.constructor == "".constructor) return true;
+        if(obj.constructor == [].contsructor) return true;
+        return false;
     }
+    
+    static merge(m1, m2){
+        for(key in m2){
+            if(this.is_value(m2[key])) m1[key] = m2[key];
+            else{
+                if(m1[key] == undefined) m1[key] = {};
+                merge(m1[key],m2[key]);
+            }
+        }
+    }
+
+    // static merge (obj1, obj2)
+    // {
+    //     let result = {};
+    //     let key;
+    //     for (key in obj1)
+    //     {
+    //         if (obj1.hasOwnProperty(key))
+    //         {
+    //             result [key] = obj1 [key]
+    //         }
+    //     }
+    //     for (key in obj2)
+    //     {
+    //         if (obj2.hasOwnProperty(key))
+    //         {
+    //             result [key] = obj2 [key]
+    //         }
+    //     }
+    //     return result;
+    // }
 
     static async initTimetable (ABDay, arr) //ABDay: bool, 
     {
@@ -55,6 +71,9 @@ class Data
             if (value == null)
             {
                 let notifSettings = {};
+                notifSettings ["special"] = true,
+                notifSettings ["latestart"] = true,
+                notifSettings ["assembly"] = true,
                 notifSettings ["articles"] = true;
                 notifSettings ["general"] = true;
                 notifSettings ["house"] = true;
@@ -271,6 +290,9 @@ masterJSON:
         },
         notifSettings: Object { //those shown are default values
             "articles" : true,
+            "latestart": true,
+            "special": true,
+            "assembly": true,
             "general" : true,
             "house" : true,
             "surveys" : true,

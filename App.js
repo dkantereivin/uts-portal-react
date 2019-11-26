@@ -105,11 +105,9 @@ class App extends React.Component
         if (this.state.firstTime == null || !this.state.fontLoaded)
             return (<Text>{null}</Text>);
         return (
-            <Settings/>
-            /*
             <SafeAreaView style={{flex: 1}} forceInset={{ top: 'always', bottom: 'always' }}>
                 <GlobalContainer />
-            </SafeAreaView>*/
+            </SafeAreaView>
         );
     }
 }
