@@ -24,6 +24,20 @@ class Data
         }
     }
 
+    static gen_strings(n){
+        ret = [], used = {};
+        for(i=0; i<n; i++){
+            curr = "";
+            for(k=0; k<26; k++){
+                rd = String.fromCharCode(Math.floor(Math.random()*26)+97);
+                curr+=rd;
+            }
+            if(used[curr] != undefined) i--;
+            else ret.push(curr), used[curr] = 1;
+        }
+        return ret;
+    }
+
     // static merge (obj1, obj2)
     // {
     //     let result = {};
