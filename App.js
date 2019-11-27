@@ -58,8 +58,8 @@ const gNavigator = createStackNavigator({
     Settings
 },
 {
-    //initialRouteName: 'SetMonday',
-    initialRouteName: 'Buildings',
+    initialRouteName: 'SetMonday',
+    // initialRouteName: 'Buildings',
     headerMode: 'none',
     transitionConfig: (nav) => handleTransitions(nav)
     // transitionConfig: () => ({
