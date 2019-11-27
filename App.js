@@ -1,6 +1,6 @@
 import React from 'react';
 import * as Font from 'expo-font';
-import { SafeAreaView, Text, View, AsyncStorage } from 'react-native';
+import { SafeAreaView, Text, View, Switch, AsyncStorage } from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import * as ReactTransitions from 'react-navigation-transitions'; // https://github.com/plmok61/react-navigation-transitions/blob/master/src/index.js
@@ -14,6 +14,7 @@ import SetMonday from './views/SetMonday/view';
 import SetTuesday from './views/SetTuesday/view';
 import ScheduleScreen from './views/ScheduleScreen/view';
 import FinalSetup from './views/FinalSetup/view';
+import Settings from './views/Settings/view';
 import Transitions from './assets/Transitions';
 import * as firebase from 'firebase';
 import Data from './Data';
@@ -30,7 +31,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 const handleTransitions = ({scenes}) => {
-    const next = scenes[scenes.length - 1].route.routeName;
+    const next = scenes[scenes.length-1].route.routeName;
 
     switch(next)
     {
@@ -41,6 +42,7 @@ const handleTransitions = ({scenes}) => {
         case 'SetMonday':       return Transitions.fromRight(500);
         case 'SetTuesday':      return Transitions.fromRight(500);
         case 'FinalSetup':      return Transitions.fromRight(500);
+        case 'Settings':        return Transitions.fromRight(500);
         default:                return Transitions.fadeIn(300);
     }
 }
@@ -53,11 +55,12 @@ const gNavigator = createStackNavigator({
     Subscription,
     SetMonday,
     SetTuesday,
-    FinalSetup
+    FinalSetup,
+    Settings
 },
 {
-    initialRouteName: 'SetMonday',
-    //initialRouteName: 'Buildings',
+    //initialRouteName: 'SetMonday',
+    initialRouteName: 'Buildings',
     headerMode: 'none',
     transitionConfig: (nav) => handleTransitions(nav)
     // transitionConfig: () => ({
@@ -75,7 +78,11 @@ class App extends React.Component
         super();
         this.state = {
             firstTime: null,
+<<<<<<< HEAD
             fontLoaded: false
+=======
+            fontLoaded: false,
+>>>>>>> master
         }
     }
 
@@ -83,18 +90,22 @@ class App extends React.Component
     {
         AsyncStorage.getItem('@device/token')
             .then((val) => this.setState({firstTime: val == null || val == undefined}));
-    }
-
-    componentDidMount()
-    {
         Data.setDefaults();
         Data.updateAll();
+    }
+    componentDidMount()
+    {
         Font.loadAsync({
             'gilroy': require('./assets/fonts/gilroy.ttf'),
             'gilroy-bold': require('./assets/fonts/gilroy-bold.ttf'),
             'montserrat': require('./assets/fonts/montserrat.ttf'),
+<<<<<<< HEAD
             'montserrat-bold': require('./assets/fonts/Montserrat-Bold.ttf'),
         }).then (() => this.setState ({fontLoaded: true}));
+=======
+            'montserrat-bold': require('./assets/fonts/Montserrat-Bold.ttf')
+        }).then (() => this.setState ({fontLoaded: true}))
+>>>>>>> master
     }
 
     render()
@@ -102,7 +113,11 @@ class App extends React.Component
         if (this.state.firstTime == null || !this.state.fontLoaded)
             return (<Text>{null}</Text>);
         return (
+<<<<<<< HEAD
             <ScheduleScreen/>
+=======
+            <Settings/>
+>>>>>>> master
             /*
             <SafeAreaView style={{flex: 1}} forceInset={{ top: 'always', bottom: 'always' }}>
                 <GlobalContainer />
@@ -110,7 +125,5 @@ class App extends React.Component
         );
     }
 }
-
-
 
 export default App;

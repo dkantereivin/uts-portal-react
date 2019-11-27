@@ -7,26 +7,40 @@ require ('firebase/database');
 
 class Data 
 {
-    static merge (obj1, obj2)
-    {
-        let result = {};
-        let key;
-        for (key in obj1)
-        {
-            if (obj1.hasOwnProperty(key))
-            {
-                result [key] = obj1 [key]
-            }
-        }
-        for (key in obj2)
-        {
-            if (obj2.hasOwnProperty(key))
-            {
-                result [key] = obj2 [key]
-            }
-        }
-        return result;
+    static is_value(obj){
+        if(obj.constructor == "".constructor) return true;
+        if(obj.constructor == [].contsructor) return true;
+        return false;
     }
+    
+    static merge(m1, m2){
+        if (m1 == undefined) m1 = {};
+        for(key in m2){
+            if(this.is_value(m2[key])) m1[key] = m2[key];
+            else merge(m1[key],m2[key]);
+        }
+    }
+
+    // static merge (obj1, obj2)
+    // {
+    //     let result = {};
+    //     let key;
+    //     for (key in obj1)
+    //     {
+    //         if (obj1.hasOwnProperty(key))
+    //         {
+    //             result [key] = obj1 [key]
+    //         }
+    //     }
+    //     for (key in obj2)
+    //     {
+    //         if (obj2.hasOwnProperty(key))
+    //         {
+    //             result [key] = obj2 [key]
+    //         }
+    //     }
+    //     return result;
+    // }
 
     static async initTimetable (ABDay, arr) //ABDay: bool, 
     {
@@ -39,7 +53,9 @@ class Data
         try 
         {
             const value = await AsyncStorage.getItem ('@user/timetable');
-            await AsyncStorage.setItem('@user/timetable', JSON.stringify(this.merge (JSON.parse(value), newData)));
+            let old = JSON.parse (value);
+            this.merge (old, newData);
+            await AsyncStorage.setItem('@user/timetable', JSON.stringify(old));
         }
         catch (error)
         {
@@ -64,6 +80,10 @@ class Data
                 notifSettings ["house"] = true;
                 notifSettings ["surveys"] = true;
                 notifSettings ["daysBefore"] = 2;
+                notifSettings ["latestart"] = true;
+                notifSettings ["assembly"] = true;
+                notifSettings ["special"] = true;
+                notifSettings ["flipdays"] = true;
                 notifSettings ["notifTime"] = 2; //1: afternoon, 2: evening;
                 await AsyncStorage.setItem ('@user/notifSettings', JSON.stringify (notifSettings));
             }
@@ -240,6 +260,7 @@ class Data
 
     static async setNotification (key, newvalue) //string, value
     {
+        if (typeof (newvalue) === "undefined") {try {AsyncStorage.setItem ('@user/notifSettings', JSON.stringify (key));} catch (error) {console.log (error)}}
         try 
         {
             let curr = await AsyncStorage.getItem ('@user/notifSettings');
@@ -253,29 +274,11 @@ class Data
         }
     }
 
-    static async setNotification (json) //json object
+    static async getNotification (key)
     {
-        
-        try {AsyncStorage.setItem ('@user/notifSettings', JSON.stringify (json));} catch (error) {console.log (error)}
-    }
-
-    static async getNotification ()
-    {
-        try {return JSON.parse(await AsyncStorage.getItem ('@user/notifSettings'));} catch (error) {console.log (error)}
-        return null;
-    }
-
-    static async getNotification (key) //string
-    {
-        try {
-            let curr = await AsyncStorage.getItem ('@user/notifSettings');
-            let json = JSON.parse (curr);
-            return json [key];
-        }
-        catch (error)
-        {
-            console.log (error);
-        }
+        if (typeof key === "undefined") {try {return JSON.parse(await AsyncStorage.getItem ('@user/notifSettings'));} catch (error) {console.log (error)}}
+        try {let curr = await AsyncStorage.getItem ('@user/notifSettings');let json = JSON.parse (curr);return json [key];}
+        catch (error){console.log (error);}
     }
 }
 
