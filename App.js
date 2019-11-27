@@ -78,11 +78,7 @@ class App extends React.Component
         super();
         this.state = {
             firstTime: null,
-<<<<<<< HEAD
-            fontLoaded: false
-=======
             fontLoaded: false,
->>>>>>> master
         }
     }
 
@@ -99,13 +95,8 @@ class App extends React.Component
             'gilroy': require('./assets/fonts/gilroy.ttf'),
             'gilroy-bold': require('./assets/fonts/gilroy-bold.ttf'),
             'montserrat': require('./assets/fonts/montserrat.ttf'),
-<<<<<<< HEAD
-            'montserrat-bold': require('./assets/fonts/Montserrat-Bold.ttf'),
-        }).then (() => this.setState ({fontLoaded: true}));
-=======
             'montserrat-bold': require('./assets/fonts/Montserrat-Bold.ttf')
         }).then (() => this.setState ({fontLoaded: true}))
->>>>>>> master
     }
 
     render()
@@ -113,11 +104,7 @@ class App extends React.Component
         if (this.state.firstTime == null || !this.state.fontLoaded)
             return (<Text>{null}</Text>);
         return (
-<<<<<<< HEAD
             <ScheduleScreen/>
-=======
-            <Settings/>
->>>>>>> master
             /*
             <SafeAreaView style={{flex: 1}} forceInset={{ top: 'always', bottom: 'always' }}>
                 <GlobalContainer />
