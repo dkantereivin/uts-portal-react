@@ -14,11 +14,25 @@ class Data
     }
     
     static merge(m1, m2){
-        if (m1 == undefined) m1 = {};
+        if(m1 == undefined) m1 = {};
         for(key in m2){
             if(this.is_value(m2[key])) m1[key] = m2[key];
             else merge(m1[key],m2[key]);
         }
+    }
+
+    static gen_strings(n){
+        ret = [], used = {};
+        for(i=0; i<n; i++){
+            curr = "";
+            for(k=0; k<26; k++){
+                rd = String.fromCharCode(Math.floor(Math.random()*26)+97);
+                curr+=rd;
+            }
+            if(used[curr] != undefined) i--;
+            else ret.push(curr), used[curr] = 1;
+        }
+        return ret;
     }
 
     // static merge (obj1, obj2)

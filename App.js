@@ -59,8 +59,8 @@ const gNavigator = createStackNavigator({
     Settings
 },
 {
-    //initialRouteName: 'SetMonday',
-    initialRouteName: 'Buildings',
+    initialRouteName: 'SetMonday',
+    // initialRouteName: 'Buildings',
     headerMode: 'none',
     transitionConfig: (nav) => handleTransitions(nav)
     // transitionConfig: () => ({
@@ -94,7 +94,7 @@ class App extends React.Component
         Font.loadAsync({
             'gilroy': require('./assets/fonts/gilroy.ttf'),
             'gilroy-bold': require('./assets/fonts/gilroy-bold.ttf'),
-            'montserrat': require('./assets/fonts/montserrat.ttf'),
+            'montserrat': require('./assets/fonts/Montserrat.ttf'),
             'montserrat-bold': require('./assets/fonts/Montserrat-Bold.ttf')
         }).then (() => this.setState ({fontLoaded: true}))
     }
