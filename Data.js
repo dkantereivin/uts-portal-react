@@ -53,7 +53,9 @@ class Data
         try 
         {
             const value = await AsyncStorage.getItem ('@user/timetable');
-            await AsyncStorage.setItem('@user/timetable', JSON.stringify(this.merge (JSON.parse(value), newData)));
+            let old = JSON.parse (value);
+            this.merge (old, newData);
+            await AsyncStorage.setItem('@user/timetable', JSON.stringify(old));
         }
         catch (error)
         {

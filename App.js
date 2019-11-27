@@ -90,8 +90,6 @@ class App extends React.Component
     }
     componentDidMount()
     {
-        Data.setDefaults();
-        Data.updateAll();
         Font.loadAsync({
             'gilroy': require('./assets/fonts/gilroy.ttf'),
             'gilroy-bold': require('./assets/fonts/gilroy-bold.ttf'),
