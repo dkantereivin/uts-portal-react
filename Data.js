@@ -14,13 +14,14 @@ class Data
     }
     
     static merge(m1, m2){
+<<<<<<< HEAD
         if(m1 == undefined) m1 = {};
+=======
+        if (m1 == undefined) m1 = {};
+>>>>>>> 56b5d03a9151cdc0bf3e6df8f8b26614cc654cf2
         for(key in m2){
             if(this.is_value(m2[key])) m1[key] = m2[key];
-            else{
-                if(m1[key] == undefined) m1[key] = {};
-                merge(m1[key],m2[key]);
-            }
+            else merge(m1[key],m2[key]);
         }
     }
 
@@ -70,7 +71,9 @@ class Data
         try 
         {
             const value = await AsyncStorage.getItem ('@user/timetable');
-            await AsyncStorage.setItem('@user/timetable', JSON.stringify(this.merge (JSON.parse(value), newData)));
+            let old = JSON.parse (value);
+            this.merge (old, newData);
+            await AsyncStorage.setItem('@user/timetable', JSON.stringify(old));
         }
         catch (error)
         {
