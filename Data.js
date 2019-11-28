@@ -126,7 +126,7 @@ class Data
         {
             let value = JSON.parse(await AsyncStorage.getItem ('@user/expiration'));
             let date = new Date (value.expirationDate);
-            //if (value != null && Date.now() < date.getTime()) {return}
+            if (value != null && Date.now() < date.getTime()) {return}
             let newDate = new Date()
             const now = new Date ();
             const oneday = 1000*60*60*24;
@@ -509,67 +509,9 @@ masterJSON: //this might not be entirely correct, but the idea should be right
             "Assembly Day": Object {
                 "additionalNotes": Array ["","","","","","","",],
                 "correspond": Array [1, 0, 2, 0, 3, 4, 5,],
-                "endTimes": Array [
-                    Object {
-                        "nanoseconds": 0,
-                        "seconds": 1555941420,
-                    },
-                    Object {
-                        "nanoseconds": 0,
-                        "seconds": 1555944420,
-                    },
-                    Object {
-                        "nanoseconds": 0,
-                        "seconds": 1555948320,
-                    },
-                    Object {
-                        "nanoseconds": 0,
-                        "seconds": 1555951320,
-                    },
-                    Object {
-                        "nanoseconds": 0,
-                        "seconds": 1555955040,
-                    },
-                    Object {
-                        "nanoseconds": 0,
-                        "seconds": 1555958940,
-                    },
-                    Object {
-                        "nanoseconds": 0,
-                        "seconds": 1555962840,
-                    },
-                ],
+                "endTimes": Array [1555941420, 1555944420, 1555944420,1555944420,1555944420,1555944420,1555944420],
                 "periodNames": Array ["Period 1","Assembly","Period 2","Lunch","Period 3","Period 4","Period 5",],
-                "startTimes": Array [
-                    Object {
-                        "nanoseconds": 0,
-                        "seconds": 1555937700,
-                    },
-                    Object {
-                        "nanoseconds": 0,
-                        "seconds": 1554904800,
-                    },
-                    Object {
-                        "nanoseconds": 0,
-                        "seconds": 1555944600,
-                    },
-                    Object {
-                        "nanoseconds": 0,
-                        "seconds": 1555948320,
-                    },
-                    Object {
-                        "nanoseconds": 0,
-                        "seconds": 1555951320,
-                    },
-                    Object {
-                        "nanoseconds": 0,
-                        "seconds": 1555955220,
-                    },
-                    Object {
-                        "nanoseconds": 0,
-                        "seconds": 1555008720,
-                    },
-                ],
+                "startTimes": Array [1555941420, 1555944420, 1555944420,1555944420,1555944420,1555944420,1555944420],
                 "value": 2,
             },
         }
