@@ -73,6 +73,7 @@ const style = StyleSheet.create ({
     textinput: {
         position: 'absolute',
         left: wp (150/375.0*100),
+        right: 0,
         color: 'black',
         fontSize: wp (18/375.0*100),
         fontFamily: 'gilroy',

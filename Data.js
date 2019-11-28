@@ -7,19 +7,19 @@ require ('firebase/database');
 
 class Data 
 {
-    static is_value(obj){
-        if(obj.constructor == "".constructor) return true;
-        if(obj.constructor == [].contsructor) return true;
-        return false;
-    }
+    // static is_value(obj){
+    //     if(obj.constructor == "".constructor) return true;
+    //     if(obj.constructor == [].contsructor) return true;
+    //     return false;
+    // }
     
-    static merge(m1, m2){
-        if(typeof(m1) == "undefined") m1 = {};
-        for(key in m2){
-            if(this.is_value(m2[key])) m1[key] = m2[key];
-            else merge(m1[key],m2[key]);
-        }
-    }
+    // static merge(m1, m2){
+    //     if(typeof(m1) == "undefined" || m1 == null) m1 = {};
+    //     for(key in m2){
+    //         if(this.is_value(m2[key])) m1[key] = m2[key];
+    //         else this.merge(m1[key],m2[key]);
+    //     }
+    // }
 
     static gen_strings(n){
         ret = [], used = {};
@@ -35,26 +35,26 @@ class Data
         return ret;
     }
 
-    // static merge (obj1, obj2)
-    // {
-    //     let result = {};
-    //     let key;
-    //     for (key in obj1)
-    //     {
-    //         if (obj1.hasOwnProperty(key))
-    //         {
-    //             result [key] = obj1 [key]
-    //         }
-    //     }
-    //     for (key in obj2)
-    //     {
-    //         if (obj2.hasOwnProperty(key))
-    //         {
-    //             result [key] = obj2 [key]
-    //         }
-    //     }
-    //     return result;
-    // }
+    static merge (obj1, obj2)
+    {
+        let result = {};
+        let key;
+        for (key in obj1)
+        {
+            if (obj1.hasOwnProperty(key))
+            {
+                result [key] = obj1 [key]
+            }
+        }
+        for (key in obj2)
+        {
+            if (obj2.hasOwnProperty(key))
+            {
+                result [key] = obj2 [key]
+            }
+        }
+        return result;
+    }
 
     static async initTimetable (ABDay, arr) //ABDay: bool, 
     {
@@ -68,8 +68,7 @@ class Data
         {
             const value = await AsyncStorage.getItem ('@user/timetable');
             let old = JSON.parse (value);
-            this.merge (old, newData);
-            await AsyncStorage.setItem('@user/timetable', JSON.stringify(old));
+            await AsyncStorage.setItem('@user/timetable', JSON.stringify(this.merge (old, newData)));
         }
         catch (error)
         {
@@ -125,8 +124,11 @@ class Data
         try 
         {
             let value = JSON.parse(await AsyncStorage.getItem ('@user/expiration'));
-            let date = new Date (value.expirationDate);
-            if (value != null && Date.now() < date.getTime()) {return}
+            if (value != null)
+            {
+                let date = new Date (value.expirationDate);
+                if (Date.now() < date.getTime()) return;
+            }
             let newDate = new Date()
             const now = new Date ();
             const oneday = 1000*60*60*24;
@@ -261,7 +263,7 @@ class Data
         {
             let timetable = JSON.parse(await AsyncStorage.getItem ('@user/timetable'));
             let fliptonormal = JSON.parse(await AsyncStorage.getItem ('@user/fliptonormal'));
-            aday? (timetable.A [flipped? fliptonormal [classnumber] : classnumber] = newvalue) : (timetable.B [flipped? fliptonormal [classnumber] : classnumber] = newvalue);
+            aday? (timetable.A [(flipped? fliptonormal [classnumber] : classnumber)-1] = newvalue) : (timetable.B [(flipped? fliptonormal [classnumber] : classnumber)-1] = newvalue);
             await AsyncStorage.setItem ('@user/timetable', JSON.stringify (timetable));
         }
         catch (error) {
@@ -275,13 +277,12 @@ class Data
         {
             let timetable = JSON.parse(await AsyncStorage.getItem ('@user/timetable'));
             let fliptonormal = JSON.parse(await AsyncStorage.getItem ('@user/fliptonormal'));
-            return aday? timetable.A [flipped? fliptonormal [classnumber] : classnumber] : timetable.B [flipped? fliptonormal [classnumber] : classnumber];
+            return aday? timetable.A [(flipped? fliptonormal [classnumber] : classnumber)-1] : timetable.B [(flipped? fliptonormal [classnumber] : classnumber)-1];
         }
         catch (error)
         {
             console.log (error)
         }
-        return null;
     }
 
     static async setNotification (key, newvalue) //string, value
