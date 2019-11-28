@@ -86,17 +86,19 @@ class App extends React.Component
     {
         AsyncStorage.getItem('@device/token')
             .then((val) => this.setState({firstTime: val == null || val == undefined}));
-        Data.setDefaults();
-        Data.updateAll();
+        
     }
-    componentDidMount()
+    async componentDidMount()
     {
-        Font.loadAsync({
+        await Data.setDefaults();
+        await Data.updateAll();
+        await Font.loadAsync({
             'gilroy': require('./assets/fonts/gilroy.ttf'),
             'gilroy-bold': require('./assets/fonts/gilroy-bold.ttf'),
             'montserrat': require('./assets/fonts/Montserrat.ttf'),
             'montserrat-bold': require('./assets/fonts/Montserrat-Bold.ttf')
-        }).then (() => this.setState ({fontLoaded: true}))
+        })
+        this.setState ({fontLoaded: true})
     }
 
     render()

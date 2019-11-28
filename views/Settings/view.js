@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import { View, ScrollView, Animated, StyleSheet, Image, Text, Slider, AsyncStorage, TouchableOpacity, Switch } from 'react-native';
+import { View, ScrollView, Animated, StyleSheet, Image, Text, AsyncStorage, TouchableOpacity, Switch } from 'react-native';
 import Data from '../../Data'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import style from './style';
+import Slider from "react-native-slider"
 
 const images = {
     back: require ('./assets/Back.png'),
@@ -110,26 +111,26 @@ class Settings extends Component {
                     </Text>
                     TO BE NOTIFIED?
                 </Text>
-                <TouchableOpacity style={style.morningview} onPress={() => this.changenotif('notifTime',1)}>
-                    <Animated.Image style = {[style.morning,{opacity:this.state.notifs['notifTime']==1?1:0.25}]} source = {images.morning} />
-                </TouchableOpacity>
                 <View style={style.nightview}>
                     <TouchableOpacity onPress={() => this.changenotif('notifTime',2)}>
                         <Animated.Image style = {[style.night,{opacity:this.state.notifs['notifTime']==2?1:0.25}]} source = {images.night} /> 
                     </TouchableOpacity>
                 </View>
-                <TouchableOpacity style={[style.backview]} onPress={() => this.exit()}>
-                    <Image style = {style.back} source = {images.back} />   
-                </TouchableOpacity>
                 <Switch style={style.GESW} onValueChange = {(value) => this.changenotif ('general',value)} value = {this.state.notifs['general']} />
                 <Switch style={style.HOSW} onValueChange = {(value) => this.changenotif('house',value)} value = {this.state.notifs['house']}/>
                 <Switch style={style.ARSW} onValueChange = {(value) => this.changenotif('articles',value)} value = {this.state.notifs['articles']}/>
                 <Switch style={style.SUSW} onValueChange = {(value) => this.changenotif('surveys',value)} value = {this.state.notifs['surveys']}/>
-                <Slider style={style.slider} disabled = {false} minimumValue={0} maximumValue={7} step={1} minimumTrackTintColor='#536DFE' thumbTintColor='#536DFE' maximumTrackTintColor='#C8C8C8' value={this.state.notifs['daysBefore']} onValueChange={(days) => this.changenotif('daysBefore',days)}/>
+                <Slider style={style.slider} animated = {false} minimumValue={0} maximumValue={7} step={1} minimumTrackTintColor='#536DFE' thumbTintColor= '#536DFE' thumbStyle = {{width: wp (8), height: wp (8), borderRadius: wp (4)}}thumbTouchSize={{width: wp (100), height: wp (26)}} maximumTrackTintColor='#C8C8C8' value={this.state.notifs['daysBefore']} onValueChange={(days) => this.changenotif('daysBefore',days)}/>
                 <Switch style={style.LSSW} onValueChange = {(value) => this.changenotif('latestart',value)} value = {this.state.notifs['latestart']}/>
                 <Switch style={style.ASSW} onValueChange = {(value) => this.changenotif('assembly',value)} value = {this.state.notifs['assembly']}/>
                 <Switch style={style.SSSW} onValueChange = {(value) => this.changenotif('special',value)} value = {this.state.notifs['special']}/>
                 <Switch style={style.FDSW} onValueChange = {(value) => this.changenotif('flipdays',value)} value = {this.state.notifs['flipdays']}/>
+                <TouchableOpacity style={style.morningview} onPress={() => this.changenotif('notifTime',1)}>
+                    <Animated.Image style = {[style.morning,{opacity:this.state.notifs['notifTime']==1?1:0.25}]} source = {images.morning} />
+                </TouchableOpacity>
+                <TouchableOpacity style={[style.backview]} onPress={() => this.exit()}>
+                    <Image style = {style.back} source = {images.back} />   
+                </TouchableOpacity>
             </View>
         </ScrollView>
     );

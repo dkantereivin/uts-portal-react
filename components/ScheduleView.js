@@ -1,14 +1,106 @@
 import React, {Component} from 'react';
-import { Animated, Easing, Image, View, Text, TouchableOpacity, TouchableWithoutFeedback,Dimensions} from 'react-native';
+import { Animated, Easing, StyleSheet, Image, ScrollView, StackView, View, Text, TouchableOpacity, TouchableWithoutFeedback,Dimensions} from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import PeriodView from './PeriodView';
+import Data from "../Data"
 //import { Easing } from 'react-native-reanimated';
+
+const weekdays = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
+const months = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"]
 
 class ScheduleView extends Component {
 
+    constructor (props)
+    {
+        super (props);
+        this.generatePeriods = this.generatePeriods.bind (this);
+    }
+
+    generatePeriods ()
+    {
+        if (this.props.data.periods.length == 0) return null;
+        let stack = []
+        let ids = Data.gen_strings (this.props.data.periods.length);
+        for (let i = 0; i < this.props.data.periods.length; i++)
+        {
+            stack.push(<PeriodView key = {ids [i]} data = {this.props.data.periods [i]}/>)
+        }
+        return stack;
+    }
+
     render () {
-        return (null);
+        let curr = new Date (this.props.data.date);
+        let aorb = this.props.data.abday;
+
+        return (
+            <View style = {style.container}>
+                <Text style = {style.weekday}>
+                    {weekdays [curr.getDay()]}
+                </Text>
+                <Text style = {style.date}>
+                    {months [curr.getMonth()]}{' '}{curr.getDate()}
+                </Text>
+                <Text style = {style.abday}>
+                    {aorb == "N/A" ? null : aorb}
+                </Text>
+                <Text style = {style.daySchedule}>
+                    {aorb == "N/A" ? null : "DAY SCHEDULE"}
+                </Text>
+                <View style = {[style.stackview, {height: hp(this.props.data.periods.length*50/812.0*100)}]}>
+                    {this.generatePeriods()}
+                </View>
+            </View>
+        );
     }
 }
+
+const style = StyleSheet.create({
+    weekday: {
+        position: 'absolute',
+        top: hp (231/812.0*100),
+        left: wp (31/375.0*100),
+        fontSize: wp (40/375.0*100),
+        numberOfLines: 1,
+        fontFamily: 'gilroy-bold'
+    },
+    date: {
+        position: 'absolute',
+        top: hp (280/812.0*100),
+        left: wp (32/375.0*100),
+        fontSize: wp (18/375.0*100),
+        fontFamily: 'montserrat-bold',
+    },
+    container: {
+        top: 0,
+        backgroundColor: 'transparent', 
+        width: wp (100),
+        height: hp (100),
+    },
+    abday: {
+        position: 'absolute',
+        top: hp (315/812.0*100),
+        left: wp (33/375.0*100),
+        fontSize: wp (40/375.0*100),
+        numberOfLines: 1,
+        fontFamily: 'gilroy-bold'
+    },
+    daySchedule: {
+        position: 'absolute',
+        top: hp (334/812.0*100),
+        left: wp (73/375.0*100),
+        fontSize: wp (18/375.0*100),
+        numberOfLines: 1,
+        fontFamily: 'gilroy',
+    },
+    stackview: {
+        position: 'absolute',
+        top: hp (381/812.0*100),
+        left: wp (33/375.0*100),
+        width: wp (309/375.0*100),
+        flexDirection: 'column',
+        alignItems: 'stretch',
+        justifyContent: 'center',
+    },
+});
 
 export default ScheduleView;

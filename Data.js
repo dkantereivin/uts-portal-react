@@ -14,7 +14,7 @@ class Data
     }
     
     static merge(m1, m2){
-        if(m1 == undefined) m1 = {};
+        if(typeof(m1) == "undefined") m1 = {};
         for(key in m2){
             if(this.is_value(m2[key])) m1[key] = m2[key];
             else merge(m1[key],m2[key]);
@@ -29,7 +29,7 @@ class Data
                 rd = String.fromCharCode(Math.floor(Math.random()*26)+97);
                 curr+=rd;
             }
-            if(used[curr] != undefined) i--;
+            if(typeof(used[curr]) != "undefined") i--;
             else ret.push(curr), used[curr] = 1;
         }
         return ret;
@@ -125,11 +125,13 @@ class Data
         try 
         {
             let value = JSON.parse(await AsyncStorage.getItem ('@user/expiration'));
-            if (value != null && Date.now() < Date.parse(value.expirationDate)) {return}
+            let date = new Date (value.expirationDate);
+            //if (value != null && Date.now() < date.getTime()) {return}
             let newDate = new Date()
-            let now = Date.now();
-            let oneday = 1000*60*60*24;
-            newDate.setTime(now - now%(oneday) + oneday);
+            const now = new Date ();
+            const oneday = 1000*60*60*24;
+            now.setHours (0, 0, 0, 0);
+            newDate.setTime(now.getTime() + oneday);
             let newJSON = {}
             newJSON ["expirationDate"] = newDate;
             await AsyncStorage.setItem ('@user/expiration', JSON.stringify (newJSON));
@@ -152,6 +154,16 @@ class Data
             querySnapshot.forEach(function(doc) {
                 // doc.data() is never undefined for query doc snapshots
                 schedules [doc.id] = doc.data();
+                if (schedules [doc.id].hasOwnProperty ("startTimes"))
+                {
+                    for (let i = 0; i < schedules [doc.id]["startTimes"].length; i++)
+                    {
+                        let temp = schedules[doc.id]["startTimes"][i].toDate()
+                        let temp2 = schedules[doc.id]["endTimes"][i].toDate()
+                        schedules [doc.id]["startTimes"][i] = temp.getTime();
+                        schedules [doc.id]["endTimes"][i] = temp2.getTime();
+                    }
+                }
             });
             try {
                 AsyncStorage.setItem ('@user/schedules', JSON.stringify(schedules));
@@ -293,6 +305,123 @@ class Data
         if (typeof key === "undefined") {try {return JSON.parse(await AsyncStorage.getItem ('@user/notifSettings'));} catch (error) {console.log (error)}}
         try {let curr = await AsyncStorage.getItem ('@user/notifSettings');let json = JSON.parse (curr);return json [key];}
         catch (error){console.log (error);}
+    }
+
+    static async getWeekScheduleData ()
+    {
+        // JSON:
+        // data: [
+        //     Object {
+        //         date: "sdfd"
+        //         abday: true/false,
+        //         flipornot: true/false,
+        //         name: "Regular"
+        //         periods: [
+        //             Object {
+        //                 name: "something",
+        //                 classnumber: "correspond",
+        //                 startTimes: "something",
+        //                 endTimes: "something",
+        //             }
+        //         ],
+        //         events: [
+        //             Object {
+        //                 "kind": 1,
+        //                 "time": "(school closed)",
+        //                 "titleDetail": "Thanksgiving Holiday",
+        //             }
+        //         ]
+        //     },
+        // ]
+        let data = [{}, {}, {}, {}, {}];
+        let ids = this.gen_strings(5);
+        const oneday = 1000*60*60*24;
+        //events
+        const events = JSON.parse (await AsyncStorage.getItem ('@user/events'));
+        let today = new Date();
+        today.setHours (0, 0, 0, 0);
+        let later = today.getTime() + 5*oneday;
+        for (var i = 0; i < data.length; i++)
+        {
+            data [i]["date"] = today.getTime() + i*oneday;
+            data [i]["events"] = [];
+            data [i]["id"] = ids [i];
+        }
+        for (var i = 0; i < events.length; i++)
+        {
+            let date = new Date (events [i]["date"])
+            let diff = date.getTime() - today.getTime();
+            if (diff < 0 || diff >= later) continue;
+            data [Math.floor(diff/oneday)]["events"].push (events [i])
+        }
+        let weekly = JSON.parse (await AsyncStorage.getItem ('@user/weekly'))
+        let schedules = JSON.parse (await AsyncStorage.getItem ('@user/schedules'))
+        for (var i = 0; i < data.length; i++)
+        {
+
+            //ADays and FlipDays
+            const curr = new Date (data [i]["date"]); //current day
+            const weekday = curr.getDay();
+            const abday = weekly ["abday"][weekday];
+            const flipornot = weekly ["flipornot"][weekday];
+            data [i]["abday"] = abday;
+            data [i]["flipornot"] = flipornot;
+            //schedules
+            let schedule;
+            for (key in schedules)
+            {
+                if (schedules [key]["value"] == weekly ["scheduletype"][weekday])
+                {
+                    schedule = schedules [key];
+                    break;
+                }
+            }
+            let periods = [];
+            if (schedule.hasOwnProperty ("periodNames"))
+            {
+                for (var j = 0; j < schedule ["periodNames"].length; j++)
+                {
+                    let period = {}
+                    const defaultName = schedule ["periodNames"][j];
+                    const correspond = schedule ["correspond"][j];
+                    const notes = schedule ["additionalNotes"][j];
+                    period ["startTime"] = schedule ["startTimes"][j];
+                    period ["endTime"] = schedule ["endTimes"][j];
+                    period ["classnumber"] = parseInt(correspond);
+                    if (correspond == 0)
+                    {
+                        period ["name"] = defaultName;
+                    }
+                    else 
+                    {
+                        let userInput = "";
+                        if (notes == "A")
+                        {
+                            userInput = await this.timetablequery (true, flipornot == "F", correspond)
+                        }
+                        else if (notes == "B")
+                        {
+                            userInput = await this.tiemtablequery (false, flipornot == "F", correspond)
+                        }
+                        else
+                        {
+                            userInput = await this.timetablequery (abday == "A", flipornot == "F", correspond)
+                        }
+                        if (userInput == "")
+                        {
+                            period ["name"] = defaultName;
+                        }
+                        else 
+                        {
+                            period ["name"] = userInput;
+                        }
+                    }
+                    periods.push (period);
+                }
+            }
+            data [i]["periods"] = periods;
+        }
+        return data;
     }
 }
 
