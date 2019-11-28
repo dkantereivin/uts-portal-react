@@ -14,14 +14,15 @@ class Data
     }
     
     static merge(m1, m2){
-        if(m1 == undefined) m1 = {};
+        if(m1 == null) m1 = {};
         for(key in m2){
             if(this.is_value(m2[key])) m1[key] = m2[key];
             else{
-                if(m1[key] == undefined) m1[key] = m2[key];
+                if(m1[key] == null) m1[key] = m2[key];
                 else merge(m1[key],m2[key]);
             }
         }
+        return m1;
     }
 
     static gen_strings(n){
@@ -33,7 +34,7 @@ class Data
                 curr+=rd;
             }
             if(used[curr] != undefined) i--;
-            else ret.push(curr), used[curr] = 1; 
+            else ret.push(curr), used[curr] = 1;
         }
         return ret;
     }
@@ -70,7 +71,9 @@ class Data
         try 
         {
             const value = await AsyncStorage.getItem ('@user/timetable');
-            await AsyncStorage.setItem('@user/timetable', JSON.stringify(this.merge (JSON.parse(value), newData)));
+            let old = JSON.parse (value);
+            old = this.merge (old, newData);
+            await AsyncStorage.setItem('@user/timetable', JSON.stringify(old));
         }
         catch (error)
         {
