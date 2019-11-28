@@ -27,6 +27,13 @@ const style = {
         backgroundColor: 'black', 
         width: wp (100-40/375.0*100),
         height: hp (100),
+    },
+    container: {
+        top: 0,
+        left: 0,
+        absolute: 0,
+        height: hp (100),
+        width: wp (100),
     }
 }
 

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Animated, Easing, StyleSheet, Image, ScrollView, StackView, View, Text, TouchableOpacity, TouchableWithoutFeedback,Dimensions} from 'react-native';
+import { Animated, Easing, StyleSheet, Image, ScrollView, View, Text, TouchableOpacity, TouchableWithoutFeedback,Dimensions} from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import PeriodView from './PeriodView';
 import Data from "../Data"
@@ -14,6 +14,9 @@ class ScheduleView extends Component {
     {
         super (props);
         this.generatePeriods = this.generatePeriods.bind (this);
+        this.state = {
+            eventIndex: 0,
+        }
     }
 
     generatePeriods ()
@@ -23,7 +26,7 @@ class ScheduleView extends Component {
         let ids = Data.gen_strings (this.props.data.periods.length);
         for (let i = 0; i < this.props.data.periods.length; i++)
         {
-            stack.push(<PeriodView key = {ids [i]} data = {this.props.data.periods [i]}/>)
+            stack.push(<PeriodView key = {ids [i]} aday = {this.props.data.abday} flipped = {this.props.data.flipornot} data = {this.props.data.periods [i]}/>)
         }
         return stack;
     }
@@ -31,7 +34,16 @@ class ScheduleView extends Component {
     render () {
         let curr = new Date (this.props.data.date);
         let aorb = this.props.data.abday;
-
+        let eventtext = null;
+        if (this.props.data.events.length > 0)
+        {
+            let event = this.props.data.events [this.state.eventIndex]
+            eventtext = event.titleDetail + " " + event.time;
+        }
+        else 
+        {
+            eventtext = "NOTHING MUCH.\ngo for a run or something"
+        }
         return (
             <View style = {style.container}>
                 <Text style = {style.weekday}>
@@ -46,9 +58,16 @@ class ScheduleView extends Component {
                 <Text style = {style.daySchedule}>
                     {aorb == "N/A" ? null : "DAY SCHEDULE"}
                 </Text>
-                <View style = {[style.stackview, {height: hp(this.props.data.periods.length*50/812.0*100)}]}>
-                    {this.generatePeriods()}
+                <View style = {[style.scrollview, {height: Math.min(hp (300/812.0*100), hp(this.props.data.periods.length*50/812.0*100))}]}>
+                    <ScrollView automaticallyAdjustContentInsets = {false} style = {style.stackview}>
+                        {this.generatePeriods()}
+                    </ScrollView>
                 </View>
+                <TouchableOpacity style = {style.eventtextpos} onPress = {() => this.setState ({eventIndex: (this.state.eventIndex + 1)%this.props.data.events.length})}>
+                    <Animated.Text style = {style.eventtext}>
+                        {eventtext}
+                    </Animated.Text>
+                </TouchableOpacity>
             </View>
         );
     }
@@ -94,13 +113,36 @@ const style = StyleSheet.create({
     },
     stackview: {
         position: 'absolute',
-        top: hp (381/812.0*100),
-        left: wp (33/375.0*100),
+        top: 0,
+        left: 0,
         width: wp (309/375.0*100),
         flexDirection: 'column',
         alignItems: 'stretch',
         justifyContent: 'center',
     },
+    eventtext: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0,
+        fontSize: wp (18/375.0*100),
+        fontFamily: 'gilroy',
+        color: 'black'
+    },
+    eventtextpos: {
+        position: 'absolute',
+        top: hp (150/812.0*100),
+        left: wp (34/375.0*100),
+        right: wp (34/375.0*100),
+        height: hp (55/812.0*100),
+    },
+    scrollview: {
+        position: 'absolute',
+        top: hp (381/812.0*100),
+        left: wp (33/375.0*100),
+        width: wp (309/375.0*100),
+    }
 });
 
 export default ScheduleView;

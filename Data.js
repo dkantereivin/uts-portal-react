@@ -263,7 +263,14 @@ class Data
         {
             let timetable = JSON.parse(await AsyncStorage.getItem ('@user/timetable'));
             let fliptonormal = JSON.parse(await AsyncStorage.getItem ('@user/fliptonormal'));
-            aday? (timetable.A [(flipped? fliptonormal [classnumber] : classnumber)-1] = newvalue) : (timetable.B [(flipped? fliptonormal [classnumber] : classnumber)-1] = newvalue);
+            if (aday)
+            {
+                timetable.A [(flipped? fliptonormal [classnumber] : classnumber) - 1] = newvalue;
+            }
+            else
+            {
+                timetable.B [(flipped? fliptonormal [classnumber] : classnumber) - 1] = newvalue;
+            }
             await AsyncStorage.setItem ('@user/timetable', JSON.stringify (timetable));
         }
         catch (error) {
@@ -317,6 +324,7 @@ class Data
         //         abday: true/false,
         //         flipornot: true/false,
         //         name: "Regular"
+        //         timetable: Object (the timetable)
         //         periods: [
         //             Object {
         //                 name: "something",

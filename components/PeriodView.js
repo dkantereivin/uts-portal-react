@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { Animated, Easing, Image, View, StyleSheet, TextInput, Text, TouchableOpacity, TouchableWithoutFeedback,Dimensions} from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
+import Data from '../Data';
 //import { Easing } from 'react-native-reanimated';
 
 class PeriodView extends Component {
@@ -38,6 +39,7 @@ class PeriodView extends Component {
 
     textchange (text)
     {
+        Data.timetableupdate (this.props.aday == "A", this.props.flipped == "F", this.state.data.classnumber, text);
         let data = this.state.data;
         data ["name"] = text;
         this.setState (data);
