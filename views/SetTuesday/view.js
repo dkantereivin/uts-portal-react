@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Animated, Image, Easing, Dimensions, View, Text, TouchableOpacity, TextInput} from 'react-native';
+import { Animated, Image, UIManager, Easing, Dimensions, Keyboard, View, Text, TouchableOpacity, TextInput} from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import style from "./style";
 import Data from "../../Data";
@@ -7,6 +7,7 @@ import Data from "../../Data";
 //import { Easing } from 'react-native-reanimated';
 
 const {width, height} = Dimensions.get('window');
+const {State} = TextInput
 
 const images = {
     sadwoman: require ('./assets/sadwoman.png'),
@@ -22,11 +23,16 @@ class SetTuesday extends Component {
     {
         super ()
         this.next = this.next.bind (this);
+        this.handleDidHide = this.handleDidHide.bind (this);
+        this.handleDidShow = this.handleDidShow.bind (this);
         this.createStackTuesday = this.createStackTuesday.bind (this);
+        this.shift = new Animated.Value (0);
     }
 
     componentDidMount () {
         this.setState (this.animateIn);
+        this.DidHide = Keyboard.addListener('keyboardDidHide', this.handleDidHide)
+        this.DidShow = Keyboard.addListener ('keyboardDidShow', this.handleDidShow)
     }
 
     next () {
@@ -57,6 +63,30 @@ class SetTuesday extends Component {
         return stack;
     }
 
+    handleDidHide()
+    {
+        Animated.timing (this.shift, {
+            toValue: 0,
+            duration: 200,
+            useNativeDriver: true,
+        }).start();
+    }
+
+    handleDidShow(event)
+    {
+        const keyboardHeight = event.endCoordinates.height;
+        const currentlyFocusedField = State.currentlyFocusedField();
+        UIManager.measure (currentlyFocusedField, (originX, originY, fieldWidth, fieldHeight, pageX, fieldTop) => {
+            const gap = (height - keyboardHeight) - (fieldTop + fieldHeight);
+            if (gap >= 0) return;
+            Animated.timing (this.shift, {
+                toValue: gap,
+                duration: 200,
+                useNativeDriver: true,
+            }).start()
+        })
+    }
+
     render ()
     {
         //for image
@@ -77,7 +107,7 @@ class SetTuesday extends Component {
         })
 
         return (
-            <View style = {{flex: 1, overflow: 'hidden'}}>
+            <Animated.View style = {{flex: 1, overflow: 'hidden', transform: [{translateY: this.shift}]}}>
                 <Animated.Image style = {[style.sadwoman, {transform: [{translateY: translateYDIR}, {translateX: translateXDIR}]}]} source = {images.sadwoman} resizeMode = 'stretch'/>
                 <Animated.Text style = {style.tuesdayLabel}>
                     TUESDAY CLASSES.
@@ -90,7 +120,7 @@ class SetTuesday extends Component {
                         next.
                     </Text>
                 </TouchableOpacity>
-            </View>
+            </Animated.View>
         );
     }
 }

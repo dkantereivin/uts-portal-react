@@ -26,33 +26,33 @@ class ScheduleScreen extends Component {
         this.index = 0;
         this.pagination = this.pagination.bind (this);
         this.getSchedule = this.getSchedule.bind (this);
-        this.handleWillHide = this.handleWillHide.bind (this);
-        this.handleWillShow = this.handleWillShow.bind (this);
+        this.handleDidHide = this.handleDidHide.bind (this);
+        this.handleDidShow = this.handleDidShow.bind (this);
         this.update = this.update.bind (this);
         this.shift = new Animated.Value (0);
         this.state = {
             dataLoaded: false,
             data: null,
+            scrollEnabled: true,
         }
     }
 
     async componentDidMount ()
     {
-        this.WillHide = Keyboard.addListener('keyboardWillHide', this.handleWillHide)
-        this.WillShow = Keyboard.addListener ('keyboardWillShow', this.handleWillShow)
+        this.DidHide = Keyboard.addListener('keyboardDidHide', this.handleDidHide)
+        this.DidShow = Keyboard.addListener ('keyboardDidShow', this.handleDidShow)
         this.update();
     }
 
     componentWillUnmount()
     {
-        this.WillShow.remove();
+        this.DidShow.remove();
         this.didHide.remove();
     }
 
-    async update ()
+    update ()
     {
-        let something = await Data.getWeekScheduleData ();
-        this.setState ({data: something, dataLoaded: true});
+        Data.getWeekScheduleData().then((something) => {this.setState({data: something, dataLoaded: true})})
     }
 
     render ()
@@ -65,6 +65,7 @@ class ScheduleScreen extends Component {
                     WHAT'S UP TODAY?
                 </Text>
                 <FlatList
+                    scrollEnabled = {this.state.scrollEnabled}
                     automaticallyAdjustContentInsets = {false}
                     data = {this.state.data}
                     renderItem = { ({item}) => this.getSchedule (item)}
@@ -102,8 +103,9 @@ class ScheduleScreen extends Component {
         }
     }
     //animations for keyboard shifting.
-    handleWillHide()
+    handleDidHide()
     {
+        this.setState ({scrollEnabled: true});
         //updates the data and rerenders the view when the keyboard is dismissed, assuming that data in the local database are updated.
         Animated.timing (this.shift, {
             toValue: 0,
@@ -112,7 +114,7 @@ class ScheduleScreen extends Component {
         }).start(() => this.update());
     }
 
-    handleWillShow(event)
+    handleDidShow(event)
     {
         const keyboardHeight = event.endCoordinates.height;
         const currentlyFocusedField = State.currentlyFocusedField();
@@ -120,7 +122,7 @@ class ScheduleScreen extends Component {
             const gap = (height - keyboardHeight) - (fieldTop + fieldHeight);
             if (gap >= 0) return;
             Animated.timing (this.shift, {
-                toValue: gap,
+                toValue: gap-hp(6/812.0*100),
                 duration: 200,
                 useNativeDriver: true,
             }).start()
