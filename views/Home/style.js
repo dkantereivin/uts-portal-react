@@ -1,0 +1,62 @@
+import { StyleSheet, Dimensions } from 'react-native';
+
+import {widthPercentageToDP as wp, 
+        heightPercentageToDP as hp} from 'react-native-responsive-screen';
+
+const style = {
+    superContainer: {
+        flex: 1
+    },
+    container: {
+        flex: 0.94
+    },
+    containerContent: {
+        paddingLeft: wp(3.5),
+        paddingRight: wp(3.5)
+    },
+    helloMsg: {
+        fontSize: 30,
+        fontFamily: 'gilroy'
+    },
+    stdText: {
+        fontSize: 18,
+        fontFamily: 'gilroy'
+    },
+    topContent: { // this is all content including "REST OF THE DAY" and above
+        height: hp(35),
+        paddingTop: hp(6),
+        paddingLeft: wp(3.5),
+        paddingRight: wp(3.5)
+    },
+    nextClassContent: {
+        flex: 1,
+        height: hp(10),
+        flexDirection: 'row'
+    },
+    clock: {
+        flex: 0.5,
+        fontSize: 45,
+        fontFamily: 'gilroy'
+    },
+    classContentLeftBox: {
+        flex: 0.5,
+        justifyContent: 'center',
+        textAlignVertical: 'center'
+    },
+    restOfDayBox: {
+        flex: 1,
+        height: hp(20),
+        padding: hp(2),
+        backgroundColor: 'rgba(242,242,242,1)',
+        justifyContent: 'space-around',
+        alignItems: 'center'
+    },
+    upcomingDayBox: {
+        height: hp(42),
+        paddingTop: hp(3),
+        paddingBottom: hp(3),
+        backgroundColor: 'cornflowerblue'
+    }
+
+}
+export default StyleSheet.create(style);
