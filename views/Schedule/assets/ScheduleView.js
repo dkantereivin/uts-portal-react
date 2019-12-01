@@ -58,7 +58,7 @@ class ScheduleView extends Component {
                     {aorb == "N/A" ? null : "DAY SCHEDULE"}
                 </Text>
                 <View style = {[style.scrollview, {height: Math.min(hp (300/812.0*100), hp(this.props.data.periods.length*50/812.0*100))}]}>
-                    <ScrollView automaticallyAdjustContentInsets = {false} style = {style.stackview}>
+                    <ScrollView automaticallyAdjustContentInsets = {false} alwaysBounceHorizontal = {false} alwaysBounceVertical = {true} style = {style.stackview}>
                         {this.generatePeriods()}
                     </ScrollView>
                 </View>

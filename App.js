@@ -89,7 +89,6 @@ class App extends React.Component
                 'montserrat-bold': require('./assets/fonts/Montserrat-Bold.ttf')
             })
         ]).then(() => this.setState({firstTime: true}))
-        
     }
 
     render()
