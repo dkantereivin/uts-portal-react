@@ -72,7 +72,8 @@ class InputArea extends React.Component
         this.busy = false;
         this.state = {
             verificationText: `Please enter a valid email ending in ${domain}`,
-            badEmailMessage: null
+            badEmailMessage: null,
+            buttonColor: null
         };
     }
 
@@ -85,23 +86,27 @@ class InputArea extends React.Component
     async handleSubmit(option)
     {
         const addUserError = (err) => {
-            this.setState({verificationText: 'Having an issue verifying your email. Check for typos and make sure you are connected to the internet.'});
+            this.setState({verificationText: 'Having an issue verifying your email.\nCheck for typos and make sure you are connected to the internet.'});
         }
         const verifyError = (err) => {
-            this.setState({badEmailMessage: 'Unable to verify you. Check for typos and connection issues, and try restarting the app to resend a code.'});
+            this.setState({badEmailMessage: 'Unable to verify you.\nCheck for typos and connection issues, and try restarting the app to resend a code.'});
         }
         
         if (this.busy)
             return;
-        this.busy = true;
 
         if (!this.verifyEmail())
             return this.forceUpdate();
 
-        if (option == 'submit')
+        this.busy = true;
+        this.setState({buttonColor: {backgroundColor: 'cornflowerblue'}});
+        
+        if (this.props.info)
         {
+            if (this.fields.name == 'skip')
+                return this.props.navigation.navigate('DayNight');
             let link = 'https://us-central1-uts-portal-293.cloudfunctions.net/email/add_user/';
-            let res = await axios.post(link, this.fields, {timeout: 10000}).catch((e) => addUserError(e));
+            let res = await axios.post(link, this.fields).catch((e) => addUserError(e));
             if (res.status == 201)
                 this.props.onSubmit();
             else
@@ -110,7 +115,7 @@ class InputArea extends React.Component
         else
         {
             let link = 'https://us-central1-uts-portal-293.cloudfunctions.net/email/check_code/';
-            let res = await axios.post(link, this.fields, {timeout: 10000}).catch((e) => verifyError(e));
+            let res = await axios.post(link, this.fields).catch((e) => verifyError(e));
             if (res.status == 200 && res.data.success) {
                 AsyncStorage.setItem('@device_token', res.data.token);
                 AsyncStorage.setItem('@user/basics', JSON.stringify(this.fields))
@@ -130,7 +135,7 @@ class InputArea extends React.Component
                         enter some basic details.
                     </Text>
                     <TextInputField text='first name' autocomplete='name' 
-                                    onChangeText={(txt) => this.fields.name = txt}
+                                    onChangeText={(txt) => this.fields.name = txt.trim()}
                                     style={{fontSize: 28}}
                     />
                     <View style={{flex: 0.1}}/>
@@ -143,7 +148,7 @@ class InputArea extends React.Component
                     </Text>
                 </View>
                 <View style={style.buttonBox} >
-                    <RoundedButton text='submit' onPress={() => this.handleSubmit('submit')} />
+                    <RoundedButton text='submit' style={this.state.buttonColor} onPress={() => this.handleSubmit('submit')} />
                 </View>
             </Animated.View>
         );

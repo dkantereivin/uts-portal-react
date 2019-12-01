@@ -25,7 +25,7 @@ class TextInputField extends React.Component
             <View style={style.view}>
                 <TextInput 
                     style={[style.field, this.props.style]}
-                    maxLength={this.props.maxLength || 20} // max 20 characters for field
+                    maxLength={this.props.maxLength || 26} // max 26 characters for field
                     textAlignVertical='bottom'
                     autoCorrect={false}
                     keyboardAppearance='light'

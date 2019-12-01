@@ -25,7 +25,7 @@ class FinalSetup extends Component {
     }
 
     open () {
-        this.props.navigation.navigate('Welcome');
+        this.props.navigation.navigate('Home');
     }
 
     animate = () => Animated.timing (this.animation, {
