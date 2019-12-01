@@ -14,6 +14,7 @@ import SetMonday from './views/SetMonday/view';
 import SetTuesday from './views/SetTuesday/view';
 import FinalSetup from './views/FinalSetup/view';
 import Home from './views/Home/view';
+import Schedule from './views/Schedule/view';
 import Transitions from './assets/Transitions';
 
 import Data from './Data';
@@ -55,7 +56,8 @@ const gNavigator = createStackNavigator({
     SetMonday,
     SetTuesday,
     FinalSetup,
-    Home
+    Home,
+    Schedule
 },
 {
     initialRouteName: 'Home',
@@ -75,12 +77,6 @@ class App extends React.Component
         }
     }
 
-    checkFirstTime()
-    {
-        AsyncStorage.getItem('@device/token')
-            .then((val) => this.setState({firstTime: val == null || val == undefined}));
-    }
-
     componentDidMount()
     {
         Promise.all([
@@ -92,7 +88,7 @@ class App extends React.Component
                 'montserrat': require('./assets/fonts/montserrat.ttf'),
                 'montserrat-bold': require('./assets/fonts/montserrat-bold.ttf')
             })
-        ]).then(() => {this.checkFirstTime()})
+        ]).then(() => this.setState({firstTime: true}))
         
     }
 

@@ -3,7 +3,7 @@ import moment from 'moment';
 import style from './style';
 import Data from '../../Data';
 import Navbar from './assets/Navbar';
-import { AsyncStorage, ScrollView, View, Text } from 'react-native';
+import { AsyncStorage, ScrollView, View, Text, TouchableWithoutFeedback } from 'react-native';
 import { NavigationActions, StackActions } from 'react-navigation';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
@@ -39,9 +39,9 @@ class Home extends React.Component
     /**
      * Sets the state to reflect the current user scheduling.
      */
-    async setAllScheduling(schedule)
+    async setAllScheduling()
     {
-        schedule = schedule || await Data.getWeekScheduleData();
+        let schedule = await Data.getWeekScheduleData();
         let {periods} = schedule.shift();
 
         let time = moment();
@@ -56,10 +56,10 @@ class Home extends React.Component
         
         
         this.setState({
-            nextClass: nextClass ? {
+            nextClass: nextClass != undefined && nextClass != null ? {
                 start: toTimeString(nextClass.startTime),
                 name: nextClass.name.toUpperCase()
-            } : {start: 'Schools', name: null},
+            } : {start: 'School', name: null},
             remainingClasses: periods,
             nextDays: schedule.slice(0, 3) // is this obsolete? dependant on implementation of ScheduleScreen
         })
@@ -108,7 +108,7 @@ class Home extends React.Component
                         <RemainingClasses periods={this.state.remainingClasses}/>
                     </View>
                     <View style={style.upcomingDayBox}>
-                        
+                        <DaysList days={this.state.nextDays} navigation={this.props.navigation}/>
                     </View>
                 </ScrollView>
                 <Navbar navigation={this.props.navigation}/>
@@ -142,12 +142,60 @@ class RemainingClasses extends React.Component
     }
 }
 
-class DayListRendered extends React.Component
-{   // object, daysUntil: number of days (index) between current and future date -- 0 = cur date
-    periodRow({abday, name, periods, events}, daysUntil)
+class DaysList extends React.Component
+{   // days: object, not a prop -- daysUntil (key): number of days (index) between current and future date -- 0 = cur date
+    render()
+    {
+        return (
+            <React.Fragment>
+                {this.props.days.length > 0 ? 
+                this.props.days.map((day, idx) => this.periodRow(day, idx)):null}
+            </React.Fragment>
+        )
+    }
+
+    periodRow({abday, name, events}, daysUntil)
     {
         const date = moment().add({days: daysUntil});
-        
+        return ( // 1 row/day
+            <TouchableWithoutFeedback style={{flex:1}} key={daysUntil} 
+            onPress={() => this.props.navigation.navigate('Schedule', {index: daysUntil})}
+            >
+                <View style={style.futureDayButton}>
+                <View style={style.nextDaysCalendar}>
+                    <Text style={{flex: 0.5, justifyContent: 'flex-end', fontFamily: 'gilroy-bold', fontSize: 16, color: 'rgba(83,109,254,1)'}}>
+                        {abday == 'N/A' ? null : abday}
+                    </Text>
+                    <View style={{flex: 0.5, flexDirection: 'column', justifyContent: 'center', alignSelf: 'center', alignContent: 'center'}}>
+                        <Text style={{flex:0, fontFamily: 'gilroy-bold', fontSize: 30}}>
+                            {date.format('dd').toUpperCase()}
+                        </Text>
+                        <Text style={[style.stdText, {flex: 0}]}>{date.format('DD')}</Text>
+                    </View>
+                </View>
+                <View style={style.nextDaysText}>
+                    <Text style={style.stdText}>
+                        {this.dayDescription(abday, events)}
+                    </Text>
+                </View>
+                </View>
+            </TouchableWithoutFeedback>
+        )
+    }
+
+    // ideally, this would be replaced with the use of weekScheduleData[n].name
+    dayDescription(abday, events)
+    {
+        if (events.length > 0)
+        {
+            let out = '';
+            for (let cur in events)
+                out += cur.titleDetail;
+            return out;
+        }
+        if (abday == 'N/A')
+            return 'NO SCHOOL!\nWEEKEND.';
+        return 'PERFECTLY\nNORMAL DAY.';
     }
 }
 

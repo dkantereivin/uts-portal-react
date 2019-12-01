@@ -22,6 +22,12 @@ class Buildings extends React.Component
         this.animateValue = new Animated.Value (0);
     }
  
+    async checkFirstTime()
+    {
+        AsyncStorage.getItem('@device/token')
+            .then((val) => {if(val)this.props.navigation.navigate('Home')});
+    }
+
     moveBuildings()
     {
         Animated.timing (this.animateValue, {
@@ -35,7 +41,8 @@ class Buildings extends React.Component
  
     componentDidMount()
     { 
-        this.moveBuildings() 
+        this.checkFirstTime();
+        this.moveBuildings();
     }
  
     render()

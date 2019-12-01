@@ -30,7 +30,7 @@ const style = {
     },
     nextClassContent: {
         flex: 1,
-        height: hp(10),
+        // height: hp(10),
         flexDirection: 'row'
     },
     clock: {
@@ -52,10 +52,28 @@ const style = {
         alignItems: 'center'
     },
     upcomingDayBox: {
+        flex: 1,
         height: hp(42),
         paddingTop: hp(3),
         paddingBottom: hp(3),
-        backgroundColor: 'cornflowerblue'
+        paddingLeft: wp(1),
+        paddingRight: wp(1)
+    },
+    futureDayButton: {
+        flex: 1,
+        flexDirection: 'row'
+        // justifyContent: 'space-evenly'
+    },
+    nextDaysCalendar: {
+        flex: 0.5,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'flex-end'
+    },
+    nextDaysText: {
+        flex: 0.5,
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 
 }
