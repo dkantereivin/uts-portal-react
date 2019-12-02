@@ -19,14 +19,6 @@ import Transitions from './assets/Transitions';
 
 import Data from './Data';
 
-const firebaseConfig = {
-    apiKey: "AIzaSyCkMVXbgG-8l_vPXo5EoHDw3lB2HXKm4Y4",
-    authDomain: "uts-portal-293.firebaseapp.com",
-    databaseURL: "https://uts-portal-293.firebaseio.com",
-    projectId: "uts-portal-293",
-    storageBucket: "uts-portal-293.appspot.com",
-    messagingSenderId: "367766824243",
-};
 
 firebase.initializeApp(firebaseConfig);
 
