@@ -5,6 +5,7 @@ import style from "./style";
 import ScheduleView from './assets/ScheduleView'
 import Data from "../../Data";
 import { Platform } from '@unimodules/core';
+import Navbar from '../../components/Navbar';
 
 const {width, height} = Dimensions.get('window');
 const {State} = TextInput;
@@ -78,6 +79,7 @@ class Schedule extends Component {
         if (!this.state.dataLoaded) {return <Text>{null}</Text>}
         
         return (
+            <View>
             <KeyboardAvoidingView style = {style.container} behavior = "position" keyboardVerticalOffset = {-hp (80/812.0*100)}>
                 <Text style = {style.whatsup}>
                     WHAT'S UP{'\n'}TODAY?
@@ -100,6 +102,8 @@ class Schedule extends Component {
                     />
                 </View>
             </KeyboardAvoidingView>
+            {/* <Navbar navigation={this.props.navigation} /> */}
+            </View>
         );
     }
     //Paging and scrolling and stuff

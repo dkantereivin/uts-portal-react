@@ -1,6 +1,6 @@
 import style from './style';
 import React from 'react';
-import { View, Animated } from 'react-native';
+import { View, Animated, AsyncStorage } from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 function sleep(ms) {
@@ -19,13 +19,19 @@ class Buildings extends React.Component
     constructor(props)
     {
         super(props);
+        this.active = true;
         this.animateValue = new Animated.Value (0);
     }
  
-    async checkFirstTime()
+    checkFirstTime()
     {
-        AsyncStorage.getItem('@device/token')
-            .then((val) => {if(val)this.props.navigation.navigate('Home')});
+        AsyncStorage.getItem('@device_token')
+            .then((val) => {
+                if(val) {
+                    this.active = false; 
+                    this.props.navigation.navigate('Home');
+                }
+            });
     }
 
     moveBuildings()
@@ -35,7 +41,7 @@ class Buildings extends React.Component
             duration: 4000,
             useNativeDriver: true,
         }).start(() => {
-            sleep(1000).then(() => this.props.navigation.navigate('Welcome'));
+            sleep(1000).then(() => {if (this.active) this.props.navigation.navigate('Welcome')});
         });
     }
  

@@ -15,6 +15,7 @@ import SetTuesday from './views/SetTuesday/view';
 import FinalSetup from './views/FinalSetup/view';
 import Home from './views/Home/view';
 import Schedule from './views/Schedule/view';
+import Settings from './views/Settings/view';
 import Transitions from './assets/Transitions';
 
 import Data from './Data';
@@ -57,10 +58,11 @@ const gNavigator = createStackNavigator({
     SetTuesday,
     FinalSetup,
     Home,
-    Schedule
+    Schedule,
+    Settings
 },
 {
-    initialRouteName: 'Home',
+    initialRouteName: 'Buildings',
     headerMode: 'none',
     transitionConfig: (nav) => handleTransitions(nav)
 });
