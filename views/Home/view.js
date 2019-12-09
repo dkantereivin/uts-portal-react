@@ -2,8 +2,8 @@ import React from 'react';
 import moment from 'moment';
 import style from './style';
 import Data from '../../Data';
-import Navbar from './assets/Navbar';
-import { AsyncStorage, ScrollView, View, Text, TouchableWithoutFeedback } from 'react-native';
+import Navbar from '../../components/Navbar';
+import { AsyncStorage, ScrollView, View, Text, TouchableWithoutFeedback, BackHandler } from 'react-native';
 import { NavigationActions, StackActions } from 'react-navigation';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
@@ -12,9 +12,9 @@ function toTimeString(ms) // returns ms as MM:SS
 
 class Home extends React.Component
 {
-    constructor()
+    constructor(props)
     {
-        super();
+        super(props);
         this.state = {
             firstName: 'THERE',
             nextClass: {
@@ -24,6 +24,7 @@ class Home extends React.Component
             remainingClasses: [],
             nextDays: []
         }
+        // this.handleBackButton = this.handleBackButton.bind(this);
     }
 
     readFirstName()
@@ -84,7 +85,21 @@ class Home extends React.Component
     {
         this.readFirstName();
         this.setAllScheduling();
+        // BackHandler.addEventListener('androidGoBack', () => this.handleBackButton());
     }
+
+    // componentWillUnmount()
+    // {
+    //     BackHandler.removeEventListener('androidGoBack', () => this.handleBackButton());
+    // }
+
+    // handleBackButton()
+    // {
+    //     if (this.props.navigation.state.routeName === 'Home') {
+    //         BackHandler.exitApp();
+    //         console.log(this.props.navigation.state.routeName);
+    //     }
+    // }
 
     render()
     {

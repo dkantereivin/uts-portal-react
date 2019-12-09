@@ -148,7 +148,7 @@ class InputArea extends React.Component
                     </Text>
                 </View>
                 <View style={style.buttonBox} >
-                    <RoundedButton text='submit' style={this.state.buttonColor} onPress={() => this.handleSubmit('submit')} />
+                    <RoundedButton text='submit.' style={this.state.buttonColor} onPress={() => this.handleSubmit('submit')} />
                 </View>
             </Animated.View>
         );

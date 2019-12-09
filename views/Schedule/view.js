@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
-import {Keyboard, UIManager, Animated, Image, Easing, FlatList, Dimensions, View, Text, TouchableOpacity, TextInput} from 'react-native';
+import {Keyboard, UIManager, Animated, Image, Easing, KeyboardAvoidingView, FlatList, Dimensions, View, Text, TouchableOpacity, TextInput} from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import style from "./style";
 import ScheduleView from './assets/ScheduleView'
 import Data from "../../Data";
 import { Platform } from '@unimodules/core';
+import Navbar from '../../components/Navbar';
 
 const {width, height} = Dimensions.get('window');
 const {State} = TextInput;
@@ -22,11 +23,12 @@ class Schedule extends Component {
     {
         super (props);
         this.flatlist = null;
+        this.container = null;
         this.index = 0;
         this.pagination = this.pagination.bind (this);
         this.getSchedule = this.getSchedule.bind (this);
         this.handleDidHide = this.handleDidHide.bind (this);
-        this.handleDidShow = this.handleDidShow.bind (this);
+        this.handleWillHide = this.handleWillHide.bind (this);
         this.update = this.update.bind (this);
         this.shift = new Animated.Value (0);
         this.state = {
@@ -38,20 +40,38 @@ class Schedule extends Component {
 
     async componentDidMount ()
     {
-        this.DidHide = Keyboard.addListener('keyboardDidHide', this.handleDidHide)
-        this.DidShow = Keyboard.addListener ('keyboardDidShow', this.handleDidShow)
+        if (Platform.OS == "ios")
+        {
+            this.WillHide = Keyboard.addListener('keyboardWillHide', this.handleWillHide)
+        }
+        else
+        {
+            this.DidHide = Keyboard.addListener('keyboardDidHide', this.handleDidHide)
+        }
         this.update();
+    }
+
+    componentWillMount ()
+    {
+        //take your time
+        Data.updateAll();
     }
 
     componentWillUnmount()
     {
-        this.DidShow.remove();
-        this.didHide.remove();
+        if (Platform.OS == "ios")
+        {
+            this.WillHide.remove();
+        }
+        else
+        {
+            this.DidHide.remove();
+        }
     }
 
-    update ()
+    async update ()
     {
-        Data.getWeekScheduleData().then((something) => {this.setState({data: something, dataLoaded: true})})
+        Data.getWeekScheduleData().then ((something) => this.setState ({data: something, dataLoaded: true}))
     }
 
     render ()
@@ -59,26 +79,31 @@ class Schedule extends Component {
         if (!this.state.dataLoaded) {return <Text>{null}</Text>}
         
         return (
-            <Animated.View style = {[style.container, {transform: [{translateY: this.shift}]}]}>
+            <View>
+            <KeyboardAvoidingView style = {style.container} behavior = "position" keyboardVerticalOffset = {-hp (80/812.0*100)}>
                 <Text style = {style.whatsup}>
-                    WHAT'S UP TODAY?
+                    WHAT'S UP{'\n'}TODAY?
                 </Text>
-                <FlatList
-                    scrollEnabled = {this.state.scrollEnabled}
-                    automaticallyAdjustContentInsets = {false}
-                    data = {this.state.data}
-                    renderItem = { ({item}) => this.getSchedule (item)}
-                    horizontal
-                    showsHorizontalScrollIndicator = {false}
-                    contentContainerStyle = {style.contentContainerStyle}
-                    keyExtractor = {item => item.id}
-                    //pass the reference to control
-                    ref = {(ref) => (this.flatlist = ref)}
-                    onScrollEndDrag = {(event) => {
-                        this.pagination (event.nativeEvent)
-                    }}
-                />
-            </Animated.View>
+                <View style = {style.container}>
+                    <FlatList
+                        scrollEnabled = {this.state.scrollEnabled}
+                        automaticallyAdjustContentInsets = {false}
+                        data = {this.state.data}
+                        renderItem = { ({item}) => this.getSchedule (item)}
+                        horizontal
+                        showsHorizontalScrollIndicator = {false}
+                        contentContainerStyle = {style.contentContainerStyle}
+                        keyExtractor = {item => item.id}
+                        //pass the reference to control
+                        ref = {(ref) => (this.flatlist = ref)}
+                        onScrollEndDrag = {(event) => {
+                            this.pagination (event.nativeEvent)
+                        }}
+                    />
+                </View>
+            </KeyboardAvoidingView>
+            {/* <Navbar navigation={this.props.navigation} /> */}
+            </View>
         );
     }
     //Paging and scrolling and stuff
@@ -100,30 +125,30 @@ class Schedule extends Component {
             this.flatlist.scrollToIndex({index: this.index, animated: true})
         }
     }
-    //animations for keyboard shifting.
+
     handleDidHide()
     {
-        this.setState ({scrollEnabled: true});
-        //updates the data and rerenders the view when the keyboard is dismissed, assuming that data in the local database are updated.
-        Animated.timing (this.shift, {
-            toValue: 0,
-            duration: 200,
-            useNativeDriver: true,
-        }).start(() => this.update());
+        this.update()
     }
-    handleDidShow(event)
+
+    handleWillHide()
     {
-        const keyboardHeight = event.endCoordinates.height;
-        const currentlyFocusedField = State.currentlyFocusedField();
-        UIManager.measure (currentlyFocusedField, (originX, originY, fieldWidth, fieldHeight, pageX, fieldTop) => {
-            const gap = (height - keyboardHeight) - (fieldTop + fieldHeight);
-            if (gap >= 0) return;
-            Animated.timing (this.shift, {
-                toValue: gap-hp(6/812.0*100),
-                duration: 200,
-                useNativeDriver: true,
-            }).start()
-        })
+        this.update();
     }
+    
+    // handleWillShow(event)
+    // {
+    //     const keyboardHeight = event.endCoordinates.height;
+    //     const currentlyFocusedField = State.currentlyFocusedField();
+    //     UIManager.measure (currentlyFocusedField, (originX, originY, fieldWidth, fieldHeight, pageX, fieldTop) => {
+    //         const gap = (height - keyboardHeight) - (fieldTop + fieldHeight);
+    //         if (gap >= 0) return;
+    //         Animated.timing (this.shift, {
+    //             toValue: gap-hp(6/812.0*100),
+    //             duration: 200,
+    //             useNativeDriver: true,
+    //         }).start()
+    //     })
+    // }
 }
 export default Schedule;

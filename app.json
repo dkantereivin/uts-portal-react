@@ -2,31 +2,37 @@
   "expo": {
     "name": "UTS Portal",
     "slug": "uts-portal",
-    "privacy": "public",
+    "privacy": "unlisted",
     "sdkVersion": "35.0.0",
-    "platforms": [
+    "platforms": [  
       "ios",
       "android"
     ],
-    "version": "0.0.2",
+    "version": "0.0.3",
     "orientation": "portrait",
     "icon": "./assets/favicon.png",
+    "primaryColor": "#3b79f5",
+    "githubUrl": "https://github.com/dkantereivin/uts-portal-react",
     "splash": {
       "image": "./assets/favicon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "updates": {
+      "enabled": true,
       "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
-      "supportsTablet": false
+      "supportsTablet": false,
+      "bundleIdentifier": "com.utschools.utsportal"
     },
     "android": {
-      "package": "com.studentdev.utsportal"
+      "package": "com.utschools.utsportal",
+      "versionCode": 1,
+      "permissions": []
     }
   }
 }

@@ -11,7 +11,7 @@ const style = {
         color: 'black',
         top: hp (54/812.0*100),
         left: wp (34/375.0*100),
-        width: wp (165/375.0*100),
+        width: wp (300/375.0*100),
     },
     contentContainerStyle: {
         position: 'absolute',

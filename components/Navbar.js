@@ -20,13 +20,19 @@ const style = StyleSheet.create({
 
 class Navbar extends Component
 {
+    homeBarPress()
+    {
+        if (this.props.navigation.state.routeName != 'Home')
+            this.props.navigation.popToTop();
+    }
+
     render()
     {
         return (
             <View style={style.navbar}>
-                <NavbarButton icon={'home'} onPress={() => this.props.navigation.popToTop()}/>
+                <NavbarButton icon={'home'} onPress={this.homeBarPress()}/>
                 <NavbarButton icon={'schedule'} onPress={()=>this.props.navigation.navigate('Schedule')}/>
-                <NavbarButton icon={'articles'} onPress={()=>this.props.navigation.navigate('Articles')}/>
+                {/* <NavbarButton icon={'articles'} onPress={()=>this.props.navigation.navigate('Articles')}/> */}
                 <NavbarButton icon={'settings'} onPress={()=>this.props.navigation.navigate('Settings')}/>
             </View>
         )
@@ -47,13 +53,13 @@ class NavbarButton extends Component
         let icon;
         switch (this.props.icon)
         {
-            case 'home':        icon = require('./home.png');
+            case 'home':        icon = require('./navbar_assets/home.png');
                                 break;
-            case 'schedule':    icon = require('./schedule.png');
+            case 'schedule':    icon = require('./navbar_assets/schedule.png');
                                 break;
-            case 'articles':    icon = require('./articles.png');
+            case 'articles':    icon = require('./navbar_assets/articles.png');
                                 break; 
-            case 'settings':    icon = require('./settings.png');
+            case 'settings':    icon = require('./navbar_assets/settings.png');
                                 break;    
             default:            throw new Error("Navbar Button props.icon is invalid.")     
         }
@@ -68,7 +74,7 @@ class NavbarButton extends Component
     render()
     {
         return (
-            <TouchableHighlight style={style.button} onPress={this.props.onPress}>
+            <TouchableHighlight style={style.button} onPress={this.props.onPress} underlayColor='gainsboro'>
                 <Image style={style.iconImg} source={this.state.icon} />
             </TouchableHighlight>
         )
