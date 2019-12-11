@@ -33,9 +33,16 @@ class DayNightSelection extends React.Component {
 
     componentDidMount()
     {
-        Animated.timing(this.buttonTranslate, {
-            duration: 600, toValue: 0, useNativeDriver: true // custom easing?  easing: Easing.out (Easing.poly(4))
-        }).start();
+        this.loadListener = this.props.navigation.addListener('didFocus', () => {
+            Animated.timing(this.buttonTranslate, {
+                duration: 600, toValue: 0, useNativeDriver: true // custom easing?  easing: Easing.out (Easing.poly(4))
+            }).start();
+        });
+    }
+
+    componentWillUnmount()
+    {
+        this.loadListener.remove();
     }
 
     render()

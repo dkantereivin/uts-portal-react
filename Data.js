@@ -7,6 +7,34 @@ require ('firebase/database');
 
 class Data 
 {
+    // static is_value(obj){
+    //     if(obj.constructor == "".constructor) return true;
+    //     if(obj.constructor == [].contsructor) return true;
+    //     return false;
+    // }
+    
+    // static merge(m1, m2){
+    //     if(typeof(m1) == "undefined" || m1 == null) m1 = {};
+    //     for(key in m2){
+    //         if(this.is_value(m2[key])) m1[key] = m2[key];
+    //         else this.merge(m1[key],m2[key]);
+    //     }
+    // }
+
+    static gen_strings(n){
+        ret = [], used = {};
+        for(i=0; i<n; i++){
+            curr = "";
+            for(k=0; k<26; k++){
+                rd = String.fromCharCode(Math.floor(Math.random()*26)+97);
+                curr+=rd;
+            }
+            if(typeof(used[curr]) != "undefined") i--;
+            else ret.push(curr), used[curr] = 1;
+        }
+        return ret;
+    }
+
     static merge (obj1, obj2)
     {
         let result = {};
@@ -39,7 +67,8 @@ class Data
         try 
         {
             const value = await AsyncStorage.getItem ('@user/timetable');
-            await AsyncStorage.setItem('@user/timetable', JSON.stringify(this.merge (JSON.parse(value), newData)));
+            let old = JSON.parse (value);
+            await AsyncStorage.setItem('@user/timetable', JSON.stringify(this.merge (old, newData)));
         }
         catch (error)
         {
@@ -55,7 +84,11 @@ class Data
             if (value == null)
             {
                 let notifSettings = {};
+                notifSettings ["special"] = true,
+                notifSettings ["latestart"] = true,
+                notifSettings ["assembly"] = true,
                 notifSettings ["articles"] = true;
+                notifSettings ["flipday"] = true,
                 notifSettings ["general"] = true;
                 notifSettings ["house"] = true;
                 notifSettings ["surveys"] = true;
@@ -91,11 +124,16 @@ class Data
         try 
         {
             let value = JSON.parse(await AsyncStorage.getItem ('@user/expiration'));
-            if (value != null && Date.now() < Date.parse(value.expirationDate)) {return}
+            if (value != null)
+            {
+                let date = new Date (value.expirationDate);
+                if (Date.now() < date.getTime()) return;
+            }
             let newDate = new Date()
-            let now = Date.now();
-            let oneday = 1000*60*60*24;
-            newDate.setTime(now - now%(oneday) + oneday);
+            const now = new Date ();
+            const oneday = 1000*60*60*24;
+            now.setHours (0, 0, 0, 0);
+            newDate.setTime(now.getTime() + oneday);
             let newJSON = {}
             newJSON ["expirationDate"] = newDate;
             await AsyncStorage.setItem ('@user/expiration', JSON.stringify (newJSON));
@@ -118,6 +156,16 @@ class Data
             querySnapshot.forEach(function(doc) {
                 // doc.data() is never undefined for query doc snapshots
                 schedules [doc.id] = doc.data();
+                if (schedules [doc.id].hasOwnProperty ("startTimes"))
+                {
+                    for (let i = 0; i < schedules [doc.id]["startTimes"].length; i++)
+                    {
+                        let temp = schedules[doc.id]["startTimes"][i].toDate()
+                        let temp2 = schedules[doc.id]["endTimes"][i].toDate()
+                        schedules [doc.id]["startTimes"][i] = temp.getTime();
+                        schedules [doc.id]["endTimes"][i] = temp2.getTime();
+                    }
+                }
             });
             try {
                 AsyncStorage.setItem ('@user/schedules', JSON.stringify(schedules));
@@ -215,7 +263,14 @@ class Data
         {
             let timetable = JSON.parse(await AsyncStorage.getItem ('@user/timetable'));
             let fliptonormal = JSON.parse(await AsyncStorage.getItem ('@user/fliptonormal'));
-            aday? (timetable.A [flipped? fliptonormal [classnumber] : classnumber] = newvalue) : (timetable.B [flipped? fliptonormal [classnumber] : classnumber] = newvalue);
+            if (aday)
+            {
+                timetable.A [(flipped? fliptonormal [classnumber] : classnumber) - 1] = newvalue;
+            }
+            else
+            {
+                timetable.B [(flipped? fliptonormal [classnumber] : classnumber) - 1] = newvalue;
+            }
             await AsyncStorage.setItem ('@user/timetable', JSON.stringify (timetable));
         }
         catch (error) {
@@ -229,17 +284,17 @@ class Data
         {
             let timetable = JSON.parse(await AsyncStorage.getItem ('@user/timetable'));
             let fliptonormal = JSON.parse(await AsyncStorage.getItem ('@user/fliptonormal'));
-            return aday? timetable.A [flipped? fliptonormal [classnumber] : classnumber] : timetable.B [flipped? fliptonormal [classnumber] : classnumber];
+            return aday? timetable.A [(flipped? fliptonormal [classnumber] : classnumber)-1] : timetable.B [(flipped? fliptonormal [classnumber] : classnumber)-1];
         }
         catch (error)
         {
             console.log (error)
         }
-        return null;
     }
 
     static async setNotification (key, newvalue) //string, value
     {
+        if (typeof (newvalue) === "undefined") {try {AsyncStorage.setItem ('@user/notifSettings', JSON.stringify (key));} catch (error) {console.log (error)}}
         try 
         {
             let curr = await AsyncStorage.getItem ('@user/notifSettings');
@@ -253,51 +308,151 @@ class Data
         }
     }
 
-    static async setNotification (json) //json object
+    static async getNotification (key)
     {
-        
-        try {AsyncStorage.setItem ('@user/notifSettings', JSON.stringify (json));} catch (error) {console.log (error)}
+        if (typeof key === "undefined") {try {return JSON.parse(await AsyncStorage.getItem ('@user/notifSettings'));} catch (error) {console.log (error)}}
+        try {let curr = await AsyncStorage.getItem ('@user/notifSettings');let json = JSON.parse (curr);return json [key];}
+        catch (error){console.log (error);}
     }
 
-    static async getNotification ()
+    static async getWeekScheduleData ()
     {
-        try {
-            let value = AsyncStorage.getItem ("@user/notifSettings");
-            if (value == null) {
-                await this.setDefaults();
+        // JSON:
+        // data: [
+        //     Object {
+        //         date: Js DateTime Number
+        //         abday: 'A','B','N/A',
+        //         flipornot: 'F','N','N/A',
+        //         name: "Regular",
+        //         periods: [
+        //             Object {
+        //                 name: "something",
+        //                 classnumber: "correspond",
+        //                 startTimes: "something",
+        //                 endTimes: "something",
+        //             }
+        //         ],
+        //         events: [
+        //             Object {
+        //                 "kind": 1,
+        //                 "time": "(school closed)",
+        //                 "titleDetail": "Thanksgiving Holiday",
+        //             }
+        //         ]
+        //     },
+        // ]
+        let data = [{}, {}, {}, {}, {}];
+        let ids = this.gen_strings(5);
+        const oneday = 1000*60*60*24;
+        //events
+        const events = JSON.parse (await AsyncStorage.getItem ('@user/events'));
+        let today = new Date();
+        today.setHours (0, 0, 0, 0);
+        let later = today.getTime() + 5*oneday;
+        for (var i = 0; i < data.length; i++)
+        {
+            data [i]["date"] = today.getTime() + i*oneday;
+            data [i]["events"] = [];
+            data [i]["id"] = ids [i];
+        }
+        for (var i = 0; i < events.length; i++)
+        {
+            let date = new Date (events [i]["date"])
+            let diff = date.getTime() - today.getTime();
+            if (diff < 0 || diff >= later) continue;
+            data [Math.floor(diff/oneday)]["events"].push (events [i])
+        }
+        let weekly = JSON.parse (await AsyncStorage.getItem ('@user/weekly'))
+        let schedules = JSON.parse (await AsyncStorage.getItem ('@user/schedules'))
+        for (var i = 0; i < data.length; i++)
+        {
+
+            //ADays and FlipDays
+            const curr = new Date (data [i]["date"]); //current day
+            const weekday = curr.getDay();
+            const abday = weekly ["abday"][weekday];
+            const flipornot = weekly ["flipornot"][weekday];
+            data [i]["abday"] = abday;
+            data [i]["flipornot"] = flipornot;
+            //schedules
+            let schedule;
+            for (key in schedules)
+            {
+                if (schedules [key]["value"] == weekly ["scheduletype"][weekday])
+                {
+                    schedule = schedules [key];
+                    break;
+                }
             }
-            return JSON.parse(await AsyncStorage.getItem ('@user/notifSettings'));
-        } 
-        catch (error) 
-        {
-            console.log (error)
+            let periods = [];
+            if (schedule.hasOwnProperty ("periodNames"))
+            {
+                for (var j = 0; j < schedule ["periodNames"].length; j++)
+                {
+                    let period = {}
+                    const defaultName = schedule ["periodNames"][j];
+                    const correspond = schedule ["correspond"][j];
+                    const notes = schedule ["additionalNotes"][j];
+                    period ["startTime"] = schedule ["startTimes"][j];
+                    period ["endTime"] = schedule ["endTimes"][j];
+                    period ["classnumber"] = parseInt(correspond);
+                    if (correspond == 0)
+                    {
+                        period ["name"] = defaultName;
+                    }
+                    else 
+                    {
+                        let userInput = "";
+                        if (notes == "A")
+                        {
+                            userInput = await this.timetablequery (true, flipornot == "F", correspond)
+                        }
+                        else if (notes == "B")
+                        {
+                            userInput = await this.tiemtablequery (false, flipornot == "F", correspond)
+                        }
+                        else
+                        {
+                            userInput = await this.timetablequery (abday == "A", flipornot == "F", correspond)
+                        }
+                        if (userInput == "")
+                        {
+                            period ["name"] = defaultName;
+                        }
+                        else 
+                        {
+                            period ["name"] = userInput;
+                        }
+                    }
+                    periods.push (period);
+                }
+            }
+            data [i]["periods"] = periods;
         }
-        return null;
-    }
-
-    static async getNotification (key) //string
-    {
-        try {
-            let curr = await AsyncStorage.getItem ('@user/notifSettings');
-            let json = JSON.parse (curr);
-            return json [key];
-        }
-        catch (error)
-        {
-            console.log (error);
-        }
+        return data;
     }
 }
 
 export default Data;
 /*
-masterJSON:
+masterJSON: //this might not be entirely correct, but the idea should be right
+    @device_token: token,
     @user: {
+        "basics": Object {
+            "name" : str,
+            "email" : str,
+            "code" : number,
+        },
+        
         "expiration": Object {
             "expirationDate" : "DateString"
         },
         notifSettings: Object { //those shown are default values
             "articles" : true,
+            "latestart": true,
+            "special": true,
+            "flipday": true,
+            "assembly": true,
             "general" : true,
             "house" : true,
             "surveys" : true,
@@ -362,67 +517,9 @@ masterJSON:
             "Assembly Day": Object {
                 "additionalNotes": Array ["","","","","","","",],
                 "correspond": Array [1, 0, 2, 0, 3, 4, 5,],
-                "endTimes": Array [
-                    Object {
-                        "nanoseconds": 0,
-                        "seconds": 1555941420,
-                    },
-                    Object {
-                        "nanoseconds": 0,
-                        "seconds": 1555944420,
-                    },
-                    Object {
-                        "nanoseconds": 0,
-                        "seconds": 1555948320,
-                    },
-                    Object {
-                        "nanoseconds": 0,
-                        "seconds": 1555951320,
-                    },
-                    Object {
-                        "nanoseconds": 0,
-                        "seconds": 1555955040,
-                    },
-                    Object {
-                        "nanoseconds": 0,
-                        "seconds": 1555958940,
-                    },
-                    Object {
-                        "nanoseconds": 0,
-                        "seconds": 1555962840,
-                    },
-                ],
+                "endTimes": Array [1555941420, 1555944420, 1555944420,1555944420,1555944420,1555944420,1555944420],
                 "periodNames": Array ["Period 1","Assembly","Period 2","Lunch","Period 3","Period 4","Period 5",],
-                "startTimes": Array [
-                    Object {
-                        "nanoseconds": 0,
-                        "seconds": 1555937700,
-                    },
-                    Object {
-                        "nanoseconds": 0,
-                        "seconds": 1554904800,
-                    },
-                    Object {
-                        "nanoseconds": 0,
-                        "seconds": 1555944600,
-                    },
-                    Object {
-                        "nanoseconds": 0,
-                        "seconds": 1555948320,
-                    },
-                    Object {
-                        "nanoseconds": 0,
-                        "seconds": 1555951320,
-                    },
-                    Object {
-                        "nanoseconds": 0,
-                        "seconds": 1555955220,
-                    },
-                    Object {
-                        "nanoseconds": 0,
-                        "seconds": 1555008720,
-                    },
-                ],
+                "startTimes": Array [1555941420, 1555944420, 1555944420,1555944420,1555944420,1555944420,1555944420],
                 "value": 2,
             },
         }

@@ -1,9 +1,9 @@
 import React from 'react';
+import * as firebase from 'firebase';
 import * as Font from 'expo-font';
-import { SafeAreaView, Text, View, AsyncStorage } from 'react-native';
+import { SafeAreaView, Text, AsyncStorage } from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-import * as ReactTransitions from 'react-navigation-transitions'; // https://github.com/plmok61/react-navigation-transitions/blob/master/src/index.js
 
 import Buildings from './views/Buildings/view';
 import Welcome from './views/Welcome/view';
@@ -13,9 +13,13 @@ import Subscription from './views/Subscription/view';
 import SetMonday from './views/SetMonday/view';
 import SetTuesday from './views/SetTuesday/view';
 import FinalSetup from './views/FinalSetup/view';
+import Home from './views/Home/view';
+import Schedule from './views/Schedule/view';
 import Settings from './views/Settings/view';
 import Transitions from './assets/Transitions';
 import * as firebase from 'firebase';
+import Data from './Data';
+
 import Data from './Data';
 
 const firebaseConfig = {
@@ -41,7 +45,7 @@ const handleTransitions = ({scenes}) => {
         case 'SetMonday':       return Transitions.fromRight(500);
         case 'SetTuesday':      return Transitions.fromRight(500);
         case 'FinalSetup':      return Transitions.fromRight(500);
-        case 'Settings':        return Transitions.fromRight(500);
+        case 'Home':            return Transitions.fadeIn(200);
         default:                return Transitions.fadeIn(300);
     }
 }
@@ -55,6 +59,8 @@ const gNavigator = createStackNavigator({
     SetMonday,
     SetTuesday,
     FinalSetup,
+    Home,
+    Schedule,
     Settings
 },
 {
@@ -62,10 +68,6 @@ const gNavigator = createStackNavigator({
     initialRouteName: 'Buildings',
     headerMode: 'none',
     transitionConfig: (nav) => handleTransitions(nav)
-    // transitionConfig: () => ({
-    //     transitionSpec: Transitions.transitionSpec(),
-    //     screenInterpolator: (sceneProps) => Transitions.screenInterpolator(sceneProps)
-    // })
 });
 
 const GlobalContainer = createAppContainer(gNavigator);
@@ -80,23 +82,19 @@ class App extends React.Component
         }
     }
 
-    componentWillMount()
-    {
-        AsyncStorage.getItem('@device/token')
-            .then((val) => this.setState({firstTime: val == null || val == undefined}));
-        Data.setDefaults();
-        Data.updateAll();
-    }
     componentDidMount()
     {
-        Data.setDefaults();
-        Data.updateAll();
-        Font.loadAsync({
-            'gilroy': require('./assets/fonts/gilroy.ttf'),
-            'gilroy-bold': require('./assets/fonts/gilroy-bold.ttf'),
-            'montserrat': require('./assets/fonts/Montserrat.ttf'),
-            'montserrat-bold': require('./assets/fonts/Montserrat-Bold.ttf')
-        });
+        Promise.all([
+            Data.setDefaults(),
+            Data.updateAll(),
+            Font.loadAsync({
+                'gilroy': require('./assets/fonts/gilroy.ttf'),
+                'gilroy-bold': require('./assets/fonts/gilroy-bold.ttf'),
+                'montserrat': require('./assets/fonts/montserrat.ttf'),
+                'montserrat-bold': require('./assets/fonts/montserrat-bold.ttf')
+            })
+        ]).then(() => this.setState({firstTime: true}))
+        
     }
 
     render()
