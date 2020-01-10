@@ -99,7 +99,8 @@ class App extends React.Component
             return (<Text>{null}</Text>);
         return (
             <SafeAreaView style={{flex: 1}} forceInset={{ top: 'always', bottom: 'always' }}>
-                <GlobalContainer />
+                <Settings/>
+                {/* <GlobalContainer /> */}
             </SafeAreaView>
         );
     }

@@ -78,25 +78,25 @@ class Data
 
     static async setDefaults ()
     {
+        let arr = ["", "", "", "", ""];
+        this.initTimetable (true, arr);
+        this.initTimetable(false, arr);
         try 
         {
             const value = await AsyncStorage.getItem ('@user/notifSettings');
             if (value == null)
             {
                 let notifSettings = {};
-                notifSettings ["special"] = true,
-                notifSettings ["latestart"] = true,
-                notifSettings ["assembly"] = true,
-                notifSettings ["articles"] = true;
-                notifSettings ["flipday"] = true,
-                notifSettings ["general"] = true;
-                notifSettings ["house"] = true;
-                notifSettings ["surveys"] = true;
-                notifSettings ["daysBefore"] = 2;
+                notifSettings ["special"] = true;
                 notifSettings ["latestart"] = true;
                 notifSettings ["assembly"] = true;
-                notifSettings ["special"] = true;
-                notifSettings ["flipdays"] = true;
+                notifSettings ["articles"] = false;
+                notifSettings ["flipday"] = true;
+                notifSettings ["general"] = false;
+                notifSettings ["house"] = false;
+                notifSettings ["surveys"] = false;
+                notifSettings ["daysBefore"] = 2;
+                notifSettings ["latestart"] = true;
                 notifSettings ["notifTime"] = 2; //1: afternoon, 2: evening;
                 await AsyncStorage.setItem ('@user/notifSettings', JSON.stringify (notifSettings));
             }

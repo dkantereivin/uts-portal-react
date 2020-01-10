@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { Animated, Easing, Image, View, Text, TouchableOpacity, TouchableWithoutFeedback,Dimensions} from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
+import Data from '../Data';
 //import { Easing } from 'react-native-reanimated';
 
 class Circle extends Component {
@@ -29,6 +30,22 @@ class Circle extends Component {
                 easing: Easing.inOut (Easing.ease),
             }).start());
             this.select = !this.select
+            if (this.props.text == "general")
+            {
+                Data.SetNotification ("general", this.select);
+            }
+            else if (this.props.text == "article")
+            {
+                Data.SetNotification ("articles", this.select); //this has an 's'
+            }
+            else if (this.props.text == "house")
+            {
+                Data.SetNotification ("house", this.select);
+            }
+            else if (this.props.text == "surveys")
+            {
+                Data.SetNotification ("surveys", this.select);
+            }
         }
         else 
         {
