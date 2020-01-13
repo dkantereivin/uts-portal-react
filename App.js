@@ -3,6 +3,9 @@ import * as firebase from 'firebase';
 import * as Font from 'expo-font';
 import { SafeAreaView, Text, AsyncStorage } from 'react-native';
 import { createAppContainer } from 'react-navigation';
+import { Notifications } from 'expo';
+import * as Permissions from 'expo-permissions';
+import * as Constants from 'expo-constants';
 import { createStackNavigator } from 'react-navigation-stack';
 
 import Buildings from './views/Buildings/view';
@@ -75,13 +78,57 @@ class App extends React.Component
     {
         super();
         this.state = {
-            firstTime: null
+            firstTime: null,
+            notification: {}
         }
+    }
+
+    //copy pasted
+    async registerForPushNotificationsAsync ()
+    {
+        // let result = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+
+        // if (Constants.isDevice && result.status === 'granted') {
+        //     console.log('Notification permissions granted.')
+        // }
+        if (Constants.isDevice) 
+        {
+            const { status: existingStatus } = await Permissions.getAsync(
+                Permissions.NOTIFICATIONS
+            );
+            let finalStatus = existingStatus;
+            if (existingStatus !== 'granted') 
+            {
+                const { status } = await Permissions.askAsync(
+                Permissions.NOTIFICATIONS
+                );
+                finalStatus = status;
+            }
+            if (finalStatus !== 'granted') 
+            {
+                alert('Failed to get push token for push notification!');
+                return;
+            }
+            let token = await Notifications.getExpoPushTokenAsync();
+            console.log(token);
+        } 
+        else 
+        {
+            alert('Must use physical device for Push Notifications');
+        }
+        Notifications.addListener (this.handleNotifications);
+        Data.scheduleNotifications();
+    };
+
+    handleNotifications ()
+    {
+        console.warn ("notification received");
     }
 
     componentDidMount()
     {
         Promise.all([
+            this.registerForPushNotificationsAsync(),
             Data.setDefaults(),
             Data.updateAll(),
             Font.loadAsync({
@@ -91,6 +138,7 @@ class App extends React.Component
                 'montserrat-bold': require('./assets/fonts/Montserrat-Bold.ttf')
             })
         ]).then(() => this.setState({firstTime: true}))
+        //Notifications
     }
 
     render()

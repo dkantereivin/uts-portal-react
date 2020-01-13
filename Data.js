@@ -1,4 +1,5 @@
 import {AsyncStorage} from 'react-native';
+import {Notifications} from 'expo';
 //import * as firebase from 'firebase';
 
 const firebase = require ('firebase');
@@ -431,6 +432,21 @@ class Data
         }
         return data;
     }
+
+    static scheduleNotifications ()
+    {
+        const localnotif = {
+            title: "done",
+            body: "done!",
+        };
+        
+        const options = {
+            time: (new Date().getTime() + 1000*10)
+        };
+
+        Notifications.scheduleLocalNotificationAsync(localnotif, options);
+    }
+
 }
 
 export default Data;
