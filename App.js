@@ -6,6 +6,8 @@ import { createAppContainer } from 'react-navigation';
 import { Notifications } from 'expo';
 import * as Permissions from 'expo-permissions';
 import * as Constants from 'expo-constants';
+import * as BackgroundFetch from "expo-background-fetch";
+import * as TaskManager from "expo-task-manager";
 import { createStackNavigator } from 'react-navigation-stack';
 
 import Buildings from './views/Buildings/view';
@@ -33,6 +35,15 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
+
+//background fetch
+BackgroundFetch.setMinimumIntervalAsync(1);
+const taskname = "updateDataNotif";
+TaskManager.defineTask(taskname, async () => {
+    await Data.updateAll();
+    await Data.scheduleNotifications();
+    return BackgroundFetch.Result.NewData;
+});
 
 const handleTransitions = ({scenes}) => {
     const next = scenes[scenes.length - 1].route.routeName;
@@ -83,6 +94,11 @@ class App extends React.Component
         }
     }
 
+    async registerBackgroundTask () 
+    {
+        await BackgroundFetch.registerTaskAsync(taskname);
+    }
+
     //copy pasted
     async registerForPushNotificationsAsync ()
     {
@@ -128,9 +144,10 @@ class App extends React.Component
     componentDidMount()
     {
         Promise.all([
-            this.registerForPushNotificationsAsync(),
             Data.setDefaults(),
+            this.registerBackgroundTask(),
             Data.updateAll(),
+            this.registerForPushNotificationsAsync(),
             Font.loadAsync({
                 'gilroy': require('./assets/fonts/gilroy.ttf'),
                 'gilroy-bold': require('./assets/fonts/gilroy-bold.ttf'),
