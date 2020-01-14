@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { View, ScrollView, Animated, StyleSheet, Image, Text, AsyncStorage, TouchableOpacity } from 'react-native';
+import { View, ScrollView, Animated, StyleSheet, Image, Text, AsyncStorage, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import Data from '../../Data'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import style from './style';
@@ -15,6 +15,7 @@ const images = {
 };
 
 class Settings extends Component {
+
     constructor()
     {
         super();
@@ -43,7 +44,7 @@ class Settings extends Component {
         if (!this.state.loaded) {return <Text>{null}</Text>}
     return (
         <ScrollView contentContainerStyle={{flexGrow:1}}>   
-            <View>
+            <View style = {style.supercontainer}>
                 <Image style = {style.person} source = {images.person} /> 
                 <Text style = {style.MC}>
                     <Text style = {{fontFamily: 'gilroy-bold'}}>
@@ -112,11 +113,7 @@ class Settings extends Component {
                     </Text>
                     TO BE NOTIFIED?
                 </Text>
-                <View style={style.nightview}>
-                    <TouchableOpacity onPress={() => this.changenotif('notifTime',2)}>
-                        <Animated.Image style = {[style.night,{opacity:this.state.notifs['notifTime']==2?1:0.25}]} source = {images.night} /> 
-                    </TouchableOpacity>
-                </View>
+                
                 <View style={style.GESW}>
                     <Switch type={'general'} value = {this.state.notifs['general']}/>
                 </View>
@@ -141,14 +138,21 @@ class Settings extends Component {
                 <View style={style.FDSW}>
                     <Switch  type={'flipdays'} value = {this.state.notifs ['flipdays']}/>
                 </View>
-                <Slider style={style.slider} animated = {false} minimumValue={0} maximumValue={7} step={1} minimumTrackTintColor='#536DFE' thumbTintColor= '#536DFE' thumbStyle = {{width: wp (8), height: wp (8), borderRadius: wp (4)}}thumbTouchSize={{width: wp (100), height: wp (26)}} maximumTrackTintColor='#C8C8C8' value={this.state.notifs['daysBefore']} onValueChange={(days) => this.changenotif('daysBefore',days)}/>
+                <Slider style={style.slider} animated = {false} minimumValue={1} maximumValue={4} step={1} minimumTrackTintColor='#536DFE' thumbTintColor= '#536DFE' thumbStyle = {{width: wp (8), height: wp (8), borderRadius: wp (4)}}thumbTouchSize={{width: wp (100), height: wp (26)}} maximumTrackTintColor='#C8C8C8' value={this.state.notifs['daysBefore']} onValueChange={(days) => this.changenotif('daysBefore',days)}/>
 
-                <TouchableOpacity style={style.morningview} onPress={() => this.changenotif('notifTime',1)}>
-                    <Animated.Image style = {[style.morning,{opacity:this.state.notifs['notifTime']==1?1:0.25}]} source = {images.morning} />
-                </TouchableOpacity>
-                <TouchableOpacity style={[style.backview]} onPress={() => this.exit()}>
-                    <Image style = {style.back} source = {images.back} />   
-                </TouchableOpacity>
+                <View style = {style.morningview}>
+                    <TouchableWithoutFeedback  onPress={() => this.changenotif('notifTime',1)}>
+                        <Animated.Image style = {[style.morning,{opacity:this.state.notifs['notifTime']==1?1:0.25}]} source = {images.morning} />
+                    </TouchableWithoutFeedback>
+                </View>
+                <View style={style.nightview}>
+                    <TouchableWithoutFeedback onPress={() => this.changenotif('notifTime',2)}>
+                        <Animated.Image style = {[style.night,{opacity:this.state.notifs['notifTime']==2?1:0.25}]} source = {images.night} /> 
+                    </TouchableWithoutFeedback>
+                </View>
+                <TouchableWithoutFeedback style={[style.backview]} onPress={() => this.exit()}>
+                    <Image style = {style.back} source = {images.back} resizeMode = 'stretch'/>   
+                </TouchableWithoutFeedback>
             </View>
         </ScrollView>
     );

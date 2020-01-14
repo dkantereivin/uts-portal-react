@@ -80,8 +80,8 @@ class Data
     static async setDefaults ()
     {
         let arr = ["", "", "", "", ""];
-        this.initTimetable (true, arr);
-        this.initTimetable(false, arr);
+        await this.initTimetable (true, arr);
+        await this.initTimetable(false, arr);
         try 
         {
             const value = await AsyncStorage.getItem ('@user/notifSettings');
@@ -121,7 +121,7 @@ class Data
     }
 
     static async updateCheckExpiration ()
-    {        
+    {
         try 
         {
             let value = JSON.parse(await AsyncStorage.getItem ('@user/expiration'));
@@ -377,14 +377,18 @@ class Data
             data [i]["flipornot"] = flipornot;
             //schedules
             let schedule;
+            let k;
             for (key in schedules)
             {
                 if (schedules [key]["value"] == weekly ["scheduletype"][weekday])
                 {
                     schedule = schedules [key];
+                    k = key
                     break;
                 }
             }
+            data [i]["value"] = schedule ["value"];
+            data [i]["schedulename"] = k;
             let periods = [];
             if (schedule.hasOwnProperty ("periodNames"))
             {
@@ -433,20 +437,246 @@ class Data
         return data;
     }
 
-    static scheduleNotifications ()
+    static startOfDay (date) 
     {
-        const localnotif = {
-            title: "done",
-            body: "done!",
-        };
-        
-        const options = {
-            time: (new Date().getTime() + 1000*10)
-        };
-
-        Notifications.scheduleLocalNotificationAsync(localnotif, options);
+        let a = new Date (date);
+        a.setHours (0, 0, 0, 0);
+        return a.getTime();
     }
 
+    static nextDays (date, days) 
+    {
+        let a = new Date (date);
+        let t = 1000*60*60*24;
+        return a.getTime() + t;
+    }
+
+    static async scheduleNotifications ()
+    {
+        await Notifications.cancelAllScheduledNotificationsAsync();
+        let contents = []; //an array of body objects;
+        let ops = []; //an array of options mainly for time
+        const data = await this.getWeekScheduleData(); //gets the next n days of data;
+        const notifsettings = await this.getNotification();
+        const events = JSON.parse (await AsyncStorage.getItem ('@user/events'));
+        const daysbefore = notifsettings ["daysBefore"];
+
+        //loop through each day;
+        for (var i = 0; i < data.length; i++)
+        {
+            let currday = data [i];
+            const daysWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            let t = new Date(this.nextDays(this.startOfDay(new Date().getTime()), i));
+            if (i + daysbefore < data.length)
+            {
+                let afterday = data[i + daysbefore];
+                //schedule notifications      //if not regular school day or stuff 
+                if (notifsettings ["general"] && afterday["value"] != 1 && afterday["value"] != 4) 
+                {
+                    //notify days before
+                    let bd = "";
+                    if (notifsettings["notifTime"] == 1) t.setHours(10, 42); //afternoon
+                    else if (notifsettings ["notifTime"] == 2) t.setHours (10, 42); //evening 
+                    if (daysbefore > 1) bd = "There is " + afterday["schedulename"].toLowerCase() + " in " + daysbefore + "days on " + daysWeek[new Date(afterday["date"]).getDay()] + ".";
+                    else bd = "There is " + afterday["schedulename"].toLowerCase() + " tomorrow.";
+                    const message1 = {title: afterday["schedulename"], body: bd};
+                    const time1 = {time: t.getTime()}
+                    contents.push(message1);
+                    ops.push(time1);
+                }
+                if (notifsettings ["articles"]){} //unimplemented
+                if (notifsettings ["surveys"]) {} //unimplemented
+            }
+
+            //notify the day of
+            if (notifsettings ["general"] && currday ["value"] != 1 && currday ["value"] != 4)
+            {
+                let bd = "";
+                t.setHours(7, 10); //notify in the morning because this is the day of
+                bd = "There is " + currday ["schedulename"] + " today.";
+                const message1 = {title: currday["schedulename"], body: bd};
+                const time1 = {time: t.getTime()}
+                contents.push(message1);
+                ops.push(time1);
+            }
+
+            console.log(currday ["value"]);
+            //smart notifications 5 minutes before class starts notifications
+            let ls = (notifsettings ["latestart"] && currday ["value"] == 3);
+            let ad = (notifsettings ["assembly"] && currday ["value"] == 2);
+            let ss = (notifsettings ["special"] && currday["value"] != 3 && currday ["value"] != 2 && currday ["value"] != 1 && currday["value"] != 4);
+            let fd = (notifsettings ["flipday"] && currday["flipornot"] == "F");
+            if(ls || ad || ss || fd)
+            {
+                let periods = currday["periods"];
+                for (var j = 0; j < periods.length; j++)
+                {
+                    let ttl = periods [j]["name"].trim();
+                    let bd = periods [j]["name"].trim() + " starts in 5 minutes.";
+                    let startdateobj = new Date(periods[j]["startTime"]);
+                    t.setHours (startdateobj.getHours(), startdateobj.getMinutes());
+                    const message1 ={title:ttl, body: bd};
+                    const time1 = {time: t.getTime()};
+                    contents.push(message1);
+                    ops.push(time1);
+                }
+            }
+        }
+
+        //event notifications
+        let wantedevents = [];
+        let acceptablevalues = [];
+        if(notifsettings["general"]) acceptablevalues.push(1);
+        if(notifsettings["house"]) acceptablevalues.push(2);
+        for(var i = 0; i < events.length; i++) if(acceptablevalues.includes(events[i]["kind"])) acceptablevalues.push(events[i]);
+        for(var i = 0; i < wantedevents.length;i++)
+        {
+            let event = wantedevents[i];
+            //sets the day of
+            let ttl1 = event ["titleDetail"].trim();
+            let bd1 = event ["titleDetail"].trim();
+            bd1 += " today " + event ["time"].trim() + ".";
+            let t = new Date (this.startOfDay(event["date"]));
+            t.setHours (7, 10);
+            const message1 = {title: ttl1, body: bd1};
+            const time1 = {time: t.getTime()};
+            contents.push(message1);
+            ops.push(time1);
+            
+            //set days before
+            t = new Date(this.nextDays(this.startOfDay (t.getTime()), -daysbefore));
+            let ttl2 = event ["titleDetail"].trim();
+            let bd2 = event ["titleDetail"].trim();
+            if (daysbefore > 1) bd2 += " " + daysWeek [t.getDay()] + " " + event ["time"].trim() + ".";
+            else bd2 += " tomorrow " + event ["time"].trim() + ".";
+            if (notifsettings["notifTime"] == 1) t.setHours(12, 40); //afternoon
+            else if (notifsettings ["notifTime"] == 2) t.setHours (16, 0); //evening 
+            const message2 = {title: ttl2, body: bd2};
+            const time2 = {time: t.getTime()}
+            contents.push(message2);
+            ops.push(time2);
+        }
+        //schedule all the notifications
+        for (var i = 0; i < contents.length; i++) 
+        {
+            Notifications.scheduleLocalNotificationAsync(contents[i], ops[i]);
+            console.log(contents[i]);
+            console.log(ops[i]);
+        }
+    }
+    // Object {
+    //     "articles": false,
+    //     "assembly": true,
+    //     "daysBefore": 5,
+    //     "flipday": true,
+    //     "flipdays": true,
+    //     "general": true,
+    //     "house": false,
+    //     "latestart": true,
+    //     "notifTime": 2,
+    //     "special": true,
+    //     "surveys": false,
+    //   }
+
+    // Array [
+    //     Object {
+    //       "abday": "N/A",
+    //       "date": 1578891600000,
+    //       "events": Array [],
+    //       "flipornot": "N/A",
+    //       "id": "ycaojomobrrwniumpwwdasgufe",
+    //       "periods": Array [],
+    //     },
+    //     Object {
+    //       "abday": "B",
+    //       "date": 1578978000000,
+    //       "events": Array [],
+    //       "flipornot": "N",
+    //       "id": "aenrtkqwuonpoagewcjftxxglg",
+    //       "periods": Array [
+    //         Object {
+    //           "classnumber": 1,
+    //           "endTime": 1554905220000,
+    //           "name": "Period 1",
+    //           "startTime": 1550152500000,
+    //         },
+    //         Object {
+    //           "classnumber": 2,
+    //           "endTime": 1555600920000,
+    //           "name": "Period 2",
+    //           "startTime": 1550070600000,
+    //         },
+    //         Object {
+    //           "classnumber": 3,
+    //           "endTime": 1556296620000,
+    //           "name": "Period 3",
+    //           "startTime": 1554564300000,
+    //         },
+    //         Object {
+    //           "classnumber": 0,
+    //           "endTime": 1556386020000,
+    //           "name": "Lunch",
+    //           "startTime": 1554568620000,
+    //         },
+    //         Object {
+    //           "classnumber": 4,
+    //           "endTime": 1555094340000,
+    //           "name": "Period 4",
+    //           "startTime": 1555176420000,
+    //         },
+    //         Object {
+    //           "classnumber": 5,
+    //           "endTime": 1555012440000,
+    //           "name": "Period 5",
+    //           "startTime": 1554230520000,
+    //         },
+    //       ],
+    //     },
+    //     Object {
+    //       "abday": "A",
+    //       "date": 1579064400000,
+    //       "events": Array [],
+    //       "flipornot": "F",
+    //       "id": "kbyqbpszylxgstjnukwthbrsfi",
+    //       "periods": Array [
+    //         Object {
+    //           "classnumber": 1,
+    //           "endTime": 1554905220000,
+    //           "name": undefined,
+    //           "startTime": 1550152500000,
+    //         },
+    //         Object {
+    //           "classnumber": 2,
+    //           "endTime": 1555600920000,
+    //           "name": undefined,
+    //           "startTime": 1550070600000,
+    //         },
+    //         Object {
+    //           "classnumber": 3,
+    //           "endTime": 1556296620000,
+    //           "name": undefined,
+    //           "startTime": 1554564300000,
+    //         },
+    //         Object {
+    //           "classnumber": 0,
+    //           "endTime": 1556386020000,
+    //           "name": "Lunch",
+    //           "startTime": 1554568620000,
+    //         },
+    //         Object {
+    //           "classnumber": 4,
+    //           "endTime": 1555094340000,
+    //           "name": undefined,
+    //           "startTime": 1555176420000,
+    //         },
+        //     Object {
+        //       "classnumber": 5,
+        //       "endTime": 1555012440000,
+        //       "name": undefined,
+        //       "startTime": 1554230520000,
+        //     },
+        //   ],
+        // },
 }
 
 export default Data;

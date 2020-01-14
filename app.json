@@ -27,10 +27,15 @@
     ],
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.utschools.utsportal"
+      "bundleIdentifier": "ca.utschools.students.portalapp",
+      "infoPlist" : {
+        "UIBackgroundModes" : [
+          "fetch"
+        ]
+      }
     },
     "android": {
-      "package": "com.utschools.utsportal",
+      "package": "ca.utschools.students.portalapp",
       "versionCode": 1,
       "permissions": []
     }
