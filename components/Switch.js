@@ -61,11 +61,9 @@ class Switch extends Component {
         return (
             <View>
                 <TouchableWithoutFeedback onPress = {this.tapped}>
-                    <View>
-                        <Animated.View style = {[style.background, {backgroundColor: colourAnim}]}>
-                            <Animated.View style = {[style.circle, {transform: [{translateX: translate}]}]}/>
-                        </Animated.View>
-                    </View>
+                    <Animated.View style = {[style.background, {backgroundColor: colourAnim}]}>
+                        <Animated.View style = {[style.circle, {transform: [{translateX: translate}]}]}/>
+                    </Animated.View>
                 </TouchableWithoutFeedback>
             </View>
         );

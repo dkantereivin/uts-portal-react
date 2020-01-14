@@ -7,6 +7,10 @@ import Data from "../../../Data";
 const weekdays = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
 const months = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"]
 
+const images = {
+    noschoolimage: require ('./TV.gif'),
+};
+
 class ScheduleView extends Component {
 
     constructor (props)
@@ -20,7 +24,18 @@ class ScheduleView extends Component {
 
     generatePeriods ()
     {
-        if (this.props.data.periods.length == 0) return null;
+        //if there's no periods then just return an image
+        if (this.props.data.periods.length == 0) 
+        {
+            return (
+                <View>
+                    <Image style = {{top: hp(-50/812.0*100), width: wp (309/375.0*100), height: hp (270/812.0*100)}} source = {images.noschoolimage}/>
+                    <Text style = {{top: hp(-20/812.0*100), width: wp (309/375.0*100), fontFamily: 'gilroy', fontSize: wp(14/375.0*100), textAlign: 'center'}}>
+                        Image credits attributed to Robin Davey
+                    </Text>
+                </View>
+            );
+        }
         let stack = []
         let ids = Data.gen_strings (this.props.data.periods.length);
         for (let i = 0; i < this.props.data.periods.length; i++)
@@ -141,7 +156,7 @@ const style = StyleSheet.create({
         top: hp (381/812.0*100),
         left: wp (33/375.0*100),
         width: wp (309/375.0*100),
-    }
+    },
 });
 
 export default ScheduleView;

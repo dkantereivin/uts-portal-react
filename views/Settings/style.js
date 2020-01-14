@@ -31,6 +31,7 @@ const style = {
         lineHeight: wp(22/375.0*100)
     },
     MC: {
+        position: 'absolute',
         left: wp(30/375.0*100),
         top: wp(95/375.0*100),
         color: '#000',
@@ -184,7 +185,7 @@ const style = {
     },
     supercontainer: {
         width: wp (100), 
-        height: wp (1331/375.0*100),
+        height: wp (1220/375.0*100),
     }
 }
 export default StyleSheet.create (style);

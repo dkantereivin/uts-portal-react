@@ -138,6 +138,7 @@ class Settings extends Component {
                 <View style={style.FDSW}>
                     <Switch  type={'flipdays'} value = {this.state.notifs ['flipdays']}/>
                 </View>
+                
                 <Slider style={style.slider} animated = {false} minimumValue={1} maximumValue={4} step={1} minimumTrackTintColor='#536DFE' thumbTintColor= '#536DFE' thumbStyle = {{width: wp (8), height: wp (8), borderRadius: wp (4)}}thumbTouchSize={{width: wp (100), height: wp (26)}} maximumTrackTintColor='#C8C8C8' value={this.state.notifs['daysBefore']} onValueChange={(days) => this.changenotif('daysBefore',days)}/>
 
                 <View style = {style.morningview}>

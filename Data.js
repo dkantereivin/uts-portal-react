@@ -79,14 +79,15 @@ class Data
 
     static async setDefaults ()
     {
-        let arr = ["", "", "", "", ""];
-        await this.initTimetable (true, arr);
-        await this.initTimetable(false, arr);
+        
         try 
         {
             const value = await AsyncStorage.getItem ('@user/notifSettings');
             if (value == null)
             {
+                let arr = ["", "", "", "", ""];
+                await this.initTimetable (true, arr);
+                await this.initTimetable(false, arr);
                 let notifSettings = {};
                 notifSettings ["special"] = true;
                 notifSettings ["latestart"] = true;
@@ -500,7 +501,6 @@ class Data
                 ops.push(time1);
             }
 
-            console.log(currday ["value"]);
             //smart notifications 5 minutes before class starts notifications
             let ls = (notifsettings ["latestart"] && currday ["value"] == 3);
             let ad = (notifsettings ["assembly"] && currday ["value"] == 2);
@@ -515,7 +515,7 @@ class Data
                     let bd = periods [j]["name"].trim() + " starts in 5 minutes.";
                     let startdateobj = new Date(periods[j]["startTime"]);
                     t.setHours (startdateobj.getHours(), startdateobj.getMinutes());
-                    const message1 ={title:ttl, body: bd};
+                    const message1 ={title: ttl, body: bd};
                     const time1 = {time: t.getTime()};
                     contents.push(message1);
                     ops.push(time1);
@@ -552,17 +552,13 @@ class Data
             if (notifsettings["notifTime"] == 1) t.setHours(12, 40); //afternoon
             else if (notifsettings ["notifTime"] == 2) t.setHours (16, 0); //evening 
             const message2 = {title: ttl2, body: bd2};
-            const time2 = {time: t.getTime()}
+            const time2 = {time: t.getTime()};
             contents.push(message2);
             ops.push(time2);
         }
+        
         //schedule all the notifications
-        for (var i = 0; i < contents.length; i++) 
-        {
-            Notifications.scheduleLocalNotificationAsync(contents[i], ops[i]);
-            console.log(contents[i]);
-            console.log(ops[i]);
-        }
+        for (var i = 0; i < contents.length; i++) Notifications.scheduleLocalNotificationAsync(contents[i], ops[i]);
     }
     // Object {
     //     "articles": false,
