@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, Image, TouchableHighlight} from 'react-native';
-
+import {widthPercentageToDP as wp, 
+    heightPercentageToDP as hp} from 'react-native-responsive-screen'
 const style = StyleSheet.create({
     navbar: {
         flex: 0.06,
@@ -20,17 +21,18 @@ const style = StyleSheet.create({
 
 class Navbar extends Component
 {
-    homeBarPress()
+    homeBarPress()//gets called on load for some random reason
     {
-        if (this.props.navigation.state.routeName != 'Home')
-            this.props.navigation.popToTop();
+        if (this.props.navigation.state.routeName !== 'Home')
+            this.props.navigation.navigation('Home');
+            
     }
 
     render()
     {
         return (
             <View style={style.navbar}>
-                <NavbarButton icon={'home'} onPress={this.homeBarPress()}/>
+                <NavbarButton icon={'home'} onPress={this.homeBarPress.bind(this)}/>
                 <NavbarButton icon={'schedule'} onPress={()=>this.props.navigation.navigate('Schedule')}/>
                 {/* <NavbarButton icon={'articles'} onPress={()=>this.props.navigation.navigate('Articles')}/> */}
                 <NavbarButton icon={'settings'} onPress={()=>this.props.navigation.navigate('Settings')}/>
