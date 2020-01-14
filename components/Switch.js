@@ -38,12 +38,12 @@ class Switch extends Component {
     {
         this.select ? (Animated.timing (this.animation, {
             toValue: 0,
-            duration: 400,
-            easing: Easing.inOut (Easing.ease)
+            duration: 100,
+            //easing: Easing.inOut (Easing.ease)
         }).start()) : (Animated.timing (this.animation, {
             toValue: 1,
-            duration: 400,
-            easing: Easing.inOut (Easing.ease),
+            duration: 100,
+            //easing: Easing.inOut (Easing.ease),
         }).start());
         this.select = !this.select
         this.changenotif(this.props.type,this.select);
