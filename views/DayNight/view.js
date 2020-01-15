@@ -1,7 +1,7 @@
 import React from 'react';
 import { Animated, Easing, View, Text, TouchableOpacity, AsyncStorage} from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
-
+import Data from "../../Data"
 import style from "./style";
 
 const images = {
@@ -19,8 +19,7 @@ class DayNightSelection extends React.Component {
 
     onSelection(option)
     {
-        const notifs = option === 'night' ? {time: '7:00 pm'} : {time: '8:00 am'}
-        AsyncStorage.setItem("@user/notifications", JSON.stringify(notifs));
+        Data.setNotification ("notifTime", option === 'night' ? 2 : 1);
         this.nextScreen();
     }
 
