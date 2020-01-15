@@ -27,7 +27,12 @@ const handleTransitions = ({scenes}) => {
 
 const TabBarContainer = createStackNavigator(
 {
-    Home, Schedule, Articles, Settings,
+    Home:{
+        screen:Home,
+        navigationOptions:{
+            gesturesEnabled:false
+        }
+    }, Schedule, Articles, Settings,
 }, 
 {
     initialRouteName: 'Home',
