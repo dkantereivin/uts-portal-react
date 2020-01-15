@@ -38,7 +38,7 @@ const style = StyleSheet.create({
     home: {
         position: 'absolute',
         backgroundColor: 'transparent',
-        top: wp (14/375.0*100),
+        top: wp (12.5/375.0*100),
         left: wp (55.0/375.0*100),
         width: wp(24/375.0*100),
         height: wp(24/375.0*100),
