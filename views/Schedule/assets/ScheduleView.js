@@ -34,7 +34,7 @@ class ScheduleView extends Component {
         {
             return (
                 <View>
-                    <Image style = {{top: 0, width: wp (309/375.0*100), height: hp (270/812.0*100)}} source = {randImage} resizeMode = {'stretch'}/>
+                    <Image style = {{top: 0, width: wp (309/375.0*100), height: hp (270/812.0*100)}} source = {this.randImage} resizeMode = {'stretch'}/>
                     <Text style = {{top: 0, width: wp (309/375.0*100), fontFamily: 'gilroy', fontSize: wp(14/375.0*100), textAlign: 'center'}}>
                         Image credits attributed to Robin Davey
                     </Text>
