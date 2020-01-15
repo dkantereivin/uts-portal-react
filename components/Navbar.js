@@ -5,7 +5,13 @@ import {widthPercentageToDP as wp,
 const style = StyleSheet.create({
     navbar: {
         flex: 0.06,
-        flexDirection: 'row',  
+        position: 'absolute',
+        left: 0,
+        bottom: 0,
+        width: wp (100),
+        height: wp (13),
+        backgroundColor: 'white',
+        flexDirection: 'row',
         justifyContent: 'space-evenly'
     },
     button: {
@@ -25,7 +31,6 @@ class Navbar extends Component
     {
         if (this.props.navigation.state.routeName !== 'Home')
             this.props.navigation.navigate('Home');
-            
     }
 
     render()
@@ -34,7 +39,7 @@ class Navbar extends Component
             <View style={style.navbar}>
                 <NavbarButton icon={'home'} onPress={this.homeBarPress.bind(this)}/>
                 <NavbarButton icon={'schedule'} onPress={()=>this.props.navigation.navigate('Schedule')}/>
-                {/* <NavbarButton icon={'articles'} onPress={()=>this.props.navigation.navigate('Articles')}/> */}
+                <NavbarButton icon={'articles'} onPress={()=>this.props.navigation.navigate('Articles')}/>
                 <NavbarButton icon={'settings'} onPress={()=>this.props.navigation.navigate('Settings')}/>
             </View>
         )

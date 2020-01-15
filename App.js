@@ -21,7 +21,9 @@ import FinalSetup from './views/FinalSetup/view';
 import Home from './views/Home/view';
 import Schedule from './views/Schedule/view';
 import Settings from './views/Settings/view';
+import Articles from './views/Articles/view';
 import Transitions from './assets/Transitions';
+
 
 import Data from './Data';
 
@@ -73,6 +75,7 @@ const gNavigator = createStackNavigator({
     FinalSetup,
     Home,
     Schedule,
+    Articles,
     Settings
 },
 {

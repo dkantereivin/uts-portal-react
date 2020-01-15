@@ -31,7 +31,7 @@ const style = {
         top: 0,
         left: 0,
         position: 'absolute',
-        height: hp(103.5),
+        height: hp(100),
         width: wp(100),
     }
 }
