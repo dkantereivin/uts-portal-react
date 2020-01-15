@@ -1,11 +1,7 @@
 import React from 'react';
 import * as firebase from 'firebase';
 import * as Font from 'expo-font';
-<<<<<<< HEAD
 import { SafeAreaView, Text, AsyncStorage } from 'react-native';
-=======
-import { SafeAreaView, Text, View, Switch, AsyncStorage } from 'react-native';
->>>>>>> 73a2b312e09e3d2f5ba54c5d1e23872e9c83a942
 import { createAppContainer } from 'react-navigation';
 import { Notifications } from 'expo';
 import * as Permissions from 'expo-permissions';
@@ -21,32 +17,13 @@ import DayNight from './views/DayNight/view';
 import Subscription from './views/Subscription/view';
 import SetMonday from './views/SetMonday/view';
 import SetTuesday from './views/SetTuesday/view';
-import ScheduleScreen from './views/ScheduleScreen/view';
 import FinalSetup from './views/FinalSetup/view';
-<<<<<<< HEAD
 import Home from './views/Home/view';
 import Schedule from './views/Schedule/view';
 import Settings from './views/Settings/view';
 import Articles from './views/Articles/view';
 import TabBarNavigator from './views/TabBarNavigator/view';
-=======
-import Settings from './views/Settings/view';
->>>>>>> 73a2b312e09e3d2f5ba54c5d1e23872e9c83a942
 import Transitions from './assets/Transitions';
-import * as firebase from 'firebase';
-import Data from './Data';
-
-const firebaseConfig = {
-    apiKey: "AIzaSyCkMVXbgG-8l_vPXo5EoHDw3lB2HXKm4Y4",
-    authDomain: "uts-portal-293.firebaseapp.com",
-    databaseURL: "https://uts-portal-293.firebaseio.com",
-    projectId: "uts-portal-293",
-    storageBucket: "uts-portal-293.appspot.com",
-    messagingSenderId: "367766824243",
-};
-
-firebase.initializeApp(firebaseConfig);
-
 import Data from './Data';
 
 const firebaseConfig = {
@@ -81,11 +58,7 @@ const handleTransitions = ({scenes}) => {
         case 'SetMonday':       return Transitions.fromRight(500);
         case 'SetTuesday':      return Transitions.fromRight(500);
         case 'FinalSetup':      return Transitions.fromRight(500);
-<<<<<<< HEAD
         case 'Home':            return Transitions.fadeIn(200);
-=======
-        case 'Settings':        return Transitions.fromRight(500);
->>>>>>> 73a2b312e09e3d2f5ba54c5d1e23872e9c83a942
         default:                return Transitions.fadeIn(300);
     }
 }
@@ -99,11 +72,7 @@ const gNavigator = createStackNavigator({
     SetMonday,
     SetTuesday,
     FinalSetup,
-<<<<<<< HEAD
     TabBarNavigator,
-=======
-    Settings
->>>>>>> 73a2b312e09e3d2f5ba54c5d1e23872e9c83a942
 },
 {
     initialRouteName: 'SetMonday',
@@ -125,11 +94,7 @@ class App extends React.Component
         super();
         this.state = {
             firstTime: null,
-<<<<<<< HEAD
             notification: {}
-=======
-            fontLoaded: false,
->>>>>>> 73a2b312e09e3d2f5ba54c5d1e23872e9c83a942
         }
     }
 
@@ -141,7 +106,6 @@ class App extends React.Component
     //copy pasted
     async registerForPushNotificationsAsync ()
     {
-<<<<<<< HEAD
         // let result = await Permissions.askAsync(Permissions.NOTIFICATIONS);
 
         // if (Constants.isDevice && result.status === 'granted') {
@@ -179,15 +143,9 @@ class App extends React.Component
     handleNotifications ()
     {
         console.warn ("notification received");
-=======
-        AsyncStorage.getItem('@device/token')
-            .then((val) => this.setState({firstTime: val == null || val == undefined}));
-        
->>>>>>> 73a2b312e09e3d2f5ba54c5d1e23872e9c83a942
     }
     async componentDidMount()
     {
-<<<<<<< HEAD
         Promise.all([
             Data.setDefaults(),
             this.registerBackgroundTask(),
@@ -201,17 +159,6 @@ class App extends React.Component
             })
         ]).then(() => this.setState({firstTime: true}))
         //Notifications
-=======
-        await Data.setDefaults();
-        await Data.updateAll();
-        await Font.loadAsync({
-            'gilroy': require('./assets/fonts/gilroy.ttf'),
-            'gilroy-bold': require('./assets/fonts/gilroy-bold.ttf'),
-            'montserrat': require('./assets/fonts/Montserrat.ttf'),
-            'montserrat-bold': require('./assets/fonts/Montserrat-Bold.ttf')
-        })
-        this.setState ({fontLoaded: true})
->>>>>>> 73a2b312e09e3d2f5ba54c5d1e23872e9c83a942
     }
 
     render()
@@ -219,19 +166,10 @@ class App extends React.Component
         if (this.state.firstTime == null || !this.state.fontLoaded)
             return (<Text>{null}</Text>);
         return (
-<<<<<<< HEAD
             <SafeAreaView style={{flex: 1}} forceInset={{ top: 'always', bottom: 'always' }}>
                {/* <Settings/>*/}
                 <GlobalContainer />
             </SafeAreaView>
-=======
-
-            <ScheduleScreen/>
-            
-            // <SafeAreaView style={{flex: 1}} forceInset={{ top: 'always', bottom: 'always' }}>
-            //     <GlobalContainer />
-            // </SafeAreaView>
->>>>>>> 73a2b312e09e3d2f5ba54c5d1e23872e9c83a942
         );
     }
 }
