@@ -24,7 +24,7 @@ class Navbar extends Component
     homeBarPress()//gets called on load for some random reason
     {
         if (this.props.navigation.state.routeName !== 'Home')
-            this.props.navigation.navigation('Home');
+            this.props.navigation.navigate('Home');
             
     }
 
