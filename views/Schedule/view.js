@@ -5,7 +5,6 @@ import style from "./style";
 import ScheduleView from './assets/ScheduleView'
 import Data from "../../Data";
 import { Platform } from '@unimodules/core';
-import Navbar from '../../components/Navbar';
 
 const {width, height} = Dimensions.get('window');
 const {State} = TextInput;
@@ -102,7 +101,6 @@ class Schedule extends Component {
                         />
                     </View>
                 </KeyboardAvoidingView>
-                <Navbar navigation={this.props.navigation} />
             </View>
         );
     }

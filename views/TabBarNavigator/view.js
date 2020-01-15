@@ -1,44 +1,45 @@
 import React from 'react';
-import * as firebase from 'firebase';
-import * as Font from 'expo-font';
-import { SafeAreaView, Text, AsyncStorage } from 'react-native';
 import { createAppContainer } from 'react-navigation';
-import { Notifications } from 'expo';
-import * as Permissions from 'expo-permissions';
-import * as Constants from 'expo-constants';
-import * as BackgroundFetch from "expo-background-fetch";
-import * as TaskManager from "expo-task-manager";
 import { createStackNavigator } from 'react-navigation-stack';
+import { Animated, Image, UIManager, Easing, Dimensions, Keyboard, View, Text, TouchableOpacity, TextInput} from 'react-native';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
+import style from "./style";
+import Data from "../../Data";
 
-import Buildings from './views/Buildings/view';
-import Welcome from './views/Welcome/view';
-import Login from './views/Login/view';
-import DayNight from './views/DayNight/view';
-import Subscription from './views/Subscription/view';
-import SetMonday from './views/SetMonday/view';
-import SetTuesday from './views/SetTuesday/view';
-import FinalSetup from './views/FinalSetup/view';
-import Home from './views/Home/view';
-import Schedule from './views/Schedule/view';
-import Settings from './views/Settings/view';
-import Articles from './views/Articles/view';
-import Transitions from './assets/Transitions';
+const {width, height} = Dimensions.get('window');
+const {State} = TextInput
 
+import Home from '../Home/view';
+import Schedule from '../Schedule/view';
+import Settings from '../Settings/view';
+import Articles from '../Articles/view';
+import Navbar from '../../components/Navbar';
+import Transitions from '../../assets/Transitions';
 
-import Data from './Data';
+const handleTransitions = ({scenes}) => {
+    const next = scenes[scenes.length - 1].route.routeName;
 
-const tabBarStackNavigator = createStackNavigator(
+    switch(next)
+    {
+        default:                return Transitions.fadeIn(300);
+    }
+}
+
+const TabBarContainer = createStackNavigator(
 {
     Home, Schedule, Articles, Settings,
 }, 
 {
     initialRouteName: 'Home',
     headerMode: 'none',
+    transitionConfig: (nav) => handleTransitions(nav)
 })
 
-
-class TabbarNavigator extends React.Component
+class TabBarNavigator extends React.Component
 {
+    //importants
+    static router = TabBarContainer.router;
+
     constructor()
     {
         super();
@@ -47,17 +48,14 @@ class TabbarNavigator extends React.Component
             notification: {}
         }
     }
-    
+
     render()
     {
-        
-        if (this.state.firstTime == null)
-            return (<Text>{null}</Text>);
         return (
-            <SafeAreaView style={{flex: 1}} forceInset={{ top: 'always', bottom: 'always' }}>
-               {/* <Settings/>*/}
-                <GlobalContainer />
-            </SafeAreaView>
+            <View style = {{flex:1}}>
+                <TabBarContainer navigation = {this.props.navigation}/>
+                <Navbar navigation = {this.props.navigation}/>
+            </View>
         );
     }
 }

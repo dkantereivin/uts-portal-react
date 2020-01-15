@@ -25,7 +25,7 @@ class FinalSetup extends Component {
     }
 
     open () {
-        this.props.navigation.navigate('tabBarStackNavigator');
+        this.props.navigation.navigate('TabBarNavigator');
     }
 
     animate = () => Animated.timing (this.animation, {

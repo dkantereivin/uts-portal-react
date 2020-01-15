@@ -23,7 +23,6 @@ class Articles extends Component {
                 <Text style = {style.comingsoon}>
                     Coming Soon...{'\n'}We are hard at work trying to get this done.
                 </Text>
-                <Navbar navigation = {this.props.navigation}/>
             </View>
         );
     }

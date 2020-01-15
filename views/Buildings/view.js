@@ -29,7 +29,7 @@ class Buildings extends React.Component
             .then((val) => {
                 if(val) {
                     this.active = false; 
-                    this.props.navigation.navigate('Home');
+                    this.props.navigation.navigate('TabBarNavigator');
                 }
             });
     }
