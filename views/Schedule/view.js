@@ -100,9 +100,9 @@ class Schedule extends Component {
                             this.pagination (event.nativeEvent)
                         }}
                     />
+                    <Navbar navigation={this.props.navigation} />
                 </View>
             </KeyboardAvoidingView>
-            {/* <Navbar navigation={this.props.navigation} /> */}
             </View>
         );
     }
