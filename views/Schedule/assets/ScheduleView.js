@@ -9,14 +9,20 @@ const months = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", 
 
 const images = {
     noschoolimage: require ('./TV.gif'),
+    runningimage: require ('./running.gif'),
 };
 
 class ScheduleView extends Component {
+
+    randImage;
 
     constructor (props)
     {
         super (props);
         this.generatePeriods = this.generatePeriods.bind (this);
+        let temp = Math.round(Math.random());
+        randImage = ((temp == 0) ? images.noschoolimage : images.runningimage);
+        this.randImage = Math.round(Math.random());
         this.state = {
             eventIndex: 0,
         }
@@ -29,8 +35,8 @@ class ScheduleView extends Component {
         {
             return (
                 <View>
-                    <Image style = {{top: hp(-50/812.0*100), width: wp (309/375.0*100), height: hp (270/812.0*100)}} source = {images.noschoolimage}/>
-                    <Text style = {{top: hp(-20/812.0*100), width: wp (309/375.0*100), fontFamily: 'gilroy', fontSize: wp(14/375.0*100), textAlign: 'center'}}>
+                    <Image style = {{top: 0, width: wp (309/375.0*100), height: hp (270/812.0*100)}} source = {randImage} resizeMode = {'stretch'}/>
+                    <Text style = {{top: 0, width: wp (309/375.0*100), fontFamily: 'gilroy', fontSize: wp(14/375.0*100), textAlign: 'center'}}>
                         Image credits attributed to Robin Davey
                     </Text>
                 </View>
@@ -72,7 +78,7 @@ class ScheduleView extends Component {
                 <Text style = {style.daySchedule}>
                     {aorb == "N/A" ? null : "DAY SCHEDULE"}
                 </Text>
-                <View style = {[style.scrollview, {height: Math.min(hp (300/812.0*100), hp(this.props.data.periods.length*50/812.0*100))}]}>
+                <View style = {this.props.data.periods.length == 0 ? style.scrollviewWithImage : [style.scrollview, {height: Math.min(hp (300/812.0*100), hp(this.props.data.periods.length*50/812.0*100))}]}>
                     <ScrollView automaticallyAdjustContentInsets = {false} alwaysBounceHorizontal = {false} alwaysBounceVertical = {true} style = {style.stackview}>
                         {this.generatePeriods()}
                     </ScrollView>
@@ -157,6 +163,13 @@ const style = StyleSheet.create({
         left: wp (33/375.0*100),
         width: wp (309/375.0*100),
     },
+    scrollviewWithImage: {
+        position: 'absolute',
+        top: hp (340/812.0*100),
+        left: wp (33/375.0*100),
+        width: wp (309/375.0*100),
+        height: hp (400/812.0*100),
+    }
 });
 
 export default ScheduleView;
