@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
-import {Keyboard, UIManager, Animated, Image, Easing, KeyboardAvoidingView, FlatList, Dimensions, View, Text, TouchableOpacity, TextInput} from 'react-native';
+import {Keyboard, UIManager, BackHandler, Animated, Image, Easing, KeyboardAvoidingView, FlatList, Dimensions, View, Text, TouchableOpacity, TextInput} from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import style from "./style";
 import ScheduleView from './assets/ScheduleView'
 import Data from "../../Data";
+
 import { Platform } from '@unimodules/core';
 
 const {width, height} = Dimensions.get('window');
@@ -11,6 +12,10 @@ const {State} = TextInput;
 
 class Schedule extends Component {
 
+    static navigationOptions = {
+        gesturesEnabled: false,
+        swipeEnabled: false,
+    };
     getSchedule (item)
     {
         return (
@@ -28,6 +33,7 @@ class Schedule extends Component {
         this.getSchedule = this.getSchedule.bind (this);
         this.handleDidHide = this.handleDidHide.bind (this);
         this.handleWillHide = this.handleWillHide.bind (this);
+        this.handleBackButton = this.handleBackButton.bind(this);
         this.update = this.update.bind (this);
         this.shift = new Animated.Value (0);
         this.state = {
@@ -47,8 +53,14 @@ class Schedule extends Component {
         {
             this.DidHide = Keyboard.addListener('keyboardDidHide', this.handleDidHide)
         }
+        BackHandler.addEventListener('hardwareBackPress',  this.handleBackButton);
         this.update();
     }
+
+    handleBackButton=()=>
+    {
+        return true;
+    };
 
     componentWillMount ()
     {
@@ -66,6 +78,7 @@ class Schedule extends Component {
         {
             this.DidHide.remove();
         }
+        BackHandler.removeEventListener('hardwareBackPress',  this.handleBackButton);
     }
 
     async update ()

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Keyboard, UIManager, Animated, Image, Easing, KeyboardAvoidingView, FlatList, Dimensions, View, Text, TouchableOpacity, TextInput} from 'react-native';
+import {Keyboard, UIManager, BackHandler, Animated, Image, Easing, KeyboardAvoidingView, FlatList, Dimensions, View, Text, TouchableOpacity, TextInput} from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import style from "./style";
 import Data from "../../Data";
@@ -14,6 +14,29 @@ const images = {
 }
 
 class Articles extends Component {
+
+    static navigationOptions = {
+        gesturesEnabled: false,
+        swipeEnabled: false,
+    };
+
+    constructor (props) {
+        super(props);
+        this.handleBackButton = this.handleBackButton.bind(this);
+    }
+
+    componentDidMount () {
+        BackHandler.addEventListener('hardwareBackPress',  this.handleBackButton);
+    }
+
+    componentWillUnmount () {
+        BackHandler.removeEventListener('hardwareBackPress',  this.handleBackButton);
+    }
+
+    handleBackButton=()=>
+    {
+        return true;
+    };
 
     render ()
     {

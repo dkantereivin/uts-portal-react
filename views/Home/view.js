@@ -12,6 +12,11 @@ function toTimeString(ms) // returns ms as MM:SS
 
 class Home extends React.Component
 {
+    static navigationOptions = {
+        gesturesEnabled: false,
+        swipeEnabled: false,
+    };
+
     constructor(props)
     {
         super(props);
@@ -24,7 +29,7 @@ class Home extends React.Component
             remainingClasses: [],
             nextDays: []
         }
-        // this.handleBackButton = this.handleBackButton.bind(this);
+         this.handleBackButton = this.handleBackButton.bind(this);
     }
 
     readFirstName()

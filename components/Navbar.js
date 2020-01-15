@@ -73,6 +73,11 @@ class Navbar extends Component
 {
     animation = new Animated.Value(0);
 
+    static navigationOptions = {
+        gesturesEnabled: false,
+        swipeEnabled: false,
+    };
+
     constructor (props)
     {
         super(props);

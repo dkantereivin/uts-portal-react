@@ -27,21 +27,24 @@ const handleTransitions = ({scenes}) => {
 
 const TabBarContainer = createStackNavigator(
 {
-    Home:{
-        screen:Home,
-        navigationOptions:{
-            gesturesEnabled:false
-        }
-    }, Schedule, Articles, Settings,
+    Home, Schedule, Articles, Settings,
 }, 
 {
     initialRouteName: 'Home',
     headerMode: 'none',
-    transitionConfig: (nav) => handleTransitions(nav)
+    transitionConfig: (nav) => handleTransitions(nav),
+    navigationOptions: {
+        gesturesEnabled: false,
+        swipeEnabled: false,
+    }
 })
 
 class TabBarNavigator extends React.Component
 {
+    static navigationOptions = {
+        gesturesEnabled: false,
+        swipeEnabled: false,
+    };
     //importants
     static router = TabBarContainer.router;
 

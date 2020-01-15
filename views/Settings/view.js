@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { View, ScrollView, Animated, StyleSheet, Image, Text, AsyncStorage, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
+import { View, ScrollView, Animated, BackHandler, StyleSheet, Image, Text, AsyncStorage, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import Data from '../../Data'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import style from './style';
@@ -16,21 +16,39 @@ const images = {
 
 class Settings extends Component {
 
+    static navigationOptions = {
+        gesturesEnabled: false,
+        swipeEnabled: false,
+    };
+
     constructor()
     {
         super();
         this.exit = this.exit.bind (this);
         this.changenotif = this.changenotif.bind (this);
+        this.handleBackButton = this.handleBackButton.bind(this);
         this.state = {
             loaded: false,
             notifs: {}
         }
     }
 
+
+    componentWillUnmount () {
+        BackHandler.removeEventListener('hardwareBackPress',  this.handleBackButton);
+    }
+
+    handleBackButton=()=>
+    {
+        return true;
+    };
+
     async componentDidMount(){
+        BackHandler.addEventListener('hardwareBackPress',  this.handleBackButton);
         let value = await Data.getNotification ();
         this.setState({notifs:value, loaded: true});
     }
+
     changenotif(key, newvalue){
         let newnotifs=this.state.notifs;
         newnotifs[key]=newvalue;

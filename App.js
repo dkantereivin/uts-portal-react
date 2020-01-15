@@ -79,6 +79,10 @@ const gNavigator = createStackNavigator({
 {
     initialRouteName: 'Buildings',
     headerMode: 'none',
+    navigationOptions: {
+        gesturesEnabled: false,
+        swipeEnabled: false,
+    },
     transitionConfig: (nav) => handleTransitions(nav)
 });
 
