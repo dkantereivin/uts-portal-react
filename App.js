@@ -22,6 +22,7 @@ import Home from './views/Home/view';
 import Schedule from './views/Schedule/view';
 import Settings from './views/Settings/view';
 import Articles from './views/Articles/view';
+import TabBarNavigator from './views/TabBarNavigator/view';
 import Transitions from './assets/Transitions';
 
 
@@ -73,10 +74,7 @@ const gNavigator = createStackNavigator({
     SetMonday,
     SetTuesday,
     FinalSetup,
-    Home,
-    Schedule,
-    Articles,
-    Settings
+    TabBarNavigator,
 },
 {
     initialRouteName: 'Buildings',
