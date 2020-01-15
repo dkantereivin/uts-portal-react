@@ -21,8 +21,7 @@ class ScheduleView extends Component {
         super (props);
         this.generatePeriods = this.generatePeriods.bind (this);
         let temp = Math.round(Math.random());
-        randImage = ((temp == 0) ? images.noschoolimage : images.runningimage);
-        this.randImage = Math.round(Math.random());
+        this.randImage = ((temp == 0) ? images.noschoolimage : images.runningimage);
         this.state = {
             eventIndex: 0,
         }
