@@ -85,21 +85,23 @@ class Home extends React.Component
     {
         this.readFirstName();
         this.setAllScheduling();
-        // BackHandler.addEventListener('androidGoBack', () => this.handleBackButton());
+        BackHandler.addEventListener('hardwareBackPress',  this.handleBackButton);
     }
 
-    // componentWillUnmount()
-    // {
-    //     BackHandler.removeEventListener('androidGoBack', () => this.handleBackButton());
-    // }
+    componentWillUnmount()
+    {
+        BackHandler.removeEventListener('hardwareBackPress',  this.handleBackButton);
+    }
 
-    // handleBackButton()
-    // {
-    //     if (this.props.navigation.state.routeName === 'Home') {
-    //         BackHandler.exitApp();
-    //         console.log(this.props.navigation.state.routeName);
-    //     }
-    // }
+    handleBackButton=()=>
+    {
+        if (!this.props.navigation.isFocused()) {
+            // The screen is not focused, so don't do anything
+            return false;
+        }
+        BackHandler.exitApp();
+        return true;
+    };
 
     render()
     {
