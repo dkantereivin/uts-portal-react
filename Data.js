@@ -514,7 +514,9 @@ class Data
                     let ttl = periods [j]["name"].trim();
                     let bd = periods [j]["name"].trim() + " starts in 5 minutes.";
                     let startdateobj = new Date(periods[j]["startTime"]);
-                    t.setHours (startdateobj.getHours(), startdateobj.getMinutes());
+                    let notiftime = startdateobj.getTime() - 1000*60*5; // 5 minutes  
+                    let notifdateobj = new Date (notiftime);    
+                    t.setHours (notifdateobj.getHours(), notifdateobj.getMinutes());       
                     const message1 ={title: ttl, body: bd};
                     const time1 = {time: t.getTime()};
                     contents.push(message1);
@@ -557,8 +559,13 @@ class Data
             ops.push(time2);
         }
         
+        let currdate = new Date();
         //schedule all the notifications
-        for (var i = 0; i < contents.length; i++) Notifications.scheduleLocalNotificationAsync(contents[i], ops[i]);
+        for (var i = 0; i < contents.length; i++) 
+        {
+            if (ops[i].time < currdate) continue;
+            Notifications.scheduleLocalNotificationAsync(contents[i], ops[i]);
+        }
     }
     // Object {
     //     "articles": false,
