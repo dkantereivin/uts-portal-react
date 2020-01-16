@@ -162,7 +162,7 @@ class App extends React.Component
 
     render()
     {
-        if (this.state.firstTime == null || !this.state.fontLoaded)
+        if (this.state.firstTime == null)
             return (<Text>{null}</Text>);
         return (
             <SafeAreaView style={{flex: 1}} forceInset={{ top: 'always', bottom: 'always' }}>
