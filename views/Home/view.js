@@ -22,6 +22,8 @@ class Home extends React.Component
     {
         super(props);
         this.state = {
+            date:'STARTS',
+            next:'IS NEXT',
             firstName: 'THERE',
             nextClass: {
                 start: '8:55',
@@ -59,17 +61,30 @@ class Home extends React.Component
             curr %= 1000*60*60*24;
             if (curr < temp) wantedperiods.push(periods[i]); //if the periods hasn't started;
         }
-
-        let nextclass = {};
-        if (wantedperiods.length != 0) nextclass = {start: toTimeString(wantedperiods [0].startTime), name: wantedperiods[0].name.toUpperCase()};
-        else 
-        {
-            //leave this to allen;
-            nextclass.name = "Pei";
-            nextclass.start = "Allen";
+        let nextclass;
+        let nextdate;
+        let nextnext="IS NEXT";
+        if(wantedperiods.length==0){
+            var cur=1;
+            while(cur<schedule.length&&schedule[cur].periods.length==0)cur++;
+            if(cur==schedule.length){
+                nextdate="HAPPY";
+                nextnext="";
+                nextclass={start:"HOLIDAYS!",name:""};
+            }
+            else{
+                if(cur==1)nextdate="TOMORROW"
+                else nextdate="ON "+["SUNDAY","MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY"][(new Date().getDay()+cur)%7];
+                nextclass={start:toTimeString(schedule[cur].periods[0].startTime),name:schedule[cur].periods[0].name.toUpperCase()};
+            }
         }
-        
+        else{
+            nextdate="STARTS";
+            nextclass = {start: toTimeString(wantedperiods [0].startTime), name: wantedperiods[0].name.toUpperCase()};
+        }
         this.setState({
+            date: nextdate,
+            next: nextnext,
             nextClass: nextclass,
             remainingClasses: wantedperiods,
             nextDays: schedule.slice(0, 3),
@@ -93,6 +108,7 @@ class Home extends React.Component
 
     componentDidMount()
     {
+        this.loadListener = this.props.navigation.addListener('didFocus', () => this.setAllScheduling());
         this.readFirstName();
         this.setAllScheduling();
         BackHandler.addEventListener('hardwareBackPress',  this.handleBackButton);
@@ -100,6 +116,7 @@ class Home extends React.Component
 
     componentWillUnmount()
     {
+        this.loadListener.remove();
         BackHandler.removeEventListener('hardwareBackPress',  this.handleBackButton);
     }
 
@@ -125,7 +142,7 @@ class Home extends React.Component
                         </Text>
                     </Text>
                     <Text style = {style.stdText}>
-                        STARTS
+                        {this.state.date}
                     </Text>
                     <Text style = {style.clock} numberOfLines = {1} allowFontScaling = {true}>
                         {this.state.nextClass.start}
@@ -133,7 +150,7 @@ class Home extends React.Component
                     <Text style = {style.nextclassname} numberOfLines = {2} allowFontScaling = {true}>
                         {this.state.nextClass.name} {'\n'}
                         <Text style = {style.isnext}>
-                            IS NEXT
+                            {this.state.next}
                         </Text>
                     </Text>
                     <Text style = {style.restofdaylabel} numberOfLines={1}>

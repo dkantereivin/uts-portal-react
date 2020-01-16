@@ -43,7 +43,7 @@ const style = {
         position: 'absolute',
         top: wp (177/375.0*100),
         left: wp (30/375.0*100),
-        width: wp (200/375.0*100),
+        width: wp (300/375.0*100),
         fontSize: wp(45/375.0*100),
         fontFamily: 'gilroy'
     },
