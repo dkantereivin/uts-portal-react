@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Animated, StyleSheet, View, Image, TouchableHighlight, TouchableWithoutFeedback} from 'react-native';
+import {Animated, StyleSheet, View, Image, TouchableHighlight, TouchableOpacity, TouchableWithoutFeedback} from 'react-native';
 import {widthPercentageToDP as wp, 
     heightPercentageToDP as hp} from 'react-native-responsive-screen'
 
@@ -15,17 +15,12 @@ const style = StyleSheet.create({
         //justifyContent: 'space-evenly'
     },
     button: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        flex: 0.20
-    },
-    iconImg: {
-        width: wp(24/375.0*100),
-        height: wp(24/375.0*100),
-    },
-    iconImgHome: {
-        width: wp (28.5/375.0*100),
-        height: wp (28.5/375.0*100)
+        position: 'absolute',
+        backgroundColor: 'transparent',
+        left: 0,
+        top: 0,
+        width: wp (93.75/375.0*100),
+        height: wp (13),
     },
     underline: {
         position: 'absolute',
@@ -38,32 +33,64 @@ const style = StyleSheet.create({
     home: {
         position: 'absolute',
         backgroundColor: 'transparent',
-        top: wp (12.5/375.0*100),
-        left: wp (55.0/375.0*100),
-        width: wp(24/375.0*100),
-        height: wp(24/375.0*100),
+        top: wp (0/375.0*100),
+        left: wp (0/375.0*100),
+        width: wp(93.75/375.0*100),
+        height: wp (13),
     },
     schedule: {
         position: 'absolute',
         backgroundColor: 'transparent',
-        top: wp (14/375.0*100),
-        left: wp (135.6/375.0*100),
-        width: wp(24/375.0*100),
-        height: wp(24/375.0*100),
+        top: wp (0/375.0*100),
+        left: wp (93.75/375.0*100),
+        width: wp(93.75/375.0*100),
+        height: wp (13),
     },
     articles: {
         position: 'absolute',
         backgroundColor: 'transparent',
-        top: wp (14/375.0*100),
-        left: wp (215.4/375.0*100),
-        width: wp(24/375.0*100),
-        height: wp(24/375.0*100),
+        top: wp (0/375.0*100),
+        left: wp (187.5/375.0*100),
+        width: wp(93.75/375.0*100),
+        height: wp (13),
     },
     settings: {
         position: 'absolute',
         backgroundColor: 'transparent',
+        top: wp (0/375.0*100),
+        left: wp (281.25/375.0*100),
+        width: wp(93.75/375.0*100),
+        height: wp (13),
+    },
+    homeicon: {
+        position: 'absolute',
+        backgroundColor: 'transparent',
+        top: wp (12.5/375.0*100),
+        left: wp (55.8/375.0*100),
+        width: wp (28.5/375.0*100),
+        height: wp (28.5/375.0*100)
+    },
+    schedulesicon: {
+        position: 'absolute',
+        backgroundColor: 'transparent',
         top: wp (14/375.0*100),
-        left: wp (295.2/375.0*100),
+        left: wp (41.85/375.0*100),
+        width: wp(24/375.0*100),
+        height: wp(24/375.0*100),
+    },
+    articlesicon: {
+        position: 'absolute',
+        backgroundColor: 'transparent',
+        top: wp (14/375.0*100),
+        left: wp (27.9/375.0*100),
+        width: wp(24/375.0*100),
+        height: wp(24/375.0*100),
+    },
+    settingsicon: {
+        position: 'absolute',
+        backgroundColor: 'transparent',
+        top: wp (14/375.0*100),
+        left: wp (13.95/375.0*100),
         width: wp(24/375.0*100),
         height: wp(24/375.0*100),
     }
@@ -183,10 +210,16 @@ class Navbar extends Component
 
 class NavbarButton extends Component
 {
+    iconstyle = {};
+
     constructor(props)
     {
         super(props);
         this.state = {icon: null}
+        if (this.props.icon == 'home') this.iconstyle = style.homeicon;
+        else if (this.props.icon == 'schedule') this.iconstyle = style.schedulesicon;
+        else if (this.props.icon == 'articles') this.iconstyle = style.articlesicon;
+        else if (this.props.icon == 'settings') this.iconstyle = style.settingsicon;
     }
     
     componentWillMount()
@@ -215,8 +248,10 @@ class NavbarButton extends Component
     render()
     {
         return (
-            <TouchableWithoutFeedback style={style.button} onPress={this.props.onPress} underlayColor='gainsboro'>
-                <Image style={this.props.icon == 'home' ? style.iconImgHome : style.iconImg} source={this.state.icon}/>
+            <TouchableWithoutFeedback onPress={this.props.onPress}>
+                <View style={style.button}>
+                    <Image style={this.iconstyle} source={this.state.icon}/>
+                </View>
             </TouchableWithoutFeedback>
         )
     }
