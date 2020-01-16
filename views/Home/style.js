@@ -15,53 +15,160 @@ const style = {
         height: hp (94),
     },
     containerContent: {
-        paddingLeft: wp(3.5),
-        paddingRight: wp(3.5)
+        paddingLeft: 0,
+        paddingRight: 0,
+        height: wp (870/375.0*100),
     },
     helloMsg: {
-        fontSize: 30,
-        fontFamily: 'gilroy'
+        position: 'absolute',
+        top: wp (68/375.0*100),
+        left: wp (30/375.0*100),
+        width: wp (80),
+        fontSize: wp (30/375.0*100),
+        fontFamily: 'gilroy-bold'
+    },
+    firstName: {
+        fontSize: wp (30/375.0*100),
+        fontFamily: 'gilroy',
     },
     stdText: {
-        fontSize: 18,
+        position: 'absolute',
+        top: wp (159/375.0*100),
+        left: wp(30/375.0*100),
+        width: wp (30),
+        fontSize: wp(18/375.0*100),
         fontFamily: 'gilroy'
-    },
-    topContent: { // this is all content including "REST OF THE DAY" and above
-        height: hp(35),
-        paddingTop: hp(6),
-        paddingLeft: wp(3.5),
-        paddingRight: wp(3.5)
-    },
-    nextClassContent: {
-        flex: 1,
-        // height: hp(10),
-        flexDirection: 'row'
     },
     clock: {
-        flex: 0.5,
-        fontSize: 45,
+        position: 'absolute',
+        top: wp (177/375.0*100),
+        left: wp (30/375.0*100),
+        width: wp (200/375.0*100),
+        fontSize: wp(45/375.0*100),
         fontFamily: 'gilroy'
     },
-    classContentLeftBox: {
-        flex: 0.5,
-        justifyContent: 'center',
-        textAlignVertical: 'center'
+    nextclassname: {
+        position : 'absolute',
+        fontFamily: 'gilroy-bold', 
+        fontSize: wp (18/375.0*100),
+        left: wp (195.0/375.0*100),
+        top: wp (178/375.0*100),
+        width: wp ((60 + 111)/375.0*100)
+    },
+    isnext: {
+        position: 'absolute',
+        fontFamily: 'gilroy', 
+        fontSize: wp (18/375.0*100),
+    },
+    restofdaylabel: {
+        position: 'absolute',
+        fontFamily: 'gilroy',
+        fontSize: wp (18/375.0*100),
+        left: wp (30/375.0*100),
+        top: wp (255/375.0*100),
     },
     restOfDayBox: {
-        flex: 1,
-        height: hp(20),
-        padding: hp(2),
+        position: 'absolute',
+        left: wp (16/375.0*100),
+        right: wp (16/375.0*100),
+        top: wp (277/375.0*100),
+        height: wp (165/375.0*100),
         backgroundColor: 'rgba(242,242,242,1)',
-        justifyContent: 'space-around',
-        alignItems: 'center'
+    },
+    restofdayscroll: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+    },
+    restofdaycontent: {
+        paddingLeft: 0,
+        paddingRight: 0,
+    },
+    nothinglefttext: {
+        top: wp (72/375.0*100),
+        alignSelf: 'center',
+        fontFamily: 'gilroy',
+        fontSize: wp (18/375.0*100),
     },
     upcomingDayBox: {
-        flex: 1,
-        height: hp(42),
-        paddingTop: hp(3),
-        paddingBottom: hp(3),
-        paddingLeft: wp(1),
-        paddingRight: wp(1)
+        position: 'absolute',
+        left: wp (16/375.0*100),
+        right: wp (16/375.0*100),
+        top: wp (470/375.0*100),
+        height: wp (100/375.0*100),
+    },
+    periodcontainer: {
+        left: 0,
+        right: 0,
+        height: wp (55/375.0*100),
+    },
+    periodtimelabel: {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        fontFamily: 'gilroy',
+        fontSize: wp (18/375.0*100),
+        left: wp (25/375.0*100),
+        top: wp (17/375.0*100),
+    },
+    periodclasslabel: {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        fontFamily: 'gilroy',
+        fontSize: wp (18/375.0*100),
+        left: wp (179/375.0*100),
+        top: wp (17/375.0*100),
+    },
+    dayscontainer: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        height: wp(300/375.0*100),
+    },
+    daycontainer: {
+        left: 0,
+        right: 0,
+        height: wp (100/375.0*100),
+    },
+    abdaylabel: {
+        position: 'absolute',
+        left: wp (23/375.0*100),
+        top: wp (39/375.0*100),
+        bottom: wp (39/375.0*100),
+        fontSize: wp (18/375.0*100),
+        fontFamily: 'gilroy-bold',
+        color: 'rgba(83,109,254,1)'
+    },
+    weekdaylabel: {
+        position: 'absolute',
+        left: wp (44/375.0*100),
+        top: wp (5/375.0*100),
+        fontFamily: 'gilroy-bold',
+        fontSize: wp (40/375.0*100),
+    },
+    daynumlabel: {
+        position: 'absolute',
+        left: wp (49/375.0*100),
+        top: wp (54/375.0*100),
+        fontFamily: 'gilroy-bold',
+        fontSize: wp (18/375.0*100),
+    },
+    dayth: {   
+        position: 'absolute',
+        fontFamily: 'gilroy',
+        fontSize: wp (18/375.0*100),
+    },
+    daynamelabel: { 
+        position: 'absolute',
+        left: wp (176/375.0*100),
+        top: wp (28.5/375.0*100),
+        width: wp (125/375.0*100),
+        fontFamily: 'gilroy',
+        fontSize: wp (18/375.0*100),
     },
     futureDayButton: {
         flex: 1,
@@ -79,6 +186,5 @@ const style = {
         justifyContent: 'center',
         alignItems: 'center'
     }
-
 }
 export default StyleSheet.create(style);

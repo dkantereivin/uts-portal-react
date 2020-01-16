@@ -565,7 +565,6 @@ class Data
         for (var i = 0; i < contents.length; i++) 
         {
             if (ops[i].time < currdate) continue;
-            console.log(new Date(ops[i].time));
             Notifications.scheduleLocalNotificationAsync(contents[i], ops[i]);
         }
     }
