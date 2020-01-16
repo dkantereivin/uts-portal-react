@@ -24,7 +24,6 @@ class Settings extends Component {
     constructor()
     {
         super();
-        this.exit = this.exit.bind (this);
         this.changenotif = this.changenotif.bind (this);
         this.handleBackButton = this.handleBackButton.bind(this);
         this.state = {
@@ -54,9 +53,6 @@ class Settings extends Component {
         newnotifs[key]=newvalue;
         this.setState({notifs: newnotifs});
         Data.setNotification(key,newvalue);
-    }
-    exit(){
-        this.props.navigation.navigate ('Home')
     }
     render() {
         if (!this.state.loaded) {return <Text>{null}</Text>}
@@ -169,9 +165,6 @@ class Settings extends Component {
                         <Animated.Image style = {[style.night,{opacity:this.state.notifs['notifTime']==2?1:0.25}]} source = {images.night} /> 
                     </TouchableWithoutFeedback>
                 </View>
-                <TouchableWithoutFeedback style={[style.backview]} onPress={() => this.exit()}>
-                    <Image style = {style.back} source = {images.back} resizeMode = 'stretch'/>   
-                </TouchableWithoutFeedback>
             </View>
         </ScrollView>
     );
