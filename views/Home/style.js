@@ -8,7 +8,11 @@ const style = {
         flex: 1
     },
     container: {
-        flex: 0.94
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: wp (100),
+        height: hp (94),
     },
     containerContent: {
         paddingLeft: wp(3.5),
