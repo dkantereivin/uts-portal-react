@@ -47,7 +47,7 @@ TaskManager.defineTask(taskname, async () => {
 });
 
 const handleTransitions = ({scenes}) => {
-    const next = scenes[scenes.length-1].route.routeName;
+    const next = scenes[scenes.length - 1].route.routeName;
 
     switch(next)
     {
@@ -75,8 +75,7 @@ const gNavigator = createStackNavigator({
     TabBarNavigator,
 },
 {
-    initialRouteName: 'SetMonday',
-    // initialRouteName: 'Buildings',
+    initialRouteName: 'Buildings',
     headerMode: 'none',
     navigationOptions: {
         gesturesEnabled: false,
