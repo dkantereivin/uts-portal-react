@@ -8,7 +8,7 @@
       "ios",
       "android"
     ],
-    "version": "0.0.4",
+    "version": "1.0",
     "orientation": "portrait",
     "icon": "./assets/favicon.png",
     "primaryColor": "#3b79f5",
@@ -27,6 +27,7 @@
     ],
     "ios": {
       "supportsTablet": false,
+      "buildNumber" : "2",
       "bundleIdentifier": "ca.utschools.students.portalapp",
       "infoPlist" : {
         "UIBackgroundModes" : [

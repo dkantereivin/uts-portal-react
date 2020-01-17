@@ -53,13 +53,14 @@ class Home extends React.Component
         let schedule = await Data.getWeekScheduleData();
         let {periods} = schedule[0];
         let wantedperiods = [];
+        let daytime = 1000*60*60*24;
         for (var i = 0; i < periods.length; i++) 
         {
-            let temp = periods [i].startTime;
-            temp %= 1000*60*60*24;
-            let curr = new Date().getTime();
-            curr %= 1000*60*60*24;
-            if (curr < temp) wantedperiods.push(periods[i]); //if the periods hasn't started;
+            let temp = new Date(periods [i].startTime);
+            let temp1 = temp.getHours()*60 + temp.getMinutes();
+            let curr = new Date();
+            let curr1 = curr.getHours()*60 + curr.getMinutes();
+            if (curr1 < temp1) wantedperiods.push(periods[i]); //if the periods hasn't started;
         }
         let nextclass;
         let nextdate;
