@@ -48,11 +48,12 @@ class Settings extends Component {
         this.setState({notifs:value, loaded: true});
     }
 
-    changenotif(key, newvalue){
+    async changenotif(key, newvalue){
         let newnotifs=this.state.notifs;
         newnotifs[key]=newvalue;
         this.setState({notifs: newnotifs});
-        Data.setNotification(key,newvalue);
+        await Data.setNotification(key,newvalue);
+        await Data.scheduleNotifications();
     }
     render() {
         if (!this.state.loaded) {return <Text>{null}</Text>}

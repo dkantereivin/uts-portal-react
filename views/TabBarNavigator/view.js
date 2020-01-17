@@ -1,7 +1,7 @@
 import React from 'react';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-import { Animated, Image, UIManager, Easing, Dimensions, Keyboard, View, Text, TouchableOpacity, TextInput} from 'react-native';
+import { Animated, Image, SafeAreaView,UIManager, Easing, Dimensions, Keyboard, View, Text, TouchableOpacity, TextInput} from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import style from "./style";
 import Data from "../../Data";
@@ -60,10 +60,12 @@ class TabBarNavigator extends React.Component
     render()
     {
         return (
-            <View style = {{flex:1}}>
-                <TabBarContainer navigation = {this.props.navigation}/>
-                <Navbar navigation = {this.props.navigation}/>
-            </View>
+            <SafeAreaView style={{flex: 1}} forceInset={{ top: 'always', bottom: 'always' }}>
+                <View style = {{flex: 1}}>
+                    <TabBarContainer navigation = {this.props.navigation}/>
+                    <Navbar navigation = {this.props.navigation}/>
+                </View>
+            </SafeAreaView>
         );
     }
 }
