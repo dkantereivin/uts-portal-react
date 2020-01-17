@@ -8,7 +8,7 @@
       "ios",
       "android"
     ],
-    "version": "0.0.3",
+    "version": "0.0.4",
     "orientation": "portrait",
     "icon": "./assets/favicon.png",
     "primaryColor": "#3b79f5",
@@ -30,8 +30,10 @@
       "bundleIdentifier": "ca.utschools.students.portalapp",
       "infoPlist" : {
         "UIBackgroundModes" : [
+          "location",
           "fetch"
-        ]
+        ],
+        "ITSAppUsesNonExemptEncryption" : false
       }
     },
     "android": {
