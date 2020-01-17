@@ -1,11 +1,11 @@
 import React from 'react';
 import * as firebase from 'firebase';
 import * as Font from 'expo-font';
-import { SafeAreaView, Text, AsyncStorage } from 'react-native';
+import { SafeAreaView, StatusBar, Text, AsyncStorage } from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import { Notifications } from 'expo';
 import * as Permissions from 'expo-permissions';
-import * as Constants from 'expo-constants';
+import Constants from 'expo-constants';
 import * as BackgroundFetch from "expo-background-fetch";
 import * as TaskManager from "expo-task-manager";
 import { createStackNavigator } from 'react-navigation-stack';
@@ -38,7 +38,7 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-
+StatusBar.setBarStyle('dark-content');
 //background fetch
 BackgroundFetch.setMinimumIntervalAsync(1);
 const taskname = "updateDataNotif";

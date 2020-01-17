@@ -128,51 +128,55 @@ class InputArea extends React.Component
     render()
     {
         if (this.props.info) return (
-            <Animated.View style={[style.inputAreaContainer, {opacity: this.props.viewOpacity}]}>
-                <View style={style.actionBox}>
-                    <Text style={[style.fieldsTitle, {fontFamily: 'gilroy-bold'}]}>ABOUT YOU.</Text>
-                    <Text style={[style.fieldsDescription, {fontFamily: 'gilroy', fontSize: 20}]}>
-                        enter some basic details.
-                    </Text>
-                    <TextInputField text='first name' autocomplete='name' 
-                                    onChangeText={(txt) => this.fields.name = txt.trim()}
-                                    style={{fontSize: 28}}
-                    />
-                    <View style={{flex: 0.1}}/>
-                    <TextInputField text='email' keyboard='email-address' autocomplete='email' 
-                                    onChangeText={(txt) => this.fields.email = txt.toLowerCase()} 
-                                    onEndEditing={() => this.forceUpdate()} style={{fontSize: 26}}
-                    />
-                    <Text style={[style.badEmailText, {color: this.verifyEmail() ? 'white' : 'red'}]}>
-                        {this.state.verificationText}
-                    </Text>
-                </View>
-                <View style={style.buttonBox} >
-                    <RoundedButton text='submit.' style={this.state.buttonColor} onPress={() => this.handleSubmit('submit')} />
-                </View>
-            </Animated.View>
+            <SafeAreaView style={{flex: 1}} forceInset={{ top: 'always', bottom: 'always' }}>
+                <Animated.View style={[style.inputAreaContainer, {opacity: this.props.viewOpacity}]}>
+                    <View style={style.actionBox}>
+                        <Text style={[style.fieldsTitle, {fontFamily: 'gilroy-bold'}]}>ABOUT YOU.</Text>
+                        <Text style={[style.fieldsDescription, {fontFamily: 'gilroy', fontSize: 20}]}>
+                            enter some basic details.
+                        </Text>
+                        <TextInputField text='first name' autocomplete='name' 
+                                        onChangeText={(txt) => this.fields.name = txt.trim()}
+                                        style={{fontSize: 28}}
+                        />
+                        <View style={{flex: 0.1}}/>
+                        <TextInputField text='email' keyboard='email-address' autocomplete='email' 
+                                        onChangeText={(txt) => this.fields.email = txt.toLowerCase()} 
+                                        onEndEditing={() => this.forceUpdate()} style={{fontSize: 26}}
+                        />
+                        <Text style={[style.badEmailText, {color: this.verifyEmail() ? 'white' : 'red'}]}>
+                            {this.state.verificationText}
+                        </Text>
+                    </View>
+                    <View style={style.buttonBox} >
+                        <RoundedButton text='submit.' style={this.state.buttonColor} onPress={() => this.handleSubmit('submit')} />
+                    </View>
+                </Animated.View>
+            </SafeAreaView>
         );
         else return ( // in this case, the prop is 'verify'
-            <Animated.View style={[style.inputAreaContainer, {opacity: this.props.viewOpacity}]}>
-                <View style={style.actionBox}>
-                    <Text style={[style.fieldsTitle, {fontFamily: 'gilroy-bold'}]}>VERIFICATION.</Text>
-                    <Text style={[style.fieldsDescription, {fontFamily: 'gilroy', fontSize: 20}]}>
-                        check your email for{'\n'}a code we sent you.
-                    </Text>
-                    <TextInputField text='verification code' autocomplete='off' keyboard='numeric'
-                                    onChangeText={(txt) => {
-                                        this.fields.code = txt.replace(/\D/g,'');
-                                        this.setState({badEmailMessage: null})
-                                    }}
-                    />
-                    <Text style={[style.badEmailText, {color: 'red'}]}>
-                        {this.state.badEmailMessage}
-                    </Text>
-                </View>
-                <View style={style.buttonBox} >
-                    <RoundedButton text='verify.' onPress={() => this.handleSubmit('verify')} />
-                </View>
-            </Animated.View>
+            <SafeAreaView style={{flex: 1}} forceInset={{ top: 'always', bottom: 'always' }}>
+                <Animated.View style={[style.inputAreaContainer, {opacity: this.props.viewOpacity}]}>
+                    <View style={style.actionBox}>
+                        <Text style={[style.fieldsTitle, {fontFamily: 'gilroy-bold'}]}>VERIFICATION.</Text>
+                        <Text style={[style.fieldsDescription, {fontFamily: 'gilroy', fontSize: 20}]}>
+                            check your email for{'\n'}a code we sent you.
+                        </Text>
+                        <TextInputField text='verification code' autocomplete='off' keyboard='numeric'
+                                        onChangeText={(txt) => {
+                                            this.fields.code = txt.replace(/\D/g,'');
+                                            this.setState({badEmailMessage: null})
+                                        }}
+                        />
+                        <Text style={[style.badEmailText, {color: 'red'}]}>
+                            {this.state.badEmailMessage}
+                        </Text>
+                    </View>
+                    <View style={style.buttonBox} >
+                        <RoundedButton text='verify.' onPress={() => this.handleSubmit('verify')} />
+                    </View>
+                </Animated.View>
+            </SafeAreaView>
         )
     }
 }

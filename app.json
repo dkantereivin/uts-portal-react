@@ -4,6 +4,9 @@
     "slug": "uts-portal",
     "privacy": "unlisted",
     "sdkVersion": "35.0.0",
+    "androidStatusBar" : {
+      "barStyle":"dark-content"
+    },
     "platforms": [  
       "ios",
       "android"

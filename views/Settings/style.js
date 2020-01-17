@@ -173,7 +173,7 @@ const style = {
     },
     supercontainer: {
         width: wp (100), 
-        height: wp (1300/375.0*100),
+        height: wp (1280/375.0*100),
     }
 }
 export default StyleSheet.create (style);

@@ -87,20 +87,22 @@ class SetMonday extends Component {
             outputRange: [0, -width],
         })
         return (
-            <Animated.View style = {{flex: 1, overflow: 'hidden', transform: [{translateY: this.shift}]}}>
-                <Animated.Image style = {[style.sadman, {transform: [{translateX: translate}]}]} source = {images.sadman} resizeMode = 'stretch'/>
-                <Animated.Text style = {style.mondayLabel}>
-                    MONDAY CLASSES.
-                </Animated.Text>
-                <Animated.View style = {style.stackView}>
-                    {this.createStackMonday()}
+            <SafeAreaView style={{flex: 1}} forceInset={{ top: 'always', bottom: 'always' }}>
+                <Animated.View style = {{flex: 1, overflow: 'hidden', transform: [{translateY: this.shift}]}}>
+                    <Animated.Image style = {[style.sadman, {transform: [{translateX: translate}]}]} source = {images.sadman} resizeMode = 'stretch'/>
+                    <Animated.Text style = {style.mondayLabel}>
+                        MONDAY CLASSES.
+                    </Animated.Text>
+                    <Animated.View style = {style.stackView}>
+                        {this.createStackMonday()}
+                    </Animated.View>
+                    <TouchableOpacity style = {style.nextButton} onPress = {() => this.next()}>
+                        <Text style = {style.nextText}>
+                            next.
+                        </Text>
+                    </TouchableOpacity>
                 </Animated.View>
-                <TouchableOpacity style = {style.nextButton} onPress = {() => this.next()}>
-                    <Text style = {style.nextText}>
-                        next.
-                    </Text>
-                </TouchableOpacity>
-            </Animated.View>
+            </SafeAreaView>
         );
     }
 }

@@ -105,20 +105,22 @@ class SetTuesday extends Component {
         })
 
         return (
-            <Animated.View style = {{flex: 1, overflow: 'hidden', transform: [{translateY: this.shift}]}}>
-                <Animated.Image style = {[style.sadwoman, {transform: [{translateY: translateYDIR}, {translateX: translateXDIR}]}]} source = {images.sadwoman} resizeMode = 'stretch'/>
-                <Animated.Text style = {style.tuesdayLabel}>
-                    TUESDAY CLASSES.
-                </Animated.Text>
-                <Animated.View style = {[style.stackView, {transform: [{translateX: translateXDIR2}]}]}>
-                    {this.createStackTuesday()}
+            <SafeAreaView style={{flex: 1}} forceInset={{ top: 'always', bottom: 'always' }}>
+                <Animated.View style = {{flex: 1, overflow: 'hidden', transform: [{translateY: this.shift}]}}>
+                    <Animated.Image style = {[style.sadwoman, {transform: [{translateY: translateYDIR}, {translateX: translateXDIR}]}]} source = {images.sadwoman} resizeMode = 'stretch'/>
+                    <Animated.Text style = {style.tuesdayLabel}>
+                        TUESDAY CLASSES.
+                    </Animated.Text>
+                    <Animated.View style = {[style.stackView, {transform: [{translateX: translateXDIR2}]}]}>
+                        {this.createStackTuesday()}
+                    </Animated.View>
+                    <TouchableOpacity style = {[style.nextButton, {transform: [{translateX: translateXDIR2}]}]} onPress = {this.next}>
+                        <Text style = {style.nextText}>
+                            next.
+                        </Text>
+                    </TouchableOpacity>
                 </Animated.View>
-                <TouchableOpacity style = {[style.nextButton, {transform: [{translateX: translateXDIR2}]}]} onPress = {this.next}>
-                    <Text style = {style.nextText}>
-                        next.
-                    </Text>
-                </TouchableOpacity>
-            </Animated.View>
+            </SafeAreaView>
         );
     }
 }

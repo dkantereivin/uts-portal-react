@@ -347,7 +347,8 @@ class Data
         let ids = this.gen_strings(5);
         const oneday = 1000*60*60*24;
         //events
-        const events = JSON.parse (await AsyncStorage.getItem ('@user/events'));
+        const temp = JSON.parse (await AsyncStorage.getItem ('@user/events'));
+        const events = (temp == null ? [] : temp);
         let today = new Date();
         today.setHours (0, 0, 0, 0);
         let later = today.getTime() + 5*oneday;
