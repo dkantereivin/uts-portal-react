@@ -22,11 +22,12 @@ class Switch extends Component {
         }
     }
 
-    changenotif(key, newvalue){
+    async changenotif(key, newvalue){
         let newnotifs=this.state.notifs;
         newnotifs[key]=newvalue;
         this.setState({notifs: newnotifs});
-        Data.setNotification(key,newvalue);
+        await Data.setNotification(key,newvalue);
+        await Data.scheduleNotifications();
     }
 
     async componentDidMount(){

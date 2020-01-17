@@ -45,6 +45,7 @@ class Schedule extends Component {
 
     async componentDidMount ()
     {
+        this.loadListener = this.props.navigation.addListener('didFocus', () => this.update());
         if (Platform.OS == "ios")
         {
             this.WillHide = Keyboard.addListener('keyboardWillHide', this.handleWillHide)
@@ -70,6 +71,7 @@ class Schedule extends Component {
 
     componentWillUnmount()
     {
+        this.loadListener.remove();
         if (Platform.OS == "ios")
         {
             this.WillHide.remove();

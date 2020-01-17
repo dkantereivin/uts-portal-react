@@ -6,6 +6,7 @@ import Navbar from '../../components/Navbar';
 import { AsyncStorage, ScrollView, View, Text, TouchableWithoutFeedback, BackHandler } from 'react-native';
 import { NavigationActions, StackActions } from 'react-navigation';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { HeaderStyleInterpolator } from 'react-navigation-stack';
 
 function toTimeString(ms) // returns ms as MM:SS
 { return moment(ms).local().format('HH:mm'); }
@@ -21,6 +22,8 @@ class Home extends React.Component
     {
         super(props);
         this.state = {
+            date:'STARTS',
+            next:'IS NEXT',
             firstName: 'THERE',
             nextClass: {
                 start: '8:55',
@@ -48,26 +51,44 @@ class Home extends React.Component
     async setAllScheduling()
     {
         let schedule = await Data.getWeekScheduleData();
-        let {periods} = schedule.shift();
-
-        let time = moment();
-        
-        // correct all startTimes to current day and set to a momentjs object
-        periods.map(per => per.startTime = moment(per.startTime).set('dayOfYear', time.dayOfYear()));
-
-        // filter out any passed periods, only leave future periods
-        periods = periods.filter(per => per.startTime.isAfter(time));
-        periods.sort(per => per.startTime);
-        const nextClass = periods.shift();
-        
-        
+        let {periods} = schedule[0];
+        let wantedperiods = [];
+        let daytime = 1000*60*60*24;
+        for (var i = 0; i < periods.length; i++) 
+        {
+            let temp = new Date(periods [i].startTime);
+            let temp1 = temp.getHours()*60 + temp.getMinutes();
+            let curr = new Date();
+            let curr1 = curr.getHours()*60 + curr.getMinutes();
+            if (curr1 < temp1) wantedperiods.push(periods[i]); //if the periods hasn't started;
+        }
+        let nextclass;
+        let nextdate;
+        let nextnext="IS NEXT";
+        if(wantedperiods.length==0){
+            var cur=1;
+            while(cur<schedule.length&&schedule[cur].periods.length==0)cur++;
+            if(cur==schedule.length){
+                nextdate="HAPPY";
+                nextnext="";
+                nextclass={start:"HOLIDAYS!",name:""};
+            }
+            else{
+                if(cur==1)nextdate="TOMORROW"
+                else nextdate="ON "+["SUNDAY","MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY"][(new Date().getDay()+cur)%7];
+                nextclass={start:toTimeString(schedule[cur].periods[0].startTime),name:schedule[cur].periods[0].name.toUpperCase()};
+            }
+        }
+        else{
+            nextdate="STARTS";
+            nextclass = {start: toTimeString(wantedperiods [0].startTime), name: wantedperiods[0].name.toUpperCase()};
+        }
         this.setState({
-            nextClass: nextClass != undefined && nextClass != null ? {
-                start: toTimeString(nextClass.startTime),
-                name: nextClass.name.toUpperCase()
-            } : {start: 'School', name: null},
-            remainingClasses: periods,
-            nextDays: schedule.slice(0, 3) // is this obsolete? dependant on implementation of ScheduleScreen
+            date: nextdate,
+            next: nextnext,
+            nextClass: nextclass,
+            remainingClasses: wantedperiods,
+            nextDays: schedule.slice(0, 3),
         })
     }
 
@@ -88,6 +109,7 @@ class Home extends React.Component
 
     componentDidMount()
     {
+        this.loadListener = this.props.navigation.addListener('didFocus', () => this.setAllScheduling());
         this.readFirstName();
         this.setAllScheduling();
         BackHandler.addEventListener('hardwareBackPress',  this.handleBackButton);
@@ -95,6 +117,7 @@ class Home extends React.Component
 
     componentWillUnmount()
     {
+        this.loadListener.remove();
         BackHandler.removeEventListener('hardwareBackPress',  this.handleBackButton);
     }
 
@@ -111,29 +134,36 @@ class Home extends React.Component
     render()
     {
         return (
-            <View style={style.superContainer}>
-                <ScrollView style={style.container} contentContainerStyle={style.containerContent}>
-                    <View style={style.topContent}>
-                        <Text style={[style.helloMsg, {fontFamily:'gilroy-bold'}]}>HELLO</Text>
-                        <Text style={style.helloMsg}>{this.state.firstName}</Text>
-                        <Text style={[style.stdText, {paddingTop: hp(2)}]}>STARTS</Text>
-                        <View style={style.nextClassContent}>
-                            <Text style={style.clock}>{this.state.nextClass.start}</Text>
-                            <View style={style.classContentLeftBox}>
-                                <Text style={[style.stdText, {fontFamily:'gilroy-bold'}]}>{this.state.nextClass.name}</Text>
-                                <Text style={style.stdText}>IS NEXT</Text>
-                            </View>
-                        </View>
-                        <Text style={[style.stdText, {paddingTop: hp(2.5)}]}>REST OF THE DAY</Text>
+            <View style = {style.superContainer}>
+                <ScrollView style = {style.container} contentContainerStyle={style.containerContent}>
+                    <Text style = {style.helloMsg}>
+                        HELLO{'\n'}
+                        <Text style = {style.firstName}>
+                            {this.state.firstName}
+                        </Text>
+                    </Text>
+                    <Text style = {style.stdText}>
+                        {this.state.date}
+                    </Text>
+                    <Text style = {style.clock} numberOfLines = {1} allowFontScaling = {true}>
+                        {this.state.nextClass.start}
+                    </Text>
+                    <Text style = {style.nextclassname} numberOfLines = {2} allowFontScaling = {true}>
+                        {this.state.nextClass.name} {'\n'}
+                        <Text style = {style.isnext}>
+                            {this.state.next}
+                        </Text>
+                    </Text>
+                    <Text style = {style.restofdaylabel} numberOfLines={1}>
+                        REST OF THE DAY
+                    </Text>
+                    <View style = {style.restOfDayBox}>
+                        <RemainingClasses periods = {this.state.remainingClasses}/>
                     </View>
-                    <View style={style.restOfDayBox}>
-                        <RemainingClasses periods={this.state.remainingClasses}/>
-                    </View>
-                    <View style={style.upcomingDayBox}>
-                        <DaysList days={this.state.nextDays} navigation={this.props.navigation}/>
+                    <View style = {style.upcomingDayBox}>
+                        <DaysList days= {this.state.nextDays}/>
                     </View>
                 </ScrollView>
-                <Navbar navigation={this.props.navigation}/>
             </View>
         )
     }
@@ -141,16 +171,63 @@ class Home extends React.Component
 
 class RemainingClasses extends React.Component
 {   // props -> periods: obj[]
-    render()
+
+
+    constructor (props)
     {
+        super(props);
+        this.generatePeriods = this.generatePeriods.bind(this);
+    }
+
+    generatePeriods ()
+    {
+        if (this.props.periods.length == 0)
+        {
+            return (
+                <Text style = {style.nothinglefttext}>
+                    Nothing Left Today!
+                </Text>
+            )
+        }
+        let stack = []
+        let ids = Data.gen_strings (this.props.periods.length);
+        for (let i = 0; i < this.props.periods.length; i++)
+        {
+            stack.push(this.genperiod(this.props.periods [i], ids[i]));
+        }
+        return stack;
+    }
+
+    genperiod (period, id)
+    {
+        const timeText = toTimeString(period.startTime) + ' - ' + toTimeString(period.endTime);
         return (
-            <React.Fragment>
-                {this.props.periods.length > 0 ? 
-                this.props.periods.map((p) => this.periodRow(p)) : 
-                <Text style={style.stdText}>Nothing Left Today!</Text>}
-            </React.Fragment>
+            <View style = {style.periodcontainer} key = {id}>
+                <Text style={style.periodtimelabel} numberOfLines={1}>{timeText}</Text>
+                <Text style={style.periodclasslabel} numberofLines={1}>{period.name}</Text>
+            </View>
         )
     }
+
+    render () 
+    {
+        return (
+            <ScrollView style = {style.restofdayscroll} contentContainerStyle = {style.restofdaycontent}>
+                {this.generatePeriods()}
+            </ScrollView>
+        );
+    }
+
+    // render()
+    // {
+    //     return (
+    //         <React.Fragment>
+    //             {this.props.periods.length > 0 ? 
+    //             this.props.periods.map((p) => this.periodRow(p)) : 
+    //             <Text style={style.stdText}>Nothing Left Today!</Text>}
+    //         </React.Fragment>
+    //     )
+    // }
 
     periodRow({startTime, endTime, name})
     {
@@ -166,44 +243,103 @@ class RemainingClasses extends React.Component
 
 class DaysList extends React.Component
 {   // days: object, not a prop -- daysUntil (key): number of days (index) between current and future date -- 0 = cur date
-    render()
+    
+    constructor(props) {
+        super(props);
+        this.generateDays = this.generateDays.bind(this);
+        this.generateDay = this.generateDay.bind(this);
+    }
+
+    render ()
     {
         return (
-            <React.Fragment>
-                {this.props.days.length > 0 ? 
-                this.props.days.map((day, idx) => this.periodRow(day, idx)):null}
-            </React.Fragment>
+            <View style = {style.dayscontainer}>
+                {this.generateDays()}
+            </View>
         )
     }
 
-    periodRow({abday, name, events}, daysUntil)
+    generateDays()
+    {
+        let stack = []
+        let ids = Data.gen_strings (this.props.days.length);
+        for (let i = 0; i < this.props.days.length; i++)
+        {
+            stack.push(this.generateDay(this.props.days [i], ids[i], i));
+        }
+        return stack;
+    }
+
+    generateDay(day, id, daysUntil)
     {
         const date = moment().add({days: daysUntil});
-        return ( // 1 row/day
-            <TouchableWithoutFeedback style={{flex:1}} key={daysUntil} 
-            onPress={() => this.props.navigation.navigate('Schedule', {index: daysUntil})}
-            >
-                <View style={style.futureDayButton}>
-                <View style={style.nextDaysCalendar}>
-                    <Text style={{flex: 0.5, justifyContent: 'flex-end', fontFamily: 'gilroy-bold', fontSize: 16, color: 'rgba(83,109,254,1)'}}>
-                        {abday == 'N/A' ? null : abday}
+        let datenum = date.format ('DD');
+        let datenumtext = '';
+        if (datenum.charAt(datenum.length - 1) == '1') datenumtext = 'st';
+        else if (datenum.charAt(datenum.length - 1) == '2') datenumtext = 'nd';
+        else datenumtext = 'th';
+        return (
+            <View style = {style.daycontainer} key = {id}>
+                <Text style = {style.abdaylabel}>
+                    {day.abday == 'N/A' ? null : day.abday}
+                </Text>
+                <Text style = {style.weekdaylabel}>
+                    {date.format('dd').toUpperCase()}
+                </Text>
+                <Text style = {style.daynumlabel}>
+                    {datenum}
+                    <Text style = {style.dayth}>
+                        {datenumtext}
                     </Text>
-                    <View style={{flex: 0.5, flexDirection: 'column', justifyContent: 'center', alignSelf: 'center', alignContent: 'center'}}>
-                        <Text style={{flex:0, fontFamily: 'gilroy-bold', fontSize: 30}}>
-                            {date.format('dd').toUpperCase()}
-                        </Text>
-                        <Text style={[style.stdText, {flex: 0}]}>{date.format('DD')}</Text>
-                    </View>
-                </View>
-                <View style={style.nextDaysText}>
-                    <Text style={style.stdText}>
-                        {this.dayDescription(abday, events)}
-                    </Text>
-                </View>
-                </View>
-            </TouchableWithoutFeedback>
-        )
+                </Text>
+                <Text style = {style.daynamelabel} numberOfLines={2}>
+                    {day.schedulename}
+                </Text>
+            </View>
+        );
     }
+    
+    
+    // render()
+    // {
+    //     return (
+    //         <React.Fragment>
+    //             {this.props.days.length > 0 ? 
+    //             this.props.days.map((day, idx) => this.periodRow(day, idx)):null}
+    //         </React.Fragment>
+    //     )
+    // }
+
+    
+
+    // periodRow({abday, name, events}, daysUntil)
+    // {
+    //     const date = moment().add({days: daysUntil});
+    //     return ( // 1 row/day
+    //         <TouchableWithoutFeedback style={{flex:1}} key={daysUntil} 
+    //         onPress={() => this.props.navigation.navigate('Schedule', {index: daysUntil})}
+    //         >
+    //             <View style={style.futureDayButton}>
+    //             <View style={style.nextDaysCalendar}>
+    //                 <Text style={{flex: 0.5, justifyContent: 'flex-end', fontFamily: 'gilroy-bold', fontSize: 16, color: 'rgba(83,109,254,1)'}}>
+    //                     {abday == 'N/A' ? null : abday}
+    //                 </Text>
+    //                 <View style={{flex: 0.5, flexDirection: 'column', justifyContent: 'center', alignSelf: 'center', alignContent: 'center'}}>
+    //                     <Text style={{flex:0, fontFamily: 'gilroy-bold', fontSize: 30}}>
+    //                         {date.format('dd').toUpperCase()}
+    //                     </Text>
+    //                     <Text style={[style.stdText, {flex: 0}]}>{date.format('DD')}</Text>
+    //                 </View>
+    //             </View>
+    //             <View style={style.nextDaysText}>
+    //                 <Text style={style.stdText}>
+    //                     {this.dayDescription(abday, events)}
+    //                 </Text>
+    //             </View>
+    //             </View>
+    //         </TouchableWithoutFeedback>
+    //     )
+    // }
 
     // ideally, this would be replaced with the use of weekScheduleData[n].name
     dayDescription(abday, events)

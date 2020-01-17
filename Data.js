@@ -449,7 +449,7 @@ class Data
     {
         let a = new Date (date);
         let t = 1000*60*60*24;
-        return a.getTime() + t;
+        return a.getTime() + t*days;
     }
 
     static async scheduleNotifications ()
@@ -459,7 +459,8 @@ class Data
         let ops = []; //an array of options mainly for time
         const data = await this.getWeekScheduleData(); //gets the next n days of data;
         const notifsettings = await this.getNotification();
-        const events = JSON.parse (await AsyncStorage.getItem ('@user/events'));
+        const temp = JSON.parse (await AsyncStorage.getItem ('@user/events'));
+        const events = (temp == null? [] : temp);
         const daysbefore = notifsettings ["daysBefore"];
 
         //loop through each day;

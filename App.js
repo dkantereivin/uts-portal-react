@@ -43,6 +43,7 @@ const taskname = "updateDataNotif";
 TaskManager.defineTask(taskname, async () => {
     await Data.updateAll();
     await Data.scheduleNotifications();
+    console.warn("fetch successful");
     return BackgroundFetch.Result.NewData;
 });
 
@@ -119,7 +120,7 @@ class App extends React.Component
             if (existingStatus !== 'granted') 
             {
                 const { status } = await Permissions.askAsync(
-                Permissions.NOTIFICATIONS
+                    Permissions.NOTIFICATIONS
                 );
                 finalStatus = status;
             }
@@ -165,10 +166,7 @@ class App extends React.Component
         if (this.state.firstTime == null)
             return (<Text>{null}</Text>);
         return (
-            <SafeAreaView style={{flex: 1}} forceInset={{ top: 'always', bottom: 'always' }}>
-               {/* <Settings/>*/}
-                <GlobalContainer />
-            </SafeAreaView>
+            <GlobalContainer/>
         );
     }
 }
