@@ -3,7 +3,7 @@ import axios from 'axios';
 import {RoundedButton, TextInputField} from '../GlobalComponents';
 
 import React from 'react';
-import { KeyboardAvoidingView, View, Animated, Text, Image, AsyncStorage } from 'react-native';
+import { KeyboardAvoidingView, SafeAreaView, View, Animated, Text, Image, AsyncStorage } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 // import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 

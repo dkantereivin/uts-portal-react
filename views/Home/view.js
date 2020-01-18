@@ -3,13 +3,20 @@ import moment from 'moment';
 import style from './style';
 import Data from '../../Data';
 import Navbar from '../../components/Navbar';
-import { AsyncStorage, ScrollView, View, Text, TouchableWithoutFeedback, BackHandler } from 'react-native';
-import { NavigationActions, StackActions } from 'react-navigation';
+import { AsyncStorage, StatusBar, ScrollView, View, Image, Text, TouchableWithoutFeedback, BackHandler } from 'react-native';
+import { NavigationActions, StackActions, SafeAreaView } from 'react-navigation';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { HeaderStyleInterpolator } from 'react-navigation-stack';
+import { Status } from 'expo-background-fetch';
 
 function toTimeString(ms) // returns ms as MM:SS
 { return moment(ms).local().format('HH:mm'); }
+
+const images = {
+    banner: require ('./assets/Banner.png'),
+    path: require ('./assets/Path.png'),
+    waiting: require ('./assets/Waiting.png'),
+}
 
 class Home extends React.Component
 {
@@ -17,6 +24,9 @@ class Home extends React.Component
         gesturesEnabled: false,
         swipeEnabled: false,
     };
+
+    loadListener;
+    unloadListener;
 
     constructor(props)
     {
@@ -50,6 +60,7 @@ class Home extends React.Component
      */
     async setAllScheduling()
     {
+        StatusBar.setBarStyle('light-content');
         let schedule = await Data.getWeekScheduleData();
         let {periods} = schedule[0];
         let wantedperiods = [];
@@ -110,6 +121,7 @@ class Home extends React.Component
     componentDidMount()
     {
         this.loadListener = this.props.navigation.addListener('didFocus', () => this.setAllScheduling());
+        this.unloadListener = this.props.navigation.addListener('didBlur', () => StatusBar.setBarStyle('dark-content'));
         this.readFirstName();
         this.setAllScheduling();
         BackHandler.addEventListener('hardwareBackPress',  this.handleBackButton);
@@ -118,6 +130,7 @@ class Home extends React.Component
     componentWillUnmount()
     {
         this.loadListener.remove();
+        this.unloadListener.remove();
         BackHandler.removeEventListener('hardwareBackPress',  this.handleBackButton);
     }
 
@@ -134,37 +147,43 @@ class Home extends React.Component
     render()
     {
         return (
-            <View style = {style.superContainer}>
-                <ScrollView style = {style.container} contentContainerStyle={style.containerContent}>
-                    <Text style = {style.helloMsg}>
-                        HELLO{'\n'}
+            <SafeAreaView style={style.safeareaview} forceInset={{ top: 'always', bottom: 'never' }}>
+                <View style = {style.superContainer}>
+                    <ScrollView style = {style.container} contentContainerStyle={style.containerContent}>
+                        <Image style = {style.banner} source = {images.banner} resizeMode = {'stretch'}/>
+                        <View style = {style.extends}>
+                            <Text style = {style.eastereggtext}>EASTER EGG. nice job!</Text>
+                        </View>
+                        <Text style = {style.helloMsg}>
+                            HELLO
+                        </Text>
                         <Text style = {style.firstName}>
                             {this.state.firstName}
                         </Text>
-                    </Text>
-                    <Text style = {style.stdText}>
-                        {this.state.date}
-                    </Text>
-                    <Text style = {style.clock} numberOfLines = {1} allowFontScaling = {true}>
-                        {this.state.nextClass.start}
-                    </Text>
-                    <Text style = {style.nextclassname} numberOfLines = {2} allowFontScaling = {true}>
-                        {this.state.nextClass.name} {'\n'}
+                        <Text style = {style.stdText}>
+                            {this.state.date}
+                        </Text>
+                        <Text style = {style.clock} numberOfLines = {1} allowFontScaling = {true}>
+                            {this.state.nextClass.start}
+                        </Text>
+                        <Text style = {style.nextclassname} numberOfLines = {2} allowFontScaling = {true}>
+                            {this.state.nextClass.name}
+                        </Text>
                         <Text style = {style.isnext}>
                             {this.state.next}
                         </Text>
-                    </Text>
-                    <Text style = {style.restofdaylabel} numberOfLines={1}>
-                        REST OF THE DAY
-                    </Text>
-                    <View style = {style.restOfDayBox}>
-                        <RemainingClasses periods = {this.state.remainingClasses}/>
-                    </View>
-                    <View style = {style.upcomingDayBox}>
-                        <DaysList days= {this.state.nextDays}/>
-                    </View>
-                </ScrollView>
-            </View>
+                        <Text style = {style.restofdaylabel} numberOfLines={1}>
+                            REST OF THE DAY
+                        </Text>
+                        <View style = {style.restOfDayBox}>
+                            <RemainingClasses periods = {this.state.remainingClasses}/>
+                        </View>
+                        <View style = {style.upcomingDayBox}>
+                            <DaysList days= {this.state.nextDays}/>
+                        </View>
+                    </ScrollView>
+                </View>
+            </SafeAreaView>
         )
     }
 }
@@ -181,15 +200,12 @@ class RemainingClasses extends React.Component
 
     generatePeriods ()
     {
+        let stack = []
         if (this.props.periods.length == 0)
         {
-            return (
-                <Text style = {style.nothinglefttext}>
-                    Nothing Left Today!
-                </Text>
-            )
+            stack.push(<Text style = {style.nothinglefttext} key = {1}>Nothing Left Today!</Text>)
+            return stack;
         }
-        let stack = []
         let ids = Data.gen_strings (this.props.periods.length);
         for (let i = 0; i < this.props.periods.length; i++)
         {

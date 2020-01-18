@@ -4,8 +4,43 @@ import {widthPercentageToDP as wp,
         heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const style = {
+    safeareaview: {
+        flex: 1, 
+        backgroundColor: '#536DFE'
+    },
     superContainer: {
-        flex: 1
+        flex: 1,
+        backgroundColor: 'white',
+    },
+    extends: {
+        position: 'absolute',
+        backgroundColor: '#536DFE',
+        top: -wp (500/375.0*100),
+        height: wp (500/375.0*100),
+        left: 0,
+        right: 0,
+    },
+    eastereggtext: {
+        position: 'absolute',
+        alignSelf: 'center', 
+        fontFamily: 'gilroy-bold',
+        fontSize: wp (30/375.0*100),
+        top: wp (10/375.0*100),
+        color: 'white',
+    },
+    banner: {
+        position: 'absolute',
+        top: -wp(5/375.0*100),
+        left: -wp(5/375.0*100),
+        width: wp(122),
+        height: wp (250/375.0*100),
+    },
+    waiting: {
+        position: 'absolute',
+        top: wp (6/375.0*100),
+        left: wp (74/375.0*100),
+        width: wp (301/375.0*100),
+        height: wp (160/375.0*100),
     },
     container: {
         position: 'absolute',
@@ -25,11 +60,17 @@ const style = {
         left: wp (30/375.0*100),
         width: wp (80),
         fontSize: wp (30/375.0*100),
-        fontFamily: 'gilroy-bold'
+        fontFamily: 'gilroy-bold',
+        color: 'white',
     },
     firstName: {
+        position: 'absolute',
         fontSize: wp (30/375.0*100),
+        top: wp (104/375.0*100),
+        left: wp (30/375.0*100),
+        width: wp (80),
         fontFamily: 'gilroy',
+        color: 'white',
     },
     stdText: {
         position: 'absolute',
@@ -58,6 +99,9 @@ const style = {
     isnext: {
         position: 'absolute',
         fontFamily: 'gilroy', 
+        left: wp (195.0/375.0*100),
+        width: wp ((60 + 111)/375.0*100),
+        top: wp (200/375.0*100),
         fontSize: wp (18/375.0*100),
     },
     restofdaylabel: {
@@ -74,6 +118,10 @@ const style = {
         top: wp (277/375.0*100),
         height: wp (165/375.0*100),
         backgroundColor: 'rgba(242,242,242,1)',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.4,
+        elevation: 12
     },
     restofdayscroll: {
         position: 'absolute',
@@ -87,8 +135,11 @@ const style = {
         paddingRight: 0,
     },
     nothinglefttext: {
-        top: wp (72/375.0*100),
-        alignSelf: 'center',
+        paddingTop: wp (72/375.0*100),
+        paddingBottom: wp (72/375.0*100),
+        textAlign: 'center',
+        textAlignVertical: 'center',
+        justifyContent: 'center',
         fontFamily: 'gilroy',
         fontSize: wp (18/375.0*100),
     },

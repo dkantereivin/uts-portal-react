@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Keyboard, UIManager, BackHandler, Animated, Image, Easing, KeyboardAvoidingView, FlatList, Dimensions, View, Text, TouchableOpacity, TextInput} from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
+import {SafeAreaView} from 'react-navigation';
 import style from "./style";
 import ScheduleView from './assets/ScheduleView'
 import Data from "../../Data";
@@ -93,30 +94,32 @@ class Schedule extends Component {
         if (!this.state.dataLoaded) {return <Text>{null}</Text>}
         
         return (
-            <View style = {{flex: 1}}>
-                <KeyboardAvoidingView style = {style.container} behavior = "position" keyboardVerticalOffset = {-hp (80/812.0*100)}>
-                    <Text style = {style.whatsup}>
-                        WHAT'S UP{'\n'}TODAY?
-                    </Text>
-                    <View style = {style.container}>
-                        <FlatList
-                            scrollEnabled = {this.state.scrollEnabled}
-                            automaticallyAdjustContentInsets = {false}
-                            data = {this.state.data}
-                            renderItem = { ({item}) => this.getSchedule (item)}
-                            horizontal
-                            showsHorizontalScrollIndicator = {false}
-                            contentContainerStyle = {style.contentContainerStyle}
-                            keyExtractor = {item => item.id}
-                            //pass the reference to control
-                            ref = {(ref) => (this.flatlist = ref)}
-                            onScrollEndDrag = {(event) => {
-                                this.pagination (event.nativeEvent)
-                            }}
-                        />
-                    </View>
-                </KeyboardAvoidingView>
-            </View>
+            <SafeAreaView style={{flex: 1}} forceInset={{ top: 'always', bottom: 'never' }}>
+                <View style = {{flex: 1}}>
+                    <KeyboardAvoidingView style = {style.container} behavior = "position" keyboardVerticalOffset = {-hp (80/812.0*100)}>
+                        <Text style = {style.whatsup}>
+                            WHAT'S UP{'\n'}TODAY?
+                        </Text>
+                        <View style = {style.container}>
+                            <FlatList
+                                scrollEnabled = {this.state.scrollEnabled}
+                                automaticallyAdjustContentInsets = {false}
+                                data = {this.state.data}
+                                renderItem = { ({item}) => this.getSchedule (item)}
+                                horizontal
+                                showsHorizontalScrollIndicator = {false}
+                                contentContainerStyle = {style.contentContainerStyle}
+                                keyExtractor = {item => item.id}
+                                //pass the reference to control
+                                ref = {(ref) => (this.flatlist = ref)}
+                                onScrollEndDrag = {(event) => {
+                                    this.pagination (event.nativeEvent)
+                                }}
+                            />
+                        </View>
+                    </KeyboardAvoidingView>
+                </View>
+            </SafeAreaView>
         );
     }
     //Paging and scrolling and stuff

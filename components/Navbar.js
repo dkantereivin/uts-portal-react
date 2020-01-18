@@ -11,6 +11,8 @@ const style = StyleSheet.create({
         width: wp (100),
         height: wp (13),
         backgroundColor: 'white',
+        borderTopWidth: wp(1/375.0*100),
+        borderTopColor: 'rgb(224,224,224)',
         //flexDirection: 'row',
         //justifyContent: 'space-evenly'
     },
