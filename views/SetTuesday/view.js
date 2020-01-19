@@ -106,7 +106,6 @@ class SetTuesday extends Component {
         })
 
         return (
-            <SafeAreaView style={{flex: 1}} forceInset={{ top: 'always', bottom: 'always' }}>
                 <Animated.View style = {{flex: 1, overflow: 'hidden', transform: [{translateY: this.shift}]}}>
                     <Animated.Image style = {[style.sadwoman, {transform: [{translateY: translateYDIR}, {translateX: translateXDIR}]}]} source = {images.sadwoman} resizeMode = 'stretch'/>
                     <Animated.Text style = {style.tuesdayLabel}>
@@ -121,7 +120,6 @@ class SetTuesday extends Component {
                         </Text>
                     </TouchableOpacity>
                 </Animated.View>
-            </SafeAreaView>
         );
     }
 }

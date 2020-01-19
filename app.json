@@ -7,7 +7,7 @@
     "androidStatusBar" : {
       "barStyle":"dark-content"
     },
-    "platforms": [  
+    "platforms": [
       "ios",
       "android"
     ],
@@ -30,8 +30,8 @@
     ],
     "ios": {
       "supportsTablet": false,
-      "buildNumber" : "2",
-      "bundleIdentifier": "ca.utschools.students.portalapp",
+      "buildNumber" : "1",
+      "bundleIdentifier": "com.studentdev.utsportal",
       "infoPlist" : {
         "UIBackgroundModes" : [
           "location",
@@ -41,8 +41,8 @@
       }
     },
     "android": {
-      "package": "ca.utschools.students.portalapp",
-      "versionCode": 1,
+      "package": "com.studentdev.utsportal",
+      "versionCode": 2,
       "permissions": []
     }
   }
