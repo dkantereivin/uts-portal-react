@@ -104,8 +104,10 @@ class InputArea extends React.Component
         
         if (this.props.info)
         {
-            if (this.fields.name == '11221')
+            if (this.fields.name == '11221'){
+                AsyncStorage.setItem('@user/basics', JSON.stringify(this.fields))
                 return this.props.navigation.navigate('DayNight');
+            }
             let link = 'https://us-central1-uts-portal-293.cloudfunctions.net/email/add_user/';
             let res = await axios.post(link, this.fields).catch((e) => addUserError(e));
             if (res.status == 201)
@@ -115,8 +117,10 @@ class InputArea extends React.Component
         }
         else
         {
-            if (this.fields.code == '11221')
+            if (this.fields.code == '11221'){
+                AsyncStorage.setItem('@user/basics', JSON.stringify(this.fields))
                 return this.props.navigation.navigate ('DayNight');
+            }
             let link = 'https://us-central1-uts-portal-293.cloudfunctions.net/email/check_code/';
             let res = await axios.post(link, this.fields).catch((e) => verifyError(e));
             if (res.status == 200 && res.data.success) {

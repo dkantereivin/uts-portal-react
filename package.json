@@ -28,7 +28,8 @@
     "react-navigation-transitions": "^1.0.12"
   },
   "devDependencies": {
-    "babel-preset-expo": "^7.1.0"
+    "babel-preset-expo": "^7.1.0",
+    "exp": "^57.2.1"
   },
   "private": true
 }
