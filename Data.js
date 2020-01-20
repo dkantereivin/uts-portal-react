@@ -480,7 +480,7 @@ class Data
                     let bd = "";
                     if (notifsettings["notifTime"] == 1) t.setHours(12, 40); //afternoon
                     else if (notifsettings ["notifTime"] == 2) t.setHours (16, 0); //evening 
-                    if (daysbefore > 1) bd = "There is " + afterday["schedulename"].toLowerCase() + " in " + daysbefore + "days on " + daysWeek[new Date(afterday["date"]).getDay()] + ".";
+                    if (daysbefore > 1) bd = "There is " + afterday["schedulename"].toLowerCase() + " in " + daysbefore + " days on " + daysWeek[new Date(afterday["date"]).getDay()] + ".";
                     else bd = "There is " + afterday["schedulename"].toLowerCase() + " tomorrow.";
                     const message1 = {title: afterday["schedulename"], body: bd};
                     const time1 = {time: t.getTime()}

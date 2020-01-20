@@ -103,20 +103,20 @@ class Home extends React.Component
         })
     }
 
-    resetStack()
-    {
-        const reset = StackActions.reset({
-            index: 0,
-            key: null,
-            actions: [NavigationActions.navigate({routeName: 'Home'})]
-        });
-        this.props.navigation.dispatch([reset], 0);
-    }
+    // resetStack()
+    // {
+    //     const reset = StackActions.reset({
+    //         index: 0,
+    //         key: null,
+    //         actions: [NavigationActions.navigate({routeName: 'Home'})]
+    //     });
+    //     this.props.navigation.dispatch([reset], 0);
+    // }
 
-    componentWillMount()
-    {
-        this.resetStack();
-    }
+    // componentWillMount()
+    // {
+    //     this.resetStack();
+    // }
 
     componentDidMount()
     {
