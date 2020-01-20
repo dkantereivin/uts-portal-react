@@ -135,6 +135,7 @@ const style = StyleSheet.create({
         top: 0,
         left: 0,
         width: wp (309/375.0*100),
+        height: hp (300/812.0*100),
         flexDirection: 'column',
         // alignItems: 'stretch',
         // justifyContent: 'center',
