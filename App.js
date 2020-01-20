@@ -78,7 +78,7 @@ const gNavigator = createStackNavigator({
     TabBarNavigator,
 },
 {
-    initialRouteName: 'Login',//'Buildings',
+    initialRouteName: 'Buildings',
     headerMode: 'none',
     navigationOptions: {
         gesturesEnabled: false,

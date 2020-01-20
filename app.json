@@ -30,7 +30,7 @@
     ],
     "ios": {
       "supportsTablet": false,
-      "buildNumber" : "1",
+      "buildNumber" : "3",
       "bundleIdentifier": "com.studentdev.utsportal",
       "infoPlist" : {
         "UIBackgroundModes" : [
