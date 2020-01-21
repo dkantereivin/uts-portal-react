@@ -291,7 +291,9 @@ class DaysList extends React.Component
         const date = moment().add({days: daysUntil});
         let datenum = date.format ('DD');
         let datenumtext = '';
-        if (datenum.charAt(datenum.length - 1) == '1') datenumtext = 'st';
+        if (datenum == '11') datenumtext = 'th';
+        else if (datenum == '12') datenumtext = 'th';
+        else if (datenum.charAt(datenum.length - 1) == '1') datenumtext = 'st';
         else if (datenum.charAt(datenum.length - 1) == '2') datenumtext = 'nd';
         else datenumtext = 'th';
         return (
