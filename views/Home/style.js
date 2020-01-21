@@ -76,7 +76,7 @@ const style = {
         position: 'absolute',
         top: wp (159/375.0*100),
         left: wp(30/375.0*100),
-        width: wp (30),
+        width: wp (80),
         fontSize: wp(18/375.0*100),
         fontFamily: 'gilroy'
     },
