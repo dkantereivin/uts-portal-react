@@ -4,6 +4,7 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 const style = {
     container: {
         flex: 1,
+        paddingTop:hp(5),
         justifyContent: 'center',
         alignItems: 'center'
     },
@@ -24,6 +25,7 @@ const style = {
         alignItems: 'center'
     },
     buttonBox: {
+        paddingTop: hp(5),
         flex: 0.5,
         justifyContent: 'center', 
         alignItems: 'center'

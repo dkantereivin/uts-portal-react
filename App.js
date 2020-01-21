@@ -78,7 +78,7 @@ const gNavigator = createStackNavigator({
     TabBarNavigator,
 },
 {
-    initialRouteName: 'Buildings',
+    initialRouteName: 'Subscription',
     headerMode: 'none',
     navigationOptions: {
         gesturesEnabled: false,

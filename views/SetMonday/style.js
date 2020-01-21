@@ -5,6 +5,13 @@ import {widthPercentageToDP as wp,
 import { white } from 'ansi-colors';
 
 const style = {
+    container: {
+        top: 0,
+        left: 0,
+        position: 'absolute',
+        height: hp(100),
+        width: wp(100),
+    },
     sadman: {
         position: 'absolute',
         top: -hp (69/812.0*100),

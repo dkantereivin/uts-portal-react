@@ -4,6 +4,7 @@ import {RoundedButton, TextInputField} from '../GlobalComponents';
 
 import React from 'react';
 import { KeyboardAvoidingView, SafeAreaView, View, Animated, Text, Image, AsyncStorage } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { TextInput } from 'react-native-gesture-handler';
 // import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
@@ -43,17 +44,18 @@ class Welcome extends React.Component
     render()
     {
         return (
-            <KeyboardAvoidingView style={style.container} behavior='position'>
-                <View style={{flex: 0.15}} />
-                <Image style={style.image} source={images.mainContent} />
-                <InputArea info={this.state.infoMode} 
-                    viewOpacity={this.inputAreaOpacity} 
-                    onSubmit={() => this.switchInputArea()}
-                    onVerify={() => this.verifyCode()}
-                    navigation = {this.props.navigation}
-                />
-
-            </KeyboardAvoidingView>
+            <KeyboardAwareScrollView>
+                <View style={style.container}>
+                    <Image style={style.image} source={images.mainContent} />
+                    <InputArea
+                        info={this.state.infoMode} 
+                        viewOpacity={this.inputAreaOpacity} 
+                        onSubmit={() => this.switchInputArea()}
+                        onVerify={() => this.verifyCode()}
+                        navigation = {this.props.navigation}
+                    />
+                </View>
+            </KeyboardAwareScrollView> 
         );
     }
     
