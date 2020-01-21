@@ -160,7 +160,7 @@ class Home extends React.Component
                         <Text style = {style.firstName}>
                             {this.state.firstName}
                         </Text>
-                        <Text style = {style.stdText}>
+                        <Text style = {style.stdText} numberOfLines = {1}>
                             {this.state.date}
                         </Text>
                         <Text style = {style.clock} numberOfLines = {1} allowFontScaling = {true}>
