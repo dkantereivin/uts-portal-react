@@ -6,7 +6,7 @@ import {widthPercentageToDP as wp,
 const style = {
     safeareaview: {
         flex: 1, 
-        backgroundColor: '#536DFE'
+        backgroundColor: 'white',
     },
     superContainer: {
         flex: 1,
@@ -61,7 +61,7 @@ const style = {
         width: wp (80),
         fontSize: wp (30/375.0*100),
         fontFamily: 'gilroy-bold',
-        color: 'white',
+        color: 'black',
     },
     firstName: {
         position: 'absolute',
@@ -70,7 +70,7 @@ const style = {
         left: wp (30/375.0*100),
         width: wp (80),
         fontFamily: 'gilroy',
-        color: 'white',
+        color: 'black',
     },
     stdText: {
         position: 'absolute',

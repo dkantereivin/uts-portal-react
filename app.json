@@ -41,8 +41,8 @@
       }
     },
     "android": {
-      "package": "com.studentdev.utsportal",
-      "versionCode": 2,
+      "package": "com.utschools.utsportal",
+      "versionCode": 3,
       "permissions": []
     }
   }

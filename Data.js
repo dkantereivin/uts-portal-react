@@ -561,11 +561,13 @@ class Data
             ops.push(time2);
         }
         
-        let currdate = new Date();
+        let currdate = new Date().getTime();
         //schedule all the notifications
         for (var i = 0; i < contents.length; i++) 
         {
             if (ops[i].time < currdate) continue;
+            contents[i]["ios"] = {sound: true};
+            contents [i]["android"] = {sound: true, vibrate: [0, 250, 250, 250]};
             Notifications.scheduleLocalNotificationAsync(contents[i], ops[i]);
         }
     }

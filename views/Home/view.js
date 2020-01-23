@@ -150,10 +150,10 @@ class Home extends React.Component
             <SafeAreaView style={style.safeareaview} forceInset={{ top: 'always', bottom: 'never' }}>
                 <View style = {style.superContainer}>
                     <ScrollView style = {style.container} contentContainerStyle={style.containerContent}>
-                        <Image style = {style.banner} source = {images.banner} resizeMode = {'stretch'}/>
-                        <View style = {style.extends}>
+                        {/* <Image style = {style.banner} source = {images.banner} resizeMode = {'stretch'}/> */}
+                        {/* <View style = {style.extends}>
                             <Text style = {style.eastereggtext}>EASTER EGG. nice job!</Text>
-                        </View>
+                        </View> */}
                         <Text style = {style.helloMsg}>
                             HELLO
                         </Text>

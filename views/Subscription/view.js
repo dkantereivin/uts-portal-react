@@ -51,7 +51,7 @@ class Subscription extends Component {
                 <Circle text = {'general'} diameter = {hp (118/812.0*100)} touchable = {true}/>  
             </View>
             <View style = {style.articleCircle}>
-                <Circle text = {'article'} diameter = {hp (98/812.0*100)} touchable = {true}/>
+                <Circle text = {'articles'} diameter = {hp (98/812.0*100)} touchable = {true}/>
             </View>
             <View style = {style.surveysCircle}>
                 <Circle text = {'surveys'} diameter = {hp (118/812.0*100)} touchable = {true}/>

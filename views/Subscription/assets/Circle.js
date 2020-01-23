@@ -34,7 +34,7 @@ class Circle extends Component {
             {
                 Data.setNotification ("general", this.select);
             }
-            else if (this.props.text == "article")
+            else if (this.props.text == "articles")
             {
                 Data.setNotification ("articles", this.select); //this has an 's'
             }
