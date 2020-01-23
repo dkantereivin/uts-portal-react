@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Animated, Image, Easing, Dimensions, View, Text, TouchableOpacity, TextInput} from 'react-native';
+import { Animated, Image, Easing, Dimensions, View, Text, TouchableOpacity, TextInput, BackHandler} from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import style from "./style";
 //this easing that is commented out is bad and it crashes stuff
@@ -14,11 +14,32 @@ const images = {
 
 class FinalSetup extends Component {
 
+    static navigationOptions = {
+        gesturesEnabled: false,
+        swipeEnabled: false,
+    };
+
     animation = new Animated.Value (0);
 
-    componentDidMount () {
+    componentDidMount()
+    {
         this.setState (this.animate);
+        BackHandler.addEventListener('hardwareBackPress',  this.handleBackButton);
     }
+
+    componentWillUnmount()
+    {
+        BackHandler.removeEventListener('hardwareBackPress',  this.handleBackButton);
+    }
+
+    handleBackButton=()=>
+    {
+        if (!this.props.navigation.isFocused()) {
+            // The screen is not focused, so don't do anything
+            return false;
+        }
+        return true;
+    };
 
     constructor () {
         super ();

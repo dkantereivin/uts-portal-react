@@ -1,7 +1,7 @@
 import style from './style';
 import {RoundedButton} from '../GlobalComponents';
 import React from 'react';
-import { View, TouchableOpacity, Text, Image } from 'react-native';
+import { View, TouchableOpacity, Text, Image, BackHandler } from 'react-native';
 
 const images = {
     main: require("./assets/mainContent.png")
@@ -9,6 +9,29 @@ const images = {
 
 class Welcome extends React.Component
 {
+    static navigationOptions = {
+        gesturesEnabled: false,
+        swipeEnabled: false,
+    };
+    
+    componentDidMount()
+    {
+        BackHandler.addEventListener('hardwareBackPress',  this.handleBackButton);
+    }
+
+    componentWillUnmount()
+    {
+        BackHandler.removeEventListener('hardwareBackPress',  this.handleBackButton);
+    }
+
+    handleBackButton=()=>
+    {
+        if (!this.props.navigation.isFocused()) {
+            // The screen is not focused, so don't do anything
+            return false;
+        }
+        return true;
+    };
     render()
     {
 
