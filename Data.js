@@ -1,6 +1,6 @@
 import {AsyncStorage} from 'react-native';
 import {Notifications} from 'expo';
-//import * as firebase from 'firebase';
+// import * as firebase from 'firebase';
 
 const firebase = require ('firebase');
 require ('firebase/firestore');

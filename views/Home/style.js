@@ -157,8 +157,8 @@ const style = {
     },
     periodtimelabel: {
         position: 'absolute',
-        top: 0,
-        bottom: 0,
+        // top: 0,
+        // bottom: 0,
         fontFamily: 'gilroy',
         fontSize: wp (18/375.0*100),
         left: wp (25/375.0*100),
@@ -166,12 +166,13 @@ const style = {
     },
     periodclasslabel: {
         position: 'absolute',
-        top: 0,
-        bottom: 0,
+        // top: 0,
+        // bottom: 0,
         fontFamily: 'gilroy',
         fontSize: wp (18/375.0*100),
         left: wp (179/375.0*100),
         top: wp (17/375.0*100),
+        right: wp (2),
     },
     dayscontainer: {
         position: 'absolute',

@@ -60,7 +60,7 @@ class Home extends React.Component
      */
     async setAllScheduling()
     {
-        StatusBar.setBarStyle('light-content');
+       // StatusBar.setBarStyle('light-content');
         let schedule = await Data.getWeekScheduleData();
         let {periods} = schedule[0];
         let wantedperiods = [];
@@ -166,7 +166,7 @@ class Home extends React.Component
                         <Text style = {style.clock} numberOfLines = {1} allowFontScaling = {true}>
                             {this.state.nextClass.start}
                         </Text>
-                        <Text style = {style.nextclassname} numberOfLines = {2} allowFontScaling = {true}>
+                        <Text style = {style.nextclassname} numberOfLines = {1} allowFontScaling = {true}>
                             {this.state.nextClass.name}
                         </Text>
                         <Text style = {style.isnext}>
@@ -293,8 +293,10 @@ class DaysList extends React.Component
         let datenumtext = '';
         if (datenum == '11') datenumtext = 'th';
         else if (datenum == '12') datenumtext = 'th';
+        else if (datenum == '13') datenumtext = 'th';
         else if (datenum.charAt(datenum.length - 1) == '1') datenumtext = 'st';
         else if (datenum.charAt(datenum.length - 1) == '2') datenumtext = 'nd';
+        else if (datenum.charAt(datenum.length - 1) == '3') datenumtext = 'rd';
         else datenumtext = 'th';
         return (
             <View style = {style.daycontainer} key = {id}>
